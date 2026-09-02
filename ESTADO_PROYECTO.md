@@ -3,7 +3,7 @@
 > **Propósito de este archivo:** bitácora operativa y plan maestro del proyecto de graduación. Debe actualizarse al cerrar cada actividad relevante. En un chat nuevo, leer primero este archivo antes de inspeccionar el resto de la carpeta.
 
 **Última actualización:** 2 de septiembre de 2026  
-**Estado general:** segunda entrega conceptual preparada y repositorio consolidado localmente; pendiente configurar remoto para publicación en GitHub.  
+**Estado general:** segunda entrega conceptual preparada; repositorio consolidado y publicado en GitHub.  
 **Repositorio:** Git inicializado, rama `master`, sin commits.
 
 ## 1. Contexto y objetivo
@@ -110,7 +110,7 @@ Usuarios (Administrador / Jefe / Técnico / Operador)
 ### Bloqueos / información necesaria
 
 - [x] Se creó el primer commit local: `8f3b5c8` (`chore: consolidate CeroFallas and second delivery`).
-- [ ] Configurar URL de repositorio remoto (GitHub) y publicar el historial local.
+- [x] Se configuró el remoto `origin` y se publicó la rama `master` en `https://github.com/German47309120/CeroFallas`.
 - [ ] Esquema definitivo de base de datos y/o muestra anonimizada del histórico de equipos, preventivos y correctivos.
 - [ ] Confirmación de los procesos reales, roles y campos ya existentes.
 - [ ] Definición del período objetivo de predicción (por ejemplo, falla en los próximos 7, 14 o 30 días).
@@ -130,3 +130,4 @@ Usuarios (Administrador / Jefe / Técnico / Operador)
 | 2026-09-02 | Se localizó el código/documentación fuente en `C:\CeroFallas`; pendiente reconocer la versión activa. | Codex + estudiante |
 | 2026-09-02 | Se consolidó monorepo, se protegió la configuración sensible y se generó/validó el PDF de segunda entrega. | Codex + estudiante |
 | 2026-09-02 | Se creó el commit local inicial `8f3b5c8`; no existe remoto configurado aún. | Codex + estudiante |
+| 2026-09-02 | Se publicó el repositorio en GitHub, rama `master`, remoto `origin`. | Codex + estudiante |
