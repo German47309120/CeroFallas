@@ -109,7 +109,8 @@ Usuarios (Administrador / Jefe / Técnico / Operador)
 
 ### Bloqueos / información necesaria
 
-- [ ] Configurar URL de repositorio remoto (GitHub) y publicar el primer commit.
+- [x] Se creó el primer commit local: `8f3b5c8` (`chore: consolidate CeroFallas and second delivery`).
+- [ ] Configurar URL de repositorio remoto (GitHub) y publicar el historial local.
 - [ ] Esquema definitivo de base de datos y/o muestra anonimizada del histórico de equipos, preventivos y correctivos.
 - [ ] Confirmación de los procesos reales, roles y campos ya existentes.
 - [ ] Definición del período objetivo de predicción (por ejemplo, falla en los próximos 7, 14 o 30 días).
@@ -128,3 +129,4 @@ Usuarios (Administrador / Jefe / Técnico / Operador)
 | 2026-09-02 | Archivo creado; diagnóstico inicial, alcance IA y plan maestro establecidos. | Codex + estudiante |
 | 2026-09-02 | Se localizó el código/documentación fuente en `C:\CeroFallas`; pendiente reconocer la versión activa. | Codex + estudiante |
 | 2026-09-02 | Se consolidó monorepo, se protegió la configuración sensible y se generó/validó el PDF de segunda entrega. | Codex + estudiante |
+| 2026-09-02 | Se creó el commit local inicial `8f3b5c8`; no existe remoto configurado aún. | Codex + estudiante |
