@@ -1,0 +1,38 @@
+# Dependencies and builds
+**/node_modules/
+**/dist/
+**/.angular/
+**/*.tsbuildinfo
+**/__pycache__/
+**/*.py[cod]
+**/.pytest_cache/
+**/.coverage
+
+# Python environments and generated ML artifacts
+**/.venv/
+**/venv/
+**/saved_models/
+**/data/*.csv
+**/data/*.parquet
+**/data/*.xlsx
+**/reports/*.png
+**/reports/*.csv
+**/reports/*.json
+
+# Secrets and machine configuration
+**/.env
+**/.env.*
+!**/.env.example
+**/firebase-adminsdk*.json
+**/*service-account*.json
+local.properties
+
+# IDE and OS artifacts
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+
+# Document QA intermediates
+tmp/
+qa/

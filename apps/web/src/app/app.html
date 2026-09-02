@@ -1,0 +1,48 @@
+<div class="app-layout">
+  <!-- TOP HEADER (Desktop & Mobile) -->
+  <header class="app-header">
+    <div class="brand" routerLink="/dashboard">
+      <span class="logo-icon">⚡</span>
+      <div class="brand-text">
+        <h1>CEROFALLAS</h1>
+        <span class="brand-badge">ENTERPRISE AI</span>
+      </div>
+    </div>
+
+    <nav class="desktop-nav">
+      <button routerLink="/dashboard" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">Dashboard</button>
+      <button routerLink="/predictivo" routerLinkActive="active">Predictivo IA 🧠</button>
+      <button routerLink="/correctivos" routerLinkActive="active">Registrar Paro ⏱️</button>
+      <button routerLink="/confiabilidad" routerLinkActive="active">Confiabilidad 📈</button>
+      <a href="http://localhost:3000/api/docs" target="_blank" class="btn-swagger">Swagger API 📄</a>
+    </nav>
+  </header>
+
+  <!-- MAIN VIEW CONTAINER -->
+  <main class="main-content">
+    <router-outlet></router-outlet>
+  </main>
+
+  <!-- BOTTOM NAVIGATION BAR (Mobile & Tablet) -->
+  <nav class="mobile-bottom-nav">
+    <button routerLink="/dashboard" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
+      <span class="nav-icon">🏠</span>
+      <span class="nav-text">Home</span>
+    </button>
+
+    <button routerLink="/predictivo" routerLinkActive="active">
+      <span class="nav-icon">🧠</span>
+      <span class="nav-text">Predictivo</span>
+    </button>
+
+    <button routerLink="/correctivos" routerLinkActive="active" class="btn-highlight">
+      <span class="nav-icon">➕</span>
+      <span class="nav-text">Paro</span>
+    </button>
+
+    <button routerLink="/confiabilidad" routerLinkActive="active">
+      <span class="nav-icon">📈</span>
+      <span class="nav-text">KPIs</span>
+    </button>
+  </nav>
+</div>

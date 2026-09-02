@@ -1,0 +1,132 @@
+<div class="predictivo-view">
+  <!-- TOP BAR -->
+  <div class="top-nav-bar">
+    <button class="btn-back" routerLink="/dashboard">&larr; Volver al Dashboard</button>
+    <div class="title-box">
+      <h2>MANTENIMIENTO PREDICTIVO • CEROFALLAS AI</h2>
+      <p>Pronóstico de Fallas en Líneas de Producción mediante Machine Learning (Horizonte: 7 Días)</p>
+    </div>
+    <button class="btn-pipeline" (click)="dispararPipeline()" [disabled]="ejecutandoInferencia">
+      {{ ejecutandoInferencia ? '⏳ Re-entrenando...' : '⚡ Re-entrenar Pipeline ML' }}
+    </button>
+  </div>
+
+  <div *ngIf="mensajeInferencia" class="alert-info">
+    {{ mensajeInferencia }}
+  </div>
+
+  <!-- KPIS -->
+  <div class="kpi-row">
+    <div class="kpi-box red">
+      <span class="kpi-num">{{ totalCriticos }}</span>
+      <span class="kpi-title">ALERTA CRÍTICA (&ge; 70%)</span>
+      <p class="kpi-sub">Falla inminente en próximos 7 días</p>
+    </div>
+
+    <div class="kpi-box amber">
+      <span class="kpi-num">{{ totalMedios }}</span>
+      <span class="kpi-title">MONITOREO (30% - 69%)</span>
+      <p class="kpi-sub">Desgaste acelerado detectado</p>
+    </div>
+
+    <div class="kpi-box green">
+      <span class="kpi-num">{{ totalBajos }}</span>
+      <span class="kpi-title">NORMAL (&lt; 30%)</span>
+      <p class="kpi-sub">Parámetros dentro de tolerancia</p>
+    </div>
+
+    <div class="kpi-box blue">
+      <span class="kpi-num">77.2%</span>
+      <span class="kpi-title">REDUCCIÓN DE COSTOS</span>
+      <p class="kpi-sub">Ahorro proyectado vs reactivo</p>
+    </div>
+  </div>
+
+  <!-- FILTERS -->
+  <div class="filter-card">
+    <span class="filter-label">Filtrar por Línea de Producción:</span>
+    <div class="filter-buttons">
+      <button [class.active]="lineaSeleccionada === 'TODAS'" (click)="filtrarPorLinea('TODAS')">Todas las Líneas ({{ equipos.length }})</button>
+      <button [class.active]="lineaSeleccionada === 'LINEA_1'" (click)="filtrarPorLinea('LINEA_1')">Línea 1</button>
+      <button [class.active]="lineaSeleccionada === 'LINEA_2'" (click)="filtrarPorLinea('LINEA_2')">Línea 2</button>
+      <button [class.active]="lineaSeleccionada === 'LINEA_3'" (click)="filtrarPorLinea('LINEA_3')">Línea 3</button>
+      <button [class.active]="lineaSeleccionada === 'LINEA_4'" (click)="filtrarPorLinea('LINEA_4')">Línea 4</button>
+    </div>
+  </div>
+
+  <!-- TABLE -->
+  <div class="table-container">
+    <div class="table-header">
+      <h3>Diagnóstico de Confiabilidad y Prescripciones por Equipo</h3>
+      <button class="btn-refresh" (click)="cargarPredicciones()">🔄 Refrescar</button>
+    </div>
+
+    <div class="table-responsive">
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>Línea</th>
+            <th>Equipo</th>
+            <th>Nivel de Riesgo</th>
+            <th>Probabilidad (7d)</th>
+            <th>Días sin Preventivo</th>
+            <th>Fallas (30d)</th>
+            <th>Recomendación Prescriptiva de Ingeniería</th>
+            <th>Acción</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let item of equiposFiltrados">
+            <td><strong>{{ item.linea }}</strong></td>
+            <td><strong>{{ item.equipo }}</strong></td>
+            <td>
+              <span class="risk-badge" [ngClass]="item.nivelRiesgo.toLowerCase()">
+                {{ item.nivelRiesgo }}
+              </span>
+            </td>
+            <td>
+              <div class="prob-wrapper">
+                <div class="prob-track">
+                  <div class="prob-fill" [ngClass]="item.nivelRiesgo.toLowerCase()" [style.width.%]="item.scoreRiesgoPct"></div>
+                </div>
+                <span><strong>{{ item.scoreRiesgoPct }}%</strong></span>
+              </div>
+            </td>
+            <td>{{ item.diasSinPreventivo }} días</td>
+            <td>{{ item.fallas30d }}</td>
+            <td><p class="recom-p">{{ item.recomendacionPrescriptiva }}</p></td>
+            <td>
+              <button class="btn-detail" (click)="abrirDetalle(item)">🔍 Ver</button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- MODAL -->
+  <div class="modal-overlay" *ngIf="modalVisible && equipoSeleccionado">
+    <div class="modal-card">
+      <button class="modal-close" (click)="cerrarModal()">&times;</button>
+      <h3>Diagnóstico Detallado: {{ equipoSeleccionado.equipo }} ({{ equipoSeleccionado.linea }})</h3>
+      <div class="modal-body">
+        <div class="modal-metric">
+          <span class="modal-label">Índice de Riesgo Predictivo:</span>
+          <span class="modal-val" [ngClass]="equipoSeleccionado.nivelRiesgo.toLowerCase()">{{ equipoSeleccionado.scoreRiesgoPct }}%</span>
+        </div>
+        <div class="modal-metric">
+          <span class="modal-label">Semáforo Operativo:</span>
+          <span class="modal-val">{{ equipoSeleccionado.semaforo }}</span>
+        </div>
+        <div class="modal-metric">
+          <span class="modal-label">Días acumulados sin mantenimiento:</span>
+          <span class="modal-val">{{ equipoSeleccionado.diasSinPreventivo }} días</span>
+        </div>
+        <div class="modal-recom-box">
+          <h4>Acción Prescriptiva Inmediata:</h4>
+          <p>{{ equipoSeleccionado.recomendacionPrescriptiva }}</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

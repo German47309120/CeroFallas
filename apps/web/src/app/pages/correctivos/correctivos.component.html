@@ -1,0 +1,82 @@
+<div class="form-view">
+  <div class="top-nav-bar">
+    <button class="btn-back" routerLink="/dashboard">&larr; Volver</button>
+    <div class="title-box">
+      <h2>REGISTRO DE TIEMPO MUERTO / CORRECTIVO</h2>
+      <p>Captura de Evento de Paro de Línea con Cálculo Automático de Minutos</p>
+    </div>
+  </div>
+
+  <div class="form-card">
+    <div *ngIf="mensajeExito" class="alert-success">{{ mensajeExito }}</div>
+    <div *ngIf="mensajeError" class="alert-error">{{ mensajeError }}</div>
+
+    <div class="form-grid">
+      <div class="form-group">
+        <label>Línea de Producción</label>
+        <select [(ngModel)]="nuevoRegistro.linea">
+          <option value="LINEA_1">Línea 1</option>
+          <option value="LINEA_2">Línea 2</option>
+          <option value="LINEA_3">Línea 3</option>
+          <option value="LINEA_4">Línea 4</option>
+          <option value="LINEA_ABASTECIMIENTO">Abastecimiento</option>
+          <option value="LINEA_AUTOMOTRIZ">Automotriz</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label>Equipo Afectado</label>
+        <select [(ngModel)]="nuevoRegistro.equipo" (change)="onEquipoChange()">
+          <option *ngFor="let eq of equiposList" [value]="eq">{{ eq }}</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label>Fecha de Intervención</label>
+        <input type="date" [(ngModel)]="nuevoRegistro.fecha">
+      </div>
+
+      <div class="form-group">
+        <label>Turno Operativo</label>
+        <div class="radio-turnos">
+          <label><input type="radio" name="turno" value="1" [(ngModel)]="nuevoRegistro.turno"> Turno 1</label>
+          <label><input type="radio" name="turno" value="2" [(ngModel)]="nuevoRegistro.turno"> Turno 2</label>
+        </div>
+      </div>
+
+      <div class="form-group full-width">
+        <label>Nombre del Técnico Responsable</label>
+        <input type="text" placeholder="Ej. Carlos Mendoza" [(ngModel)]="nuevoRegistro.nombre">
+      </div>
+
+      <div class="form-group">
+        <label>Hora de Inicio del Paro</label>
+        <input type="datetime-local" [(ngModel)]="nuevoRegistro.horaInicio" (change)="calcularMinutos()">
+      </div>
+
+      <div class="form-group">
+        <label>Hora de Finalización / Entrega</label>
+        <input type="datetime-local" [(ngModel)]="nuevoRegistro.horaFinal" (change)="calcularMinutos()">
+      </div>
+
+      <div class="form-group">
+        <label>Minutos Totales Fuera de Servicio</label>
+        <input type="number" readonly [value]="nuevoRegistro.minutos" class="input-highlight">
+      </div>
+
+      <div class="form-group">
+        <label>Estado</label>
+        <input type="text" readonly value="FINALIZADO">
+      </div>
+
+      <div class="form-group full-width">
+        <label>Descripción Técnica de la Intervención</label>
+        <textarea rows="3" placeholder="Detalle las causas del paro, componentes reparados o reemplazados y pruebas realizadas..." [(ngModel)]="nuevoRegistro.descripcion"></textarea>
+      </div>
+    </div>
+
+    <button class="btn-submit" (click)="guardar()" [disabled]="guardando">
+      {{ guardando ? 'Guardando Registro...' : '💾 GUARDAR TIEMPO MUERTO' }}
+    </button>
+  </div>
+</div>

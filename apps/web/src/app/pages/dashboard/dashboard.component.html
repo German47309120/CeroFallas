@@ -1,0 +1,81 @@
+<div class="dashboard-container">
+  <!-- USER CARD -->
+  <div class="user-hero-card">
+    <div class="user-info">
+      <span class="user-greeting">Bienvenido al Ecosistema</span>
+      <h2>CeroFallas Enterprise</h2>
+      <p class="user-role">Sistema Inteligente de Gestión & Mantenimiento Predictivo</p>
+    </div>
+    <div class="badge-online">
+      <span class="pulse-dot"></span> Online • v2.0 AI
+    </div>
+  </div>
+
+  <!-- SUMMARY STATS BAR -->
+  <div class="stats-grid">
+    <div class="stat-card critico" routerLink="/predictivo">
+      <div class="stat-icon">⚠️</div>
+      <div class="stat-details">
+        <span class="stat-num">{{ equiposCriticos }}</span>
+        <span class="stat-label">Alertas Críticas (&le; 7d)</span>
+      </div>
+    </div>
+
+    <div class="stat-card medio" routerLink="/predictivo">
+      <div class="stat-icon">⚡</div>
+      <div class="stat-details">
+        <span class="stat-num">{{ equiposMedios }}</span>
+        <span class="stat-label">Monitoreo Preventivo</span>
+      </div>
+    </div>
+
+    <div class="stat-card ahorro">
+      <div class="stat-icon">💰</div>
+      <div class="stat-details">
+        <span class="stat-num">{{ ahorroEstimado }}%</span>
+        <span class="stat-label">Ahorro Operativo (IA)</span>
+      </div>
+    </div>
+
+    <div class="stat-card disp" routerLink="/confiabilidad">
+      <div class="stat-icon">📊</div>
+      <div class="stat-details">
+        <span class="stat-num">{{ disponibilidadGlobal }}%</span>
+        <span class="stat-label">Disponibilidad Planta</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- MAIN MODULES GRID -->
+  <h3 class="section-title">MÓDULOS DEL SISTEMA</h3>
+  <div class="modules-grid">
+    <div class="module-card card-ai" routerLink="/predictivo">
+      <div class="module-badge">NUEVO CON IA</div>
+      <div class="module-icon">🧠</div>
+      <h4>Mantenimiento Predictivo</h4>
+      <p>Pronóstico de fallas a 7 días con Machine Learning, semáforos de criticidad y acciones prescriptivas.</p>
+      <span class="link-arrow">Acceder al Tablero &rarr;</span>
+    </div>
+
+    <div class="module-card card-correctivos" routerLink="/correctivos">
+      <div class="module-icon">⏱️</div>
+      <h4>Registro de Tiempos Muertos</h4>
+      <p>Captura rápida de paros de línea y fallas correctivas con cálculo automático de minutos.</p>
+      <span class="link-arrow">Nuevo Registro &rarr;</span>
+    </div>
+
+    <div class="module-card card-kpi" routerLink="/confiabilidad">
+      <div class="module-icon">📈</div>
+      <h4>Ingeniería de Confiabilidad</h4>
+      <p>Indicadores formales de planta: MTBF, MTTR y Disponibilidad Operacional por equipo.</p>
+      <span class="link-arrow">Ver Métricas &rarr;</span>
+    </div>
+
+    <div class="module-card card-powerbi" onclick="window.open('http://localhost:3000/api/docs', '_blank')">
+      <div class="module-icon">⚡</div>
+      <h4>Swagger OpenAPI</h4>
+      <p>Documentación interactiva de todas las APIs REST del backend NestJS para jurados y evaluadores.</p>
+      <span class="link-arrow">Ver Swagger &rarr;</span>
+    </div>
+  </div>
+</div>

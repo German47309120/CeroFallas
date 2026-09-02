@@ -1,0 +1,58 @@
+<div class="confiabilidad-view">
+  <div class="top-nav-bar">
+    <button class="btn-back" routerLink="/dashboard">&larr; Volver</button>
+    <div class="title-box">
+      <h2>INGENIERÍA DE CONFIABILIDAD OPERACIONAL</h2>
+      <p>Indicadores de Desempeño: MTBF (Tiempo Medio Entre Fallas), MTTR (Tiempo Medio de Reparación) y Disponibilidad</p>
+    </div>
+  </div>
+
+  <!-- FILTROS -->
+  <div class="filter-card">
+    <span class="filter-label">Filtrar por Línea:</span>
+    <div class="filter-buttons">
+      <button [class.active]="lineaSeleccionada === 'TODAS'" (click)="filtrarPorLinea('TODAS')">Todas las Líneas</button>
+      <button [class.active]="lineaSeleccionada === 'LINEA_1'" (click)="filtrarPorLinea('LINEA_1')">Línea 1</button>
+      <button [class.active]="lineaSeleccionada === 'LINEA_2'" (click)="filtrarPorLinea('LINEA_2')">Línea 2</button>
+      <button [class.active]="lineaSeleccionada === 'LINEA_3'" (click)="filtrarPorLinea('LINEA_3')">Línea 3</button>
+      <button [class.active]="lineaSeleccionada === 'LINEA_4'" (click)="filtrarPorLinea('LINEA_4')">Línea 4</button>
+    </div>
+  </div>
+
+  <div class="table-card">
+    <table class="kpi-table">
+      <thead>
+        <tr>
+          <th>Línea</th>
+          <th>Equipo</th>
+          <th>Total Fallas</th>
+          <th>Horas de Paro</th>
+          <th>MTTR (Horas)</th>
+          <th>MTBF (Horas)</th>
+          <th>Disponibilidad ($A$)</th>
+          <th>Estado Confiabilidad</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let k of kpisFiltrados">
+          <td><strong>{{ k.linea }}</strong></td>
+          <td><strong>{{ k.equipo }}</strong></td>
+          <td>{{ k.totalFallas }}</td>
+          <td>{{ k.horasTotalesParo }} h</td>
+          <td><strong>{{ k.mttrHoras }} h</strong></td>
+          <td><strong>{{ k.mtbfHoras }} h</strong></td>
+          <td>
+            <span class="disp-badge" [ngClass]="k.disponibilidadPct >= 97 ? 'optima' : (k.disponibilidadPct >= 92 ? 'alerta' : 'critica')">
+              {{ k.disponibilidadPct }}%
+            </span>
+          </td>
+          <td>
+            <span class="status-badge" [ngClass]="k.estadoConfiabilidad.toLowerCase()">
+              {{ k.estadoConfiabilidad }}
+            </span>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

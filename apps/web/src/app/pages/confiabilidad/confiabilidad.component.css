@@ -1,0 +1,124 @@
+.confiabilidad-view {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.top-nav-bar {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  background: #1e293b;
+  padding: 16px 20px;
+  border-radius: 12px;
+  border: 1px solid #334155;
+}
+
+.btn-back {
+  background: #334155;
+  color: #f8fafc;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.title-box h2 {
+  font-size: 1.2rem;
+  color: #38bdf8;
+}
+
+.title-box p {
+  font-size: 0.8rem;
+  color: #94a3b8;
+}
+
+/* FILTERS */
+.filter-card {
+  background: #1e293b;
+  padding: 14px 18px;
+  border-radius: 10px;
+  border: 1px solid #334155;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  flex-wrap: wrap;
+}
+
+.filter-label {
+  font-size: 0.85rem;
+  color: #94a3b8;
+}
+
+.filter-buttons {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.filter-buttons button {
+  background: #334155;
+  color: #cbd5e1;
+  border: none;
+  padding: 6px 14px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.85rem;
+  font-weight: 600;
+  transition: 0.2s;
+}
+
+.filter-buttons button.active, .filter-buttons button:hover {
+  background: #38bdf8;
+  color: #0f172a;
+}
+
+.table-card {
+  background: #1e293b;
+  padding: 20px;
+  border-radius: 12px;
+  border: 1px solid #334155;
+  overflow-x: auto;
+}
+
+.kpi-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9rem;
+}
+
+.kpi-table th {
+  background: #0f172a;
+  color: #94a3b8;
+  padding: 12px;
+  text-align: left;
+  border-bottom: 2px solid #334155;
+}
+
+.kpi-table td {
+  padding: 12px;
+  border-bottom: 1px solid #334155;
+  color: #e2e8f0;
+}
+
+.disp-badge {
+  font-weight: 800;
+  padding: 4px 8px;
+  border-radius: 6px;
+}
+
+.disp-badge.optima { color: #10b981; }
+.disp-badge.alerta { color: #f59e0b; }
+.disp-badge.critica { color: #ef4444; }
+
+.status-badge {
+  padding: 4px 10px;
+  border-radius: 12px;
+  font-size: 0.75rem;
+  font-weight: 800;
+}
+
+.status-badge.optima { background: #064e3b; color: #a7f3d0; border: 1px solid #10b981; }
+.status-badge.monitoreo { background: #78350f; color: #fde68a; border: 1px solid #f59e0b; }
+.status-badge.critica { background: #7f1d1d; color: #fca5a5; border: 1px solid #ef4444; }
