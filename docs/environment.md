@@ -30,6 +30,13 @@ Fecha de verificación: 2026-09-02
 - Identidad Git disponible: German Hernández, mediante dirección `noreply` de GitHub.
 - `.gitignore` verificado contra `.env`, cuentas de servicio y `node_modules`.
 - Los comandos automatizados deben usar una excepción `safe.directory` limitada a este repositorio debido a la diferencia entre el propietario de Windows y la cuenta aislada de ejecución.
+- El usuario autorizó registrar `C:/PG2_CeroFallas` como `safe.directory` global para Git el 2026-09-02.
+
+## Compatibilidad verificada
+
+- Firebase CLI requiere Node.js 18 o superior; Node.js 22.20.0 cumple el requisito.
+- La instalación de Firebase CLI se realizará en la fase de configuración de Firebase, no antes.
+- Fuente: https://firebase.google.com/docs/cli
 
 ## Reglas del entorno
 

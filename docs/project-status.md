@@ -4,21 +4,21 @@ Fecha: 2026-09-02
 
 Fase: Fase 1 — Preparación del entorno
 
-Paso: 1.1 — Inventario local y control de versiones
+Paso: 1.2 — Compatibilidad, costos y riesgos iniciales
 
 Estado: COMPLETADO
 
 Objetivo actual:
 
-Registrar las herramientas disponibles y preparar un repositorio local protegido contra la inclusión accidental de secretos.
+Verificar compatibilidad de las herramientas base y documentar decisiones, riesgos y costos antes de instalar servicios.
 
 Último resultado confirmado:
 
-El entorno fue inventariado y el repositorio Git fue inicializado sobre `main`. `.gitignore` protege dependencias, archivos de entorno y credenciales comunes.
+Node.js 22 cumple el requisito actual de Firebase CLI. Se documentaron costos gratuitos iniciales, riesgos y decisiones conocidas. No se habilitó facturación ni se instaló Firebase CLI.
 
 Última prueba exitosa:
 
-Git reconoció la rama `main` y `.gitignore` excluyó correctamente `.env`, `service-account*.json` y `node_modules/`.
+Git y `.gitignore` fueron verificados; la compatibilidad de Node.js fue contrastada con documentación oficial de Firebase.
 
 Archivos activos:
 
@@ -26,6 +26,10 @@ Archivos activos:
 - `docs/requirements.md`
 - `docs/acceptance-criteria.md`
 - `docs/environment.md`
+- `docs/decisions.md`
+- `docs/risks.md`
+- `docs/costs.md`
+- `docs/changelog.md`
 - `docs/project-status.md`
 - `.gitignore`
 
@@ -34,12 +38,16 @@ Archivos modificados:
 - `docs/requirements.md` — creado.
 - `docs/acceptance-criteria.md` — creado.
 - `docs/environment.md` — creado.
+- `docs/decisions.md` — creado.
+- `docs/risks.md` — creado.
+- `docs/costs.md` — creado.
+- `docs/changelog.md` — creado.
 - `docs/project-status.md` — creado.
 - `.gitignore` — creado.
 
 Último commit:
 
-Pendiente de crear al cerrar el Paso 1.1.
+`7907188 docs: initialize CeroFallas project scope`
 
 Problema actual:
 
@@ -58,4 +66,4 @@ Riesgo actual:
 
 Siguiente acción exacta:
 
-Crear el commit inicial y continuar con el Paso 1.2: selección y compatibilidad de las herramientas base.
+Crear un commit del cierre de la Fase 1 e iniciar la Fase 2 con historias de usuario y casos de uso verificables.
