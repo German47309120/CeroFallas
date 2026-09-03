@@ -2,46 +2,48 @@
 
 Fecha: 2026-09-03
 
-Fase: Fase 9 — Mantenimientos correctivos
+Fase: Fase 10 — Mantenimientos preventivos
 
-Paso: 9.1 — Registro, consulta, tiempos, anulación y auditoría
+Paso: 10.1 — Planificación, ejecución, cumplimiento y auditoría
 
 Estado: COMPLETADO TÉCNICAMENTE
 
 Objetivo alcanzado:
 
-Digitalizar el reporte de tiempos correctivo suministrado y proteger sus operaciones con perfiles Firestore.
+Implementar el ciclo preventivo sin presentar frecuencias estimadas como estándares oficiales.
 
 Último resultado confirmado:
 
-- El formulario captura fecha, inicio, fin, cruce de medianoche, área, equipo, responsable, síntoma, falla provisional, componente, causa, trabajo, repuestos y observaciones.
-- La duración se calcula con timestamps completos y se limita a un máximo de 24 horas por registro.
-- Los equipos disponibles se filtran por área y se conserva una instantánea histórica de código/nombre.
-- Lectura, creación y modificación usan permisos distintos.
-- Sólo `corrective.manage` permite editar o anular; la anulación exige motivo y no borra el documento.
-- Altas y cambios crean auditoría en el mismo lote de escritura del repositorio.
-- El listado consulta los 50 registros más recientes y permite buscar y filtrar por estado.
+- Los planes relacionan equipo, actividad, descripción, tipo de frecuencia, intervalo, próxima fecha y estado.
+- Se admiten frecuencias por calendario, horas de uso y condición.
+- Toda frecuencia creada actualmente se marca `estimatedFrequency: true`.
+- Las ejecuciones pueden vincularse a un plan o registrarse como no programadas.
+- Se guardan timestamps completos, duración, técnico, actividad, repuestos, observaciones y cumplimiento.
+- El cumplimiento se clasifica como `on_time`, `late` o `unscheduled`.
+- Leer, planificar, ejecutar y modificar usan permisos independientes.
+- Sólo `preventive.manage` edita o anula planes; una anulación exige motivo y conserva las ejecuciones.
+- Planes, ejecuciones y auditoría se guardan en Firestore; no existe borrado físico.
 
 Pruebas exitosas:
 
-- Suite Firestore y duración: 14 de 14 pruebas aprobadas.
-- P-010: flujo en navegador aprobado, incluyendo 23:30–01:00 = 1 h 30 min y anulación con motivo.
-- `npm run build`: aprobado.
-- `npm audit --omit=dev`: 0 vulnerabilidades en producción (última consulta de esta sesión).
+- Suite completa: 22 de 22 pruebas aprobadas.
+- P-012: flujo en navegador aprobado para plan de 30 días, ejecución de 1 h 15 min, cumplimiento a tiempo y anulación con motivo.
+- `npm run build`: aprobado antes de la prueba integral.
 
 Pendientes externos:
 
+- Frecuencias preventivas oficiales por equipo.
 - Nombres, códigos, modelos y líneas reales de las máquinas.
-- Usuarios reales para seleccionar varios técnicos responsables.
-- Consulta de stock SAP para seleccionar repuestos existentes.
+- Usuarios reales para asignación múltiple de técnicos.
+- Consulta de stock SAP para selección asistida de repuestos.
 - Identidad del futuro técnico de soporte.
 
 Riesgos vigentes:
 
-- El catálogo de fallas suministrado mezcla fallas y actividades; se conserva como provisional hasta validarlo en planta.
+- No se calculará cumplimiento gerencial con datos ficticios en el dashboard real.
+- Las frecuencias estimadas requieren validación antes de operación productiva.
 - No existe histórico real suficiente para validar modelos predictivos.
-- Firebase CLI conserva ocho alertas moderadas sólo en dependencias de desarrollo.
 
 Siguiente acción exacta:
 
-Iniciar la Fase 10 — mantenimientos preventivos: planes configurables, frecuencias estimadas claramente marcadas, ejecución y cumplimiento.
+Iniciar la Fase 11 — checklist de montacargas: plantilla versionada, revisión integral, reglas críticas y resultado apto/no apto.

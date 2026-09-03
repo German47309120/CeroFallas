@@ -35,3 +35,8 @@
 - Se incorporaron permisos separados de lectura, registro y modificación/anulación.
 - Se agregó captura estructurada de repuestos, clasificación provisional de fallas y auditoría atómica.
 - Se aprobaron pruebas automáticas y de navegador para alta, consulta y anulación sin borrado.
+- Se implementaron planes preventivos con calendario, horas de uso o condición.
+- Toda frecuencia inicial queda identificada como estimada y conserva próxima fecha configurable.
+- Se implementó el registro de ejecuciones preventivas, duración, repuestos y cumplimiento.
+- Se separaron permisos para leer, planificar, ejecutar y modificar preventivos.
+- Se validó la anulación con motivo sin eliminar el historial de ejecuciones.

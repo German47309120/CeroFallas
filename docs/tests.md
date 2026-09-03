@@ -193,3 +193,41 @@ Resultado obtenido:
 Estado: APROBADA TÉCNICAMENTE.
 
 Limitaciones: la asignación de varios técnicos y la selección de repuestos desde SAP dependen de los módulos de usuarios y stock. El formulario ya admite repuestos manuales estructurados.
+
+## PRUEBA P-011 — Reglas y lógica preventiva
+
+Fecha: 2026-09-03
+
+Casos automatizados agregados:
+
+1. Planificador autorizado crea un plan estimado con auditoría.
+2. Firestore rechaza intervalos preventivos no positivos.
+3. Técnico autorizado registra una ejecución con auditoría.
+4. Perfil de solo lectura no puede registrar ejecuciones.
+5. Planes y ejecuciones no pueden borrarse físicamente.
+6. Frecuencias de calendario, horómetro y condición generan textos coherentes.
+7. Ejecuciones se clasifican como a tiempo, tardías o no programadas.
+
+Resultado obtenido: suite completa con 22 de 22 pruebas aprobadas.
+
+Estado: APROBADA TÉCNICAMENTE.
+
+## PRUEBA P-012 — Flujo integral de preventivos
+
+Fecha: 2026-09-03
+
+Datos utilizados: cuenta, equipo, plan y ejecución ficticios en Firebase Emulator Suite.
+
+Resultado obtenido:
+
+1. Se creó un plan para `TEST-EQ-001` con frecuencia estimada de 30 días.
+2. El listado mostró actividad, equipo, frecuencia, próxima fecha y estado.
+3. Al seleccionar el plan, la ejecución completó automáticamente equipo y fecha programada.
+4. El rango 08:00–09:15 calculó 1 h 15 min.
+5. La ejecución quedó clasificada como “A tiempo”.
+6. El historial mostró equipo, actividad, fecha, duración y cumplimiento.
+7. La anulación del plan exigió motivo y conservó tanto el plan como su ejecución histórica.
+
+Estado: APROBADA TÉCNICAMENTE.
+
+Limitación: todas las frecuencias permanecen marcadas como estimadas hasta recibir estándares reales de planta.

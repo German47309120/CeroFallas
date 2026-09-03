@@ -750,6 +750,39 @@ h2 {
   font-weight: 750;
 }
 
+.heading-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+.records-list--inside {
+  margin-top: 1rem;
+}
+
+.record-row {
+  display: grid;
+  gap: 0.75rem;
+  padding: 0.9rem 0;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.record-row:last-child {
+  border-bottom: 0;
+}
+
+.record-row strong,
+.record-row span,
+.record-row small {
+  display: block;
+}
+
+.record-row span,
+.record-row small {
+  margin-top: 0.2rem;
+  color: var(--color-muted);
+}
+
 .login-page {
   display: grid;
   min-height: 100vh;
@@ -905,6 +938,11 @@ h2 {
   .repeater-row {
     grid-template-columns: minmax(8rem, 0.7fr) minmax(12rem, 1.5fr) minmax(6rem, 0.4fr) auto;
     align-items: end;
+  }
+
+  .record-row {
+    grid-template-columns: minmax(12rem, 1.5fr) minmax(10rem, 1fr) auto auto;
+    align-items: center;
   }
 
   .form-field--wide {

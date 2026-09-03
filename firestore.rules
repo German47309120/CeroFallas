@@ -94,6 +94,52 @@ service cloud.firestore {
       allow delete: if false;
     }
 
+    match /preventivePlans/{planId} {
+      allow read: if hasPermission('preventive.read');
+      allow create: if hasPermission('preventive.plan')
+        && request.resource.data.status == 'active'
+        && request.resource.data.estimatedFrequency == true
+        && request.resource.data.activityName is string
+        && request.resource.data.activityName.size() > 0
+        && request.resource.data.frequencyType in ['calendar', 'hours', 'condition']
+        && (request.resource.data.frequencyType == 'condition' || (request.resource.data.frequencyValue is number && request.resource.data.frequencyValue > 0))
+        && request.resource.data.createdBy == request.auth.uid
+        && request.resource.data.createdAt == request.time
+        && request.resource.data.updatedAt == request.time;
+      allow update: if hasPermission('preventive.manage')
+        && request.resource.data.status in ['active', 'paused', 'completed', 'voided']
+        && request.resource.data.estimatedFrequency == true
+        && request.resource.data.createdAt == resource.data.createdAt
+        && request.resource.data.createdBy == resource.data.createdBy
+        && request.resource.data.updatedBy == request.auth.uid
+        && request.resource.data.updatedAt == request.time
+        && (request.resource.data.status != 'voided' || (request.resource.data.voidReason is string && request.resource.data.voidReason.size() > 0));
+      allow delete: if false;
+    }
+
+    match /preventiveExecutions/{executionId} {
+      allow read: if hasPermission('preventive.read');
+      allow create: if hasPermission('preventive.execute')
+        && request.resource.data.status == 'completed'
+        && request.resource.data.durationMinutes is int
+        && request.resource.data.durationMinutes > 0
+        && request.resource.data.durationMinutes <= 1440
+        && request.resource.data.endedAt > request.resource.data.startedAt
+        && request.resource.data.complianceStatus in ['on_time', 'late', 'unscheduled']
+        && request.resource.data.createdBy == request.auth.uid
+        && request.auth.uid in request.resource.data.technicianIds
+        && request.resource.data.createdAt == request.time
+        && request.resource.data.updatedAt == request.time;
+      allow update: if hasPermission('preventive.manage')
+        && request.resource.data.status in ['completed', 'voided']
+        && request.resource.data.createdAt == resource.data.createdAt
+        && request.resource.data.createdBy == resource.data.createdBy
+        && request.resource.data.technicianIds == resource.data.technicianIds
+        && request.resource.data.updatedBy == request.auth.uid
+        && request.resource.data.updatedAt == request.time;
+      allow delete: if false;
+    }
+
     match /{document=**} {
       allow read, write: if false;
     }

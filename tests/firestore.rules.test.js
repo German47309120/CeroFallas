@@ -62,6 +62,21 @@ const correctiveData = (userId, overrides = {}) => ({
   ...overrides,
 })
 
+const preventivePlanData = (userId, overrides = {}) => ({
+  equipmentId: 'TEST-EQ-001', equipmentSnapshot: { code: 'TEST-EQ-001', name: 'Equipo de prueba' },
+  activityName: 'Inspección preventiva', activityDescription: null, frequencyType: 'calendar', frequencyValue: 30,
+  frequencyUnit: 'day', estimatedFrequency: true, nextDueAt: Timestamp.fromDate(new Date('2026-10-03T12:00:00')),
+  assignedUserIds: [], status: 'active', voidReason: null,
+  createdAt: serverTimestamp(), createdBy: userId, updatedAt: serverTimestamp(), updatedBy: userId, ...overrides,
+})
+
+const preventiveExecutionData = (userId, overrides = {}) => ({
+  planId: null, equipmentId: 'TEST-EQ-001', equipmentSnapshot: { code: 'TEST-EQ-001', name: 'Equipo de prueba' }, scheduledAt: null,
+  startedAt: Timestamp.fromDate(new Date('2026-09-03T08:00:00')), endedAt: Timestamp.fromDate(new Date('2026-09-03T09:00:00')),
+  durationMinutes: 60, technicianIds: [userId], activityPerformed: 'Inspección preventiva de prueba', spareParts: [], observations: null,
+  complianceStatus: 'unscheduled', status: 'completed', createdAt: serverTimestamp(), createdBy: userId, updatedAt: serverTimestamp(), updatedBy: userId, ...overrides,
+})
+
 async function createProfile(userId, permissions, status = 'active') {
   await testEnvironment.withSecurityRulesDisabled(async (context) => {
     await setDoc(doc(context.firestore(), 'users', userId), {
@@ -175,5 +190,52 @@ describe('reglas de correctivos', () => {
     })
     const database = testEnvironment.authenticatedContext('manager').firestore()
     await assertFails(deleteDoc(doc(database, 'correctives', 'test-corrective')))
+  })
+})
+
+describe('reglas de preventivos', () => {
+  it('permite crear un plan estimado al planificador', async () => {
+    await createProfile('planner', ['preventive.read', 'preventive.plan', 'audit.write'])
+    const database = testEnvironment.authenticatedContext('planner').firestore()
+    const planRef = doc(collection(database, 'preventivePlans'))
+    const auditRef = doc(collection(database, 'audit'))
+    const batch = writeBatch(database)
+    batch.set(planRef, preventivePlanData('planner'))
+    batch.set(auditRef, { occurredAt: serverTimestamp(), actorId: 'planner', action: 'create', entityType: 'preventivePlan', entityId: planRef.id })
+    await assertSucceeds(batch.commit())
+  })
+
+  it('rechaza frecuencias no positivas', async () => {
+    await createProfile('planner', ['preventive.plan'])
+    const database = testEnvironment.authenticatedContext('planner').firestore()
+    await assertFails(setDoc(doc(database, 'preventivePlans', 'invalid-plan'), preventivePlanData('planner', { frequencyValue: 0 })))
+  })
+
+  it('permite registrar una ejecución al técnico autorizado', async () => {
+    await createProfile('executor', ['preventive.read', 'preventive.execute', 'audit.write'])
+    const database = testEnvironment.authenticatedContext('executor').firestore()
+    const executionRef = doc(collection(database, 'preventiveExecutions'))
+    const auditRef = doc(collection(database, 'audit'))
+    const batch = writeBatch(database)
+    batch.set(executionRef, preventiveExecutionData('executor'))
+    batch.set(auditRef, { occurredAt: serverTimestamp(), actorId: 'executor', action: 'create', entityType: 'preventiveExecution', entityId: executionRef.id })
+    await assertSucceeds(batch.commit())
+  })
+
+  it('rechaza ejecuciones a perfiles de solo lectura', async () => {
+    await createProfile('preventive-viewer', ['preventive.read'])
+    const database = testEnvironment.authenticatedContext('preventive-viewer').firestore()
+    await assertFails(setDoc(doc(database, 'preventiveExecutions', 'blocked'), preventiveExecutionData('preventive-viewer')))
+  })
+
+  it('impide borrar planes y ejecuciones', async () => {
+    await createProfile('preventive-manager', ['preventive.read', 'preventive.manage'])
+    await testEnvironment.withSecurityRulesDisabled(async (context) => {
+      await setDoc(doc(context.firestore(), 'preventivePlans', 'plan'), preventivePlanData('preventive-manager'))
+      await setDoc(doc(context.firestore(), 'preventiveExecutions', 'execution'), preventiveExecutionData('preventive-manager'))
+    })
+    const database = testEnvironment.authenticatedContext('preventive-manager').firestore()
+    await assertFails(deleteDoc(doc(database, 'preventivePlans', 'plan')))
+    await assertFails(deleteDoc(doc(database, 'preventiveExecutions', 'execution')))
   })
 })
