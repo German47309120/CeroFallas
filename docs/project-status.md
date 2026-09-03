@@ -2,23 +2,23 @@
 
 Fecha: 2026-09-02
 
-Fase: Fase 2 — Requerimientos
+Fase: Fase 3 — Modelo de datos
 
-Paso: 2.1 — Requisitos, historias de usuario y casos de uso
+Paso: 3.1 — Modelo lógico y reglas de integridad
 
 Estado: COMPLETADO
 
 Objetivo actual:
 
-Convertir el alcance aprobado en requisitos verificables, historias de usuario y casos de uso principales.
+Definir entidades, campos, relaciones, estados, auditoría e índices requeridos sin depender todavía de una base de datos concreta.
 
 Último resultado confirmado:
 
-Se definieron requisitos funcionales y no funcionales, reglas de negocio, historias de usuario y casos de uso para los módulos confirmados.
+Se creó el modelo lógico para usuarios, roles, áreas, turnos, equipos, correctivos, preventivos, checklist, incidentes, stock, predicciones y auditoría.
 
 Última prueba exitosa:
 
-Pendiente de validación automática de estructura y trazabilidad documental.
+Pendiente de validar estructura, entidades y referencias principales.
 
 Archivos activos:
 
@@ -33,6 +33,7 @@ Archivos activos:
 - `docs/functional-requirements.md`
 - `docs/user-stories.md`
 - `docs/use-cases.md`
+- `docs/data-model.md`
 - `docs/project-status.md`
 - `.gitignore`
 
@@ -48,6 +49,7 @@ Archivos modificados:
 - `docs/functional-requirements.md` — creado.
 - `docs/user-stories.md` — creado.
 - `docs/use-cases.md` — creado.
+- `docs/data-model.md` — creado.
 - `docs/project-status.md` — creado.
 - `.gitignore` — creado.
 
@@ -72,4 +74,4 @@ Riesgo actual:
 
 Siguiente acción exacta:
 
-Verificar identificadores y cobertura documental; crear el commit de la Fase 2 antes de iniciar el modelo de datos.
+Verificar el modelo lógico, crear el commit de la Fase 3 y continuar con la selección formal de arquitectura.

@@ -11,3 +11,4 @@
 - Se verificó la compatibilidad de Node.js con Firebase CLI.
 - Se documentaron requisitos funcionales, no funcionales y reglas de negocio.
 - Se crearon historias de usuario y casos de uso principales.
+- Se diseñó el modelo lógico de datos y sus reglas de integridad.
