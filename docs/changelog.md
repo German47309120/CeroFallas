@@ -25,3 +25,8 @@
 - Se validó Firebase Hosting local y la reescritura directa de rutas SPA.
 - Se implementaron login, persistencia de sesión, rutas protegidas y cierre de sesión con Firebase Authentication.
 - Se aprobaron las pruebas locales de autenticación, persistencia y protección de rutas.
+- Se instaló Java 21 y se habilitó Firestore Emulator.
+- Se implementaron perfiles y permisos obtenidos desde Firestore.
+- Se implementó el catálogo de equipos con alta, consulta, filtros, edición, desactivación lógica y auditoría.
+- Se agregaron reglas de seguridad y seis pruebas automatizadas para el módulo de equipos.
+- Se validó el flujo integral en navegador con datos ficticios y se confirmó el build de producción.

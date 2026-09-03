@@ -112,3 +112,45 @@ Resultado obtenido: Todos los casos aprobados en el emulador local.
 Estado: APROBADA TÉCNICAMENTE.
 
 Limitación: Todavía no valida perfiles Firestore, usuarios desactivados ni permisos por rol; esas pruebas corresponden a seguridad y roles.
+
+## PRUEBA P-007 — Reglas de seguridad de equipos
+
+Fecha: 2026-09-03
+
+Función: autorización de perfiles, catálogo de equipos y auditoría en Firestore Emulator.
+
+Casos ejecutados:
+
+1. Lectura sin autenticación rechazada.
+2. Lectura permitida a perfil activo con `equipment.read`.
+3. Lectura rechazada a perfil desactivado aunque conserve permisos.
+4. Creación rechazada a perfil de solo lectura.
+5. Creación atómica de equipo y auditoría permitida al administrador.
+6. Eliminación física rechazada incluso al administrador.
+
+Resultado obtenido: 6 de 6 pruebas automáticas aprobadas con Vitest y Firebase Rules Unit Testing.
+
+Estado: APROBADA TÉCNICAMENTE.
+
+## PRUEBA P-008 — Flujo integral del catálogo de equipos
+
+Fecha: 2026-09-03
+
+Función: perfil Firestore, permisos, alta, consulta, filtro, edición y desactivación lógica.
+
+Datos utilizados: cuenta, perfil y equipo exclusivamente ficticios en Firebase Emulator Suite.
+
+Resultado obtenido:
+
+1. El administrador autenticado recibió sus permisos desde Firestore.
+2. El catálogo vacío no inventó datos de planta.
+3. El formulario validó campos obligatorios.
+4. Se creó `TEST-EQ-001` junto con su auditoría.
+5. La recarga conservó sesión y registro.
+6. El filtro mostró correctamente el estado sin coincidencias.
+7. La edición cambió nombre y estado a inactivo sin borrar el registro.
+8. El build de producción finalizó correctamente.
+
+Estado: APROBADA TÉCNICAMENTE.
+
+Limitación: el catálogo real continúa pendiente de nombres, códigos, modelos y líneas levantados en planta. Los datos del emulador desaparecen al detenerlo.

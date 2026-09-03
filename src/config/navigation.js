@@ -60,6 +60,7 @@ export const moduleContent = {
     title: 'Equipos',
     description: 'Catálogo central de activos y acceso a su historial.',
     action: 'Nuevo equipo',
+    actionTo: '/equipos/nuevo',
   },
   '/repuestos': {
     eyebrow: 'SAP · solo lectura',

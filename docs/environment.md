@@ -1,6 +1,6 @@
 # CeroFallas — Entorno de desarrollo
 
-Fecha de verificación: 2026-09-02
+Fecha de verificación: 2026-09-03
 
 ## Sistema
 
@@ -15,7 +15,7 @@ Fecha de verificación: 2026-09-02
 - npm: 10.9.3.
 - Python: 3.12.3.
 - Firebase CLI: 15.29.0, instalada localmente.
-- Java: no instalado o no disponible en PATH.
+- Java: Eclipse Temurin JDK 21.0.12.1 LTS instalado. Una terminal abierta antes de instalarlo requiere reinicio o ruta explícita para actualizar `PATH`.
 
 ## Dependencias frontend instaladas
 
@@ -25,6 +25,8 @@ Fecha de verificación: 2026-09-02
 - Vite: 8.2.2.
 - Plugin React para Vite: 6.1.1.
 - Firebase JavaScript SDK: 12.18.0.
+- Vitest: 5.0.0.
+- Firebase Rules Unit Testing: instalada como dependencia de desarrollo.
 
 Auditoría de producción (`npm audit --omit=dev`): 0 vulnerabilidades reportadas.
 
@@ -49,7 +51,7 @@ Auditoría completa: 8 vulnerabilidades moderadas en dependencias transitivas de
 ## Compatibilidad verificada
 
 - Firebase CLI requiere Node.js 18 o superior; Node.js 22.20.0 cumple el requisito.
-- La instalación de Firebase CLI se realizará en la fase de configuración de Firebase, no antes.
+- Firestore Emulator se validó con Java 21 y Firebase CLI 15.29.0.
 - Fuente: https://firebase.google.com/docs/cli
 
 ## Reglas del entorno

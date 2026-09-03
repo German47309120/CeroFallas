@@ -45,7 +45,7 @@ function Sidebar({ environment, open, onClose }) {
           <span className="status-dot" aria-hidden="true" />
           <div>
             <strong>{environment === 'emulator' ? 'Entorno local' : 'Firebase activo'}</strong>
-            <small>{environment === 'emulator' ? 'Authentication Emulator' : 'Servicios cloud'}</small>
+            <small>{environment === 'emulator' ? 'Firebase Emulator Suite' : 'Servicios cloud'}</small>
           </div>
         </div>
       </aside>
@@ -57,7 +57,7 @@ export default function AppShell() {
   const [menuOpen, setMenuOpen] = useState(false)
   const location = useLocation()
   const navigate = useNavigate()
-  const { environment, logout, profile, user } = useAuth()
+  const { environment, logout, profile, profileError, user } = useAuth()
 
   useEffect(() => {
     setMenuOpen(false)
@@ -91,10 +91,10 @@ export default function AppShell() {
             <span>Turno actual: por configurar</span>
           </div>
           <NavLink className="profile-link" to="/perfil" aria-label="Abrir perfil">
-            <span className="avatar" aria-hidden="true">GH</span>
+            <span className="avatar" aria-hidden="true">{profile?.displayName?.slice(0, 2).toUpperCase() || 'CF'}</span>
             <span className="profile-link__text">
-              <strong>{profile?.displayName}</strong>
-              <small>{profile?.role}</small>
+              <strong>{profile?.displayName || user?.email}</strong>
+              <small>{profile?.role || 'Perfil pendiente'}</small>
             </span>
           </NavLink>
           <button className="logout-button" type="button" onClick={handleLogout}>
@@ -104,7 +104,7 @@ export default function AppShell() {
 
         <main className="main-content">
           <div className="demo-banner" role="status">
-            Sesión autenticada como {user?.email}. La persistencia operativa todavía no está conectada.
+            {profileError || `Sesión autenticada como ${user?.email}. Persistencia conectada a ${environment === 'emulator' ? 'Firestore local' : 'Firestore cloud'}.`}
           </div>
           <Outlet />
         </main>

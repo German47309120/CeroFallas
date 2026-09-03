@@ -12,7 +12,7 @@ Estado: CONFIGURACIÓN LOCAL PREPARADA; PROYECTO CLOUD PENDIENTE
 ## Archivos
 
 - `firebase.json`: Hosting, Firestore y puertos de emuladores.
-- `firestore.rules`: denegación completa inicial.
+- `firestore.rules`: perfiles, permisos, equipos y auditoría habilitados; demás colecciones denegadas.
 - `firestore.indexes.json`: índices vacíos hasta implementar consultas.
 - `.env.example`: plantilla sin valores reales.
 - `src/services/firebase/config.js`: inicialización modular condicionada.
@@ -21,7 +21,7 @@ Estado: CONFIGURACIÓN LOCAL PREPARADA; PROYECTO CLOUD PENDIENTE
 
 - No existe `.firebaserc` porque todavía no se ha elegido ni vinculado un proyecto real.
 - No existen credenciales Firebase dentro del repositorio.
-- Firestore niega toda lectura y escritura.
+- Firestore deniega por defecto y sólo habilita las operaciones cubiertas por reglas probadas.
 - La aplicación continúa en modo demostración si faltan variables.
 - No se habilitó facturación ni Cloud Storage.
 
@@ -49,7 +49,27 @@ Puertos previstos:
 - Firestore: 8080.
 - Authentication: 9099.
 
-El emulador de Firestore requiere Java. Java no está instalado actualmente, por lo que esa prueba permanece bloqueada hasta instalar una versión compatible. Hosting puede probarse independientemente.
+Firestore Emulator se ejecuta con Eclipse Temurin JDK 21.
+
+### Preparar un administrador ficticio local
+
+Con Authentication y Firestore Emulator activos, definir `CEROFALLAS_TEST_EMAIL` y `CEROFALLAS_TEST_PASSWORD` únicamente en la terminal y ejecutar:
+
+```powershell
+npm run seed:emulator
+```
+
+El script crea una cuenta y un perfil administrador sólo en memoria local. No usar credenciales reales ni versionarlas.
+
+### Probar reglas de Firestore
+
+Con Java 21 disponible:
+
+```powershell
+npx firebase emulators:exec --project demo-cerofallas-rules-test --only firestore "npm test"
+```
+
+Las pruebas usan un proyecto `demo-` aislado y limpian Firestore entre casos.
 
 ## Seguridad de dependencias
 

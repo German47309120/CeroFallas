@@ -26,13 +26,17 @@ Síntoma: El editor de parches no puede refrescar el espacio mientras `.git` est
 
 Causa: Limitación del aislamiento de Windows en esta sesión.
 
-Solución temporal: Mover `.git` a `.git-codex-paused` dentro del mismo proyecto durante cada lote de edición y restaurarlo inmediatamente antes de verificaciones y commits.
+Solución temporal anterior: mover `.git` a `.git-codex-paused` durante cada lote de edición.
+
+Incidente del 2026-09-03: Windows bloqueó parcialmente un nuevo movimiento y dividió contenido entre ambas rutas. Se recombinó el contenido, se verificó `HEAD` y `git status`, y se eliminó únicamente la copia temporal validada.
+
+Regla operativa actual: no volver a mover `.git`; aplicar parches directamente, ya que el editor volvió a funcionar con el repositorio presente.
 
 Archivos afectados: Metadatos Git movidos temporalmente, sin alteración de su contenido.
 
-Estado: Activo y controlado.
+Estado: Controlado; repositorio verificado.
 
-## ERROR 003 — Java no disponible
+## ERROR 003 — Java no disponible (RESUELTO)
 
 Fecha: 2026-09-03
 
@@ -44,9 +48,9 @@ Causa: Java no está instalado o no se encuentra en PATH.
 
 Impacto: El emulador local de Firestore no puede ejecutarse.
 
-Solución propuesta: Instalar una versión de Java compatible después de verificar la documentación vigente, o realizar temporalmente pruebas de reglas en un entorno autorizado alternativo.
+Solución aplicada: instalación de Eclipse Temurin JDK 21.0.12.1 LTS mediante Windows Package Manager. Firestore Emulator inició correctamente y ejecutó la suite de reglas.
 
-Estado: BLOQUEO PARCIAL; no afecta build ni Hosting local.
+Estado: RESUELTO el 2026-09-03.
 
 ## ERROR 004 — Vulnerabilidades transitivas en Firebase CLI
 

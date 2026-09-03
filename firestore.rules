@@ -2,8 +2,70 @@ rules_version = '2';
 
 service cloud.firestore {
   match /databases/{database}/documents {
-    // Estado inicial seguro: ningún documento puede leerse o escribirse.
-    // Cada colección se habilitará con pruebas durante su fase funcional.
+    function signedIn() {
+      return request.auth != null;
+    }
+
+    function ownProfile() {
+      return get(/databases/$(database)/documents/users/$(request.auth.uid)).data;
+    }
+
+    function activeUser() {
+      return signedIn() && ownProfile().status == 'active';
+    }
+
+    function hasPermission(permission) {
+      return activeUser() && permission in ownProfile().permissions;
+    }
+
+    match /users/{userId} {
+      allow read: if signedIn() && request.auth.uid == userId;
+      allow write: if false;
+    }
+
+    match /equipment/{equipmentId} {
+      allow read: if hasPermission('equipment.read');
+      allow create: if hasPermission('equipment.manage')
+        && request.resource.data.keys().hasAll(['code', 'name', 'type', 'areaId', 'status', 'createdAt', 'createdBy', 'updatedAt', 'updatedBy'])
+        && request.resource.data.keys().hasOnly(['code', 'name', 'type', 'areaId', 'status', 'criticality', 'brand', 'model', 'serialNumber', 'notes', 'createdAt', 'createdBy', 'updatedAt', 'updatedBy'])
+        && request.resource.data.code is string
+        && request.resource.data.code.size() > 0
+        && request.resource.data.code.matches('^[A-Z0-9][A-Z0-9._-]{0,39}$')
+        && equipmentId == request.resource.data.code
+        && request.resource.data.name is string
+        && request.resource.data.name.size() > 0
+        && request.resource.data.type is string
+        && request.resource.data.type.size() > 0
+        && request.resource.data.status in ['active', 'inactive', 'out_of_service']
+        && request.resource.data.createdBy == request.auth.uid
+        && request.resource.data.updatedBy == request.auth.uid
+        && request.resource.data.createdAt == request.time
+        && request.resource.data.updatedAt == request.time;
+      allow update: if hasPermission('equipment.manage')
+        && request.resource.data.keys().hasAll(['code', 'name', 'type', 'areaId', 'status', 'createdAt', 'createdBy', 'updatedAt', 'updatedBy'])
+        && request.resource.data.keys().hasOnly(['code', 'name', 'type', 'areaId', 'status', 'criticality', 'brand', 'model', 'serialNumber', 'notes', 'createdAt', 'createdBy', 'updatedAt', 'updatedBy'])
+        && request.resource.data.code == resource.data.code
+        && request.resource.data.code == equipmentId
+        && request.resource.data.name is string
+        && request.resource.data.name.size() > 0
+        && request.resource.data.type is string
+        && request.resource.data.type.size() > 0
+        && request.resource.data.status in ['active', 'inactive', 'out_of_service']
+        && request.resource.data.createdAt == resource.data.createdAt
+        && request.resource.data.createdBy == resource.data.createdBy
+        && request.resource.data.updatedBy == request.auth.uid
+        && request.resource.data.updatedAt == request.time;
+      allow delete: if false;
+    }
+
+    match /audit/{auditId} {
+      allow read: if hasPermission('audit.read');
+      allow create: if hasPermission('audit.write')
+        && request.resource.data.actorId == request.auth.uid
+        && request.resource.data.occurredAt == request.time;
+      allow update, delete: if false;
+    }
+
     match /{document=**} {
       allow read, write: if false;
     }
