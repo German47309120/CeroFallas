@@ -12,3 +12,6 @@
 - Se documentaron requisitos funcionales, no funcionales y reglas de negocio.
 - Se crearon historias de usuario y casos de uso principales.
 - Se diseñó el modelo lógico de datos y sus reglas de integridad.
+- Se seleccionó y documentó la arquitectura base de la solución.
+- Se desacoplaron SAP, Power BI y el servicio predictivo del frontend.
+- Se registró Cloud Storage como función condicionada a facturación Blaze.

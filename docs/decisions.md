@@ -80,18 +80,54 @@ Motivo: Mantener respaldo y trazabilidad técnica desde el inicio.
 
 Impacto: Se utilizarán commits pequeños y `.gitignore` para proteger secretos.
 
-## DECISIÓN PENDIENTE 001
+## DECISIÓN 006
 
 Fecha: 2026-09-02
 
-Tema: Base de datos operacional.
+Tema: Arquitectura base y base de datos operacional.
 
 Situación: Debe compararse Cloud Firestore con Realtime Database.
 
-Alternativas: Cloud Firestore; Realtime Database.
+Alternativas: Cloud Firestore o Realtime Database; frontend simple o SPA por componentes.
 
-Recomendación preliminar: Cloud Firestore por su modelo de colecciones, consultas compuestas, índices, escalabilidad y reglas adecuadas para las entidades e históricos de CeroFallas.
+Decisión tomada: React con Vite y JavaScript modular para el frontend; Firebase Authentication; Cloud Firestore; Security Rules; Firebase Hosting.
 
-Estado: Se formalizará durante la Fase 4 — Arquitectura.
+Motivo: Firestore se ajusta mejor a las entidades, históricos, filtros e índices. React permite organizar las numerosas pantallas y permisos sin introducir un backend monolítico. Vite es compatible con Node.js 22.20.0.
+
+Impacto: La aplicación será una SPA; las consultas se encapsularán; Hosting reescribirá rutas hacia `index.html`.
 
 Fuente oficial: https://firebase.google.com/docs/database/rtdb-vs-firestore
+
+## DECISIÓN 007
+
+Fecha: 2026-09-02
+
+Tema: Evidencias fotográficas.
+
+Situación: Cloud Storage exige actualmente el plan Blaze.
+
+Alternativas: Habilitar facturación ahora; bloquear módulos hasta tener Storage; conservar adjuntos como función opcional condicionada.
+
+Decisión tomada: Los formularios principales funcionarán sin archivos adjuntos. La carga de evidencias se habilitará únicamente después de autorizar Blaze.
+
+Motivo: Evitar costos o facturación no autorizados sin bloquear el núcleo operacional.
+
+Impacto: El modelo admite URLs futuras, pero la primera implementación no dependerá de Storage.
+
+Fuente oficial: https://firebase.google.com/docs/storage/web/start
+
+## DECISIÓN 008
+
+Fecha: 2026-09-02
+
+Tema: Integración con SAP.
+
+Situación: El stock procede de una consulta SQL Server autorizada.
+
+Alternativas: Conexión SQL directa desde navegador; backend intermedio; snapshot sincronizado.
+
+Decisión tomada: Prohibir conexión SQL desde el navegador y utilizar un proceso seguro de solo lectura que publique un snapshot controlado.
+
+Motivo: Proteger credenciales, aislar la red de SAP y mantener la aplicación disponible si SAP falla.
+
+Impacto: Se deberá definir dónde se ejecutará el sincronizador antes de implementar la conexión real.

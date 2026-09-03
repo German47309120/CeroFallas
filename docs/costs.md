@@ -49,6 +49,18 @@ Costo estimado: Pendiente del diseño y frecuencia. Algunos productos o usos pue
 
 Estado: No autorizado para facturación.
 
+## Cloud Storage for Firebase
+
+Plan: Requiere Blaze según la documentación actual para proyectos nuevos.
+
+Motivo: Evidencias fotográficas opcionales.
+
+Costo estimado: Pendiente de volumen y región.
+
+Estado: No se habilitará hasta recibir autorización expresa de facturación.
+
+Fuente: https://firebase.google.com/docs/storage/web/start
+
 ## Power BI
 
 Plan: El usuario informa que ya cuenta con una licencia para publicar reportes.

@@ -2,23 +2,23 @@
 
 Fecha: 2026-09-02
 
-Fase: Fase 3 — Modelo de datos
+Fase: Fase 4 — Arquitectura
 
-Paso: 3.1 — Modelo lógico y reglas de integridad
+Paso: 4.1 — Selección y documentación de arquitectura
 
 Estado: COMPLETADO
 
 Objetivo actual:
 
-Definir entidades, campos, relaciones, estados, auditoría e índices requeridos sin depender todavía de una base de datos concreta.
+Seleccionar una arquitectura segura, mantenible, publicable y compatible con el entorno disponible.
 
 Último resultado confirmado:
 
-Se creó el modelo lógico para usuarios, roles, áreas, turnos, equipos, correctivos, preventivos, checklist, incidentes, stock, predicciones y auditoría.
+Se seleccionó React con Vite, Firebase Authentication, Cloud Firestore, Security Rules y Firebase Hosting. SAP, Power BI y el predictivo quedaron desacoplados.
 
 Última prueba exitosa:
 
-Pendiente de validar estructura, entidades y referencias principales.
+Pendiente de validar el documento arquitectónico y sus decisiones condicionadas.
 
 Archivos activos:
 
@@ -34,6 +34,9 @@ Archivos activos:
 - `docs/user-stories.md`
 - `docs/use-cases.md`
 - `docs/data-model.md`
+- `docs/architecture.md`
+- `docs/decisions.md`
+- `docs/costs.md`
 - `docs/project-status.md`
 - `.gitignore`
 
@@ -50,6 +53,9 @@ Archivos modificados:
 - `docs/user-stories.md` — creado.
 - `docs/use-cases.md` — creado.
 - `docs/data-model.md` — creado.
+- `docs/architecture.md` — creado.
+- `docs/decisions.md` — actualizado.
+- `docs/costs.md` — actualizado.
 - `docs/project-status.md` — creado.
 - `.gitignore` — creado.
 
@@ -74,4 +80,4 @@ Riesgo actual:
 
 Siguiente acción exacta:
 
-Verificar el modelo lógico, crear el commit de la Fase 3 y continuar con la selección formal de arquitectura.
+Verificar y versionar la arquitectura; iniciar el mapa de navegación y los wireframes de la Fase 5.
