@@ -1,6 +1,46 @@
-import { Link } from 'react-router-dom'
+import { useEffect, useState } from 'react'
+import { Navigate, useLocation, useNavigate } from 'react-router-dom'
+import { useAuth } from '../features/auth/AuthContext.jsx'
+import { getAuthErrorMessage, loginWithEmail } from '../services/firebase/auth.js'
 
 export default function LoginPage() {
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
+  const [error, setError] = useState('')
+  const [submitting, setSubmitting] = useState(false)
+  const { environment, loading, user } = useAuth()
+  const location = useLocation()
+  const navigate = useNavigate()
+
+  useEffect(() => {
+    setError('')
+  }, [email, password])
+
+  if (!loading && user) {
+    return <Navigate to={location.state?.from || '/'} replace />
+  }
+
+  async function handleSubmit(event) {
+    event.preventDefault()
+    setError('')
+
+    if (!email.trim() || !password) {
+      setError('Ingresa tu correo y contraseña.')
+      return
+    }
+
+    setSubmitting(true)
+
+    try {
+      await loginWithEmail(email, password)
+      navigate(location.state?.from || '/', { replace: true })
+    } catch (authError) {
+      setError(getAuthErrorMessage(authError))
+    } finally {
+      setSubmitting(false)
+    }
+  }
+
   return (
     <main className="login-page">
       <section className="login-intro">
@@ -16,30 +56,54 @@ export default function LoginPage() {
           <h1>Información clara para actuar antes y después de cada falla.</h1>
           <p>Correctivos, preventivos, inspecciones e indicadores en una sola aplicación.</p>
         </div>
-        <small>Prototipo local · No ingresar datos reales</small>
+        <small>
+          {environment === 'emulator'
+            ? 'Authentication Emulator · Utiliza solo cuentas de prueba'
+            : 'Acceso conectado a Firebase'}
+        </small>
       </section>
 
       <section className="login-panel" aria-labelledby="login-title">
         <div className="login-card">
           <p className="eyebrow">Acceso seguro</p>
           <h2 id="login-title">Iniciar sesión</h2>
-          <p>La autenticación se conectará a Firebase en una fase posterior.</p>
+          <p>
+            {environment === 'emulator'
+              ? 'Entorno local aislado. No utilices contraseñas reales.'
+              : 'Utiliza la cuenta autorizada por el administrador.'}
+          </p>
 
-          <form onSubmit={(event) => event.preventDefault()}>
+          <form onSubmit={handleSubmit} noValidate>
             <label htmlFor="email">Correo electrónico</label>
-            <input id="email" name="email" type="email" autoComplete="username" disabled />
+            <input
+              id="email"
+              name="email"
+              type="email"
+              autoComplete="username"
+              value={email}
+              onChange={(event) => setEmail(event.target.value)}
+              disabled={submitting}
+              required
+            />
 
             <label htmlFor="password">Contraseña</label>
-            <input id="password" name="password" type="password" autoComplete="current-password" disabled />
+            <input
+              id="password"
+              name="password"
+              type="password"
+              autoComplete="current-password"
+              value={password}
+              onChange={(event) => setPassword(event.target.value)}
+              disabled={submitting}
+              required
+            />
 
-            <button className="button button--primary button--full" type="submit" disabled>
-              Iniciar sesión
+            {error ? <div className="form-error" role="alert">{error}</div> : null}
+
+            <button className="button button--primary button--full" type="submit" disabled={submitting || loading}>
+              {submitting ? 'Comprobando…' : 'Iniciar sesión'}
             </button>
           </form>
-
-          <Link className="demo-link" to="/">
-            Entrar al prototipo demostrativo
-          </Link>
         </div>
       </section>
     </main>

@@ -1,8 +1,9 @@
 import { useEffect, useState } from 'react'
-import { NavLink, Outlet, useLocation } from 'react-router-dom'
+import { NavLink, Outlet, useLocation, useNavigate } from 'react-router-dom'
 import { navigationGroups } from '../../config/navigation.js'
+import { useAuth } from '../../features/auth/AuthContext.jsx'
 
-function Sidebar({ open, onClose }) {
+function Sidebar({ environment, open, onClose }) {
   return (
     <>
       <button
@@ -43,8 +44,8 @@ function Sidebar({ open, onClose }) {
         <div className="sidebar__footer">
           <span className="status-dot" aria-hidden="true" />
           <div>
-            <strong>Modo demostración</strong>
-            <small>Sin conexión a Firebase</small>
+            <strong>{environment === 'emulator' ? 'Entorno local' : 'Firebase activo'}</strong>
+            <small>{environment === 'emulator' ? 'Authentication Emulator' : 'Servicios cloud'}</small>
           </div>
         </div>
       </aside>
@@ -55,14 +56,21 @@ function Sidebar({ open, onClose }) {
 export default function AppShell() {
   const [menuOpen, setMenuOpen] = useState(false)
   const location = useLocation()
+  const navigate = useNavigate()
+  const { environment, logout, profile, user } = useAuth()
 
   useEffect(() => {
     setMenuOpen(false)
   }, [location.pathname])
 
+  async function handleLogout() {
+    await logout()
+    navigate('/login', { replace: true })
+  }
+
   return (
     <div className="app-shell">
-      <Sidebar open={menuOpen} onClose={() => setMenuOpen(false)} />
+      <Sidebar environment={environment} open={menuOpen} onClose={() => setMenuOpen(false)} />
       <div className="app-frame">
         <header className="topbar">
           <button
@@ -77,21 +85,26 @@ export default function AppShell() {
             <span />
           </button>
           <div className="topbar__context">
-            <span className="environment-pill">Desarrollo local</span>
+            <span className="environment-pill">
+              {environment === 'emulator' ? 'Emulador local' : 'Firebase cloud'}
+            </span>
             <span>Turno actual: por configurar</span>
           </div>
           <NavLink className="profile-link" to="/perfil" aria-label="Abrir perfil">
             <span className="avatar" aria-hidden="true">GH</span>
             <span className="profile-link__text">
-              <strong>Administrador</strong>
-              <small>Sesión demostrativa</small>
+              <strong>{profile?.displayName}</strong>
+              <small>{profile?.role}</small>
             </span>
           </NavLink>
+          <button className="logout-button" type="button" onClick={handleLogout}>
+            Salir
+          </button>
         </header>
 
         <main className="main-content">
           <div className="demo-banner" role="status">
-            Interfaz demostrativa: todavía no existe autenticación ni persistencia de datos.
+            Sesión autenticada como {user?.email}. La persistencia operativa todavía no está conectada.
           </div>
           <Outlet />
         </main>

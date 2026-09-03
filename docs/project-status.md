@@ -1,24 +1,24 @@
 # CEROFALLAS — ESTADO ACTUAL
 
-Fecha: 2026-09-02
+Fecha: 2026-09-03
 
-Fase: Fase 6 — Configuración de Firebase
+Fase: Fase 7 — Autenticación
 
-Paso: 6.1 — Configuración local segura
+Paso: 7.1 — Login, protección de rutas y cierre de sesión
 
 Estado: COMPLETADO
 
 Objetivo actual:
 
-Preparar SDK, CLI, Hosting, Firestore, variables y emuladores sin crear recursos cloud ni habilitar facturación.
+Implementar autenticación real contra Firebase Authentication y validarla de forma aislada con Authentication Emulator.
 
 Último resultado confirmado:
 
-Firebase SDK 12.18.0 y CLI 15.29.0 están instalados. Hosting local sirve rutas SPA correctamente; Firestore parte cerrado y las variables reales siguen vacías.
+Login, persistencia local de sesión, protección de rutas y cierre de sesión están implementados y verificados con Authentication Emulator.
 
 Última prueba exitosa:
 
-JSON válido, build exitoso y ruta directa `/correctivos` servida por Hosting Emulator con HTTP 200 y cero errores de consola.
+Prueba P-006 aprobada: campos vacíos, contraseña incorrecta, usuario inexistente, login correcto, retorno protegido, persistencia, logout y bloqueo sin sesión.
 
 Archivos activos:
 
@@ -47,6 +47,10 @@ Archivos activos:
 - `firestore.indexes.json`
 - `.env.example`
 - `src/services/firebase/config.js`
+- `src/services/firebase/auth.js`
+- `src/features/auth/`
+- `src/pages/LoginPage.jsx`
+- `src/components/layout/AppShell.jsx`
 - `docs/firebase-setup.md`
 - `docs/errors.md`
 - `docs/decisions.md`
@@ -81,6 +85,10 @@ Archivos modificados:
 - `firestore.indexes.json` — creado.
 - `.env.example` — creado sin valores reales.
 - `src/services/firebase/config.js` — creado.
+- `src/services/firebase/auth.js` — creado.
+- `src/features/auth/` — creado.
+- `src/pages/LoginPage.jsx` — autenticación habilitada.
+- `src/components/layout/AppShell.jsx` — sesión y cierre de sesión integrados.
 - `docs/firebase-setup.md` — creado.
 - `docs/errors.md` — creado.
 - `docs/decisions.md` — actualizado.
@@ -90,11 +98,11 @@ Archivos modificados:
 
 Último commit:
 
-`7907188 docs: initialize CeroFallas project scope`
+`7e00f6a chore: configure Firebase local environment` (último commit antes de cerrar el Paso 7.1).
 
 Problema actual:
 
-- Ninguno que impida validar el alcance.
+- Firestore Emulator continúa bloqueado por ausencia de Java; no afecta Authentication Emulator.
 
 Pendiente de confirmación:
 
@@ -109,4 +117,4 @@ Riesgo actual:
 
 Siguiente acción exacta:
 
-Iniciar la Fase 7 con Authentication Emulator. La vinculación cloud de la Fase 6 queda pendiente de proyecto, región y sesión del usuario; Firestore Emulator sigue bloqueado por Java.
+Crear el commit de autenticación e iniciar la Fase 8 — catálogo provisional de equipos mediante una capa de repositorio reemplazable.

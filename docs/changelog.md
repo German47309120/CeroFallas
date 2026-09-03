@@ -23,3 +23,5 @@
 - Se configuraron Hosting, Firestore, variables y emuladores con denegación por defecto.
 - Se registraron la ausencia de Java y riesgos transitivos del CLI.
 - Se validó Firebase Hosting local y la reescritura directa de rutas SPA.
+- Se implementaron login, persistencia de sesión, rutas protegidas y cierre de sesión con Firebase Authentication.
+- Se aprobaron las pruebas locales de autenticación, persistencia y protección de rutas.

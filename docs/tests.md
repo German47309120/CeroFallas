@@ -85,3 +85,30 @@ Estado: APROBADA TÉCNICAMENTE.
 Evidencia: Emulador en `127.0.0.1:5000` y revisión en navegador integrado.
 
 Limitación: No representa un despliegue público ni valida Firestore.
+
+## PRUEBA P-006 — Autenticación local completa
+
+Fecha: 2026-09-03
+
+Función: Firebase Authentication, protección de rutas y cierre de sesión.
+
+Datos utilizados: Authentication Emulator y cuenta ficticia `admin.demo@cerofallas.local`.
+
+Casos ejecutados:
+
+1. Acceso directo sin sesión a `/correctivos`: redirigió a `/login`.
+2. Formulario vacío: mostró “Ingresa tu correo y contraseña.”
+3. Contraseña incorrecta: permaneció en login y mostró un mensaje seguro.
+4. Usuario inexistente: permaneció en login y mostró el mismo mensaje, sin revelar existencia de cuentas.
+5. Credenciales correctas: abrió `/correctivos`.
+6. Recarga del navegador: conservó la sesión y la ruta protegida.
+7. Cierre de sesión: regresó a `/login`.
+8. Nuevo acceso directo después de salir: volvió a redirigir a `/login`.
+
+Resultado esperado: Todos los casos se comportan conforme a autenticación segura básica.
+
+Resultado obtenido: Todos los casos aprobados en el emulador local.
+
+Estado: APROBADA TÉCNICAMENTE.
+
+Limitación: Todavía no valida perfiles Firestore, usuarios desactivados ni permisos por rol; esas pruebas corresponden a seguridad y roles.

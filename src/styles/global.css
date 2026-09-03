@@ -319,6 +319,17 @@ h2 {
   color: var(--color-muted);
 }
 
+.logout-button {
+  min-height: 2.55rem;
+  padding: 0.55rem 0.75rem;
+  border: 1px solid var(--color-border);
+  border-radius: 0.65rem;
+  color: var(--color-text);
+  background: var(--color-surface);
+  font-weight: 750;
+  cursor: pointer;
+}
+
 .main-content {
   width: min(100%, 1440px);
   margin: 0 auto;
@@ -619,11 +630,23 @@ h2 {
   margin-top: 0.9rem;
 }
 
-.demo-link {
-  display: block;
-  margin-top: 1.25rem;
-  text-align: center;
-  font-weight: 750;
+.form-error {
+  margin-top: 0.55rem;
+  padding: 0.75rem;
+  border: 1px solid #edc3c0;
+  border-radius: 0.65rem;
+  color: #842d29;
+  background: #fff0ef;
+  font-size: 0.9rem;
+}
+
+.auth-loading {
+  display: grid;
+  min-height: 100vh;
+  place-items: center;
+  align-content: center;
+  gap: 1rem;
+  color: var(--color-muted);
 }
 
 .not-found {

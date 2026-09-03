@@ -5,6 +5,7 @@ import LoginPage from '../pages/LoginPage.jsx'
 import ModulePage from '../pages/ModulePage.jsx'
 import NotFoundPage from '../pages/NotFoundPage.jsx'
 import { moduleContent } from '../config/navigation.js'
+import ProtectedRoute from '../features/auth/ProtectedRoute.jsx'
 
 function ModuleRoutes() {
   return Object.entries(moduleContent).map(([path, content]) => (
@@ -35,7 +36,7 @@ export default function App() {
   return (
     <Routes>
       <Route path="/login" element={<LoginPage />} />
-      <Route element={<AppShell />}>
+      <Route element={<ProtectedRoute><AppShell /></ProtectedRoute>}>
         <Route index element={<DashboardPage />} />
         {ModuleRoutes()}
         <Route path="/correctivos/nuevo" element={<PlaceholderForm title="Nuevo correctivo" />} />
