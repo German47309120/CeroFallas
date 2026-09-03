@@ -231,3 +231,42 @@ Resultado obtenido:
 Estado: APROBADA TÉCNICAMENTE.
 
 Limitación: todas las frecuencias permanecen marcadas como estimadas hasta recibir estándares reales de planta.
+
+## PRUEBA P-013 — Reglas y evaluación del checklist
+
+Fecha: 2026-09-03
+
+Casos automatizados agregados:
+
+1. Montacarguista autorizado puede registrar una inspección completa y auditada.
+2. Firestore rechaza inspecciones con menos de 25 respuestas.
+3. Firestore rechaza un resultado “apto” si declara fallas críticas.
+4. Ningún perfil puede borrar físicamente una inspección.
+5. Veinticinco respuestas buenas generan resultado apto.
+6. Una falla crítica genera fuera de servicio.
+7. Una falla no crítica genera requiere atención.
+8. Una respuesta ausente o vacía mantiene el checklist incompleto.
+
+Resultado obtenido: suite completa con 29 de 29 pruebas aprobadas.
+
+Estado: APROBADA TÉCNICAMENTE.
+
+## PRUEBA P-014 — Flujo integral de checklist de montacargas
+
+Fecha: 2026-09-03
+
+Datos utilizados: cuenta y montacargas ficticios en Firebase Emulator Suite.
+
+Resultado obtenido:
+
+1. Sólo equipos activos cuyo tipo contiene “Montacargas” aparecieron en el selector.
+2. La plantilla v1 mostró 25 puntos agrupados en inspección visual, niveles, operación y seguridad.
+3. El formulario permaneció “Checklist incompleto” mientras las respuestas estaban vacías.
+4. “Marcar todo bueno” produjo “Apto para operar”.
+5. Cambiar el freno de servicio a “Requiere atención” produjo inmediatamente “Fuera de servicio — no operar”.
+6. La observación fue obligatoria para el punto defectuoso.
+7. La inspección persistida mostró horómetro, turno, una falla crítica y resultado fuera de servicio.
+
+Estado: APROBADA TÉCNICAMENTE.
+
+Limitaciones: la evidencia fotográfica queda pendiente porque Cloud Storage requiere una decisión explícita de facturación. Los modelos reales de montacargas se agregarán después de la visita a planta.

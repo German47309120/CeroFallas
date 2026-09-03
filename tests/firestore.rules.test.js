@@ -77,6 +77,15 @@ const preventiveExecutionData = (userId, overrides = {}) => ({
   complianceStatus: 'unscheduled', status: 'completed', createdAt: serverTimestamp(), createdBy: userId, updatedAt: serverTimestamp(), updatedBy: userId, ...overrides,
 })
 
+const forkliftInspectionData = (userId, overrides = {}) => ({
+  equipmentId: 'FORKLIFT-001', equipmentSnapshot: { code: 'FORKLIFT-001', name: 'Montacargas de prueba' },
+  templateId: 'forklift-daily-v1', templateVersion: 1, inspectedAt: Timestamp.fromDate(new Date('2026-09-03T06:15:00')),
+  shiftId: 'shift-1', operatorId: userId, hourMeter: 1250.5,
+  answers: Array.from({ length: 25 }, (_, index) => ({ itemId: `item-${index}`, label: `Punto ${index}`, critical: false, status: 'good', observation: null })),
+  criticalFailures: 0, overallResult: 'fit', generalObservations: null, evidenceUrls: [], status: 'completed',
+  createdAt: serverTimestamp(), createdBy: userId, ...overrides,
+})
+
 async function createProfile(userId, permissions, status = 'active') {
   await testEnvironment.withSecurityRulesDisabled(async (context) => {
     await setDoc(doc(context.firestore(), 'users', userId), {
@@ -237,5 +246,34 @@ describe('reglas de preventivos', () => {
     const database = testEnvironment.authenticatedContext('preventive-manager').firestore()
     await assertFails(deleteDoc(doc(database, 'preventivePlans', 'plan')))
     await assertFails(deleteDoc(doc(database, 'preventiveExecutions', 'execution')))
+  })
+})
+
+describe('reglas de checklist de montacargas', () => {
+  it('permite registrar una inspección completa al montacarguista', async () => {
+    await createProfile('forklift-operator', ['forklift.read', 'forklift.inspect', 'audit.write'])
+    const database = testEnvironment.authenticatedContext('forklift-operator').firestore()
+    const inspectionRef = doc(collection(database, 'forkliftInspections'))
+    const auditRef = doc(collection(database, 'audit'))
+    const batch = writeBatch(database)
+    batch.set(inspectionRef, forkliftInspectionData('forklift-operator'))
+    batch.set(auditRef, { occurredAt: serverTimestamp(), actorId: 'forklift-operator', action: 'create', entityType: 'forkliftInspection', entityId: inspectionRef.id })
+    await assertSucceeds(batch.commit())
+  })
+
+  it('rechaza checklist incompleto o resultado crítico inconsistente', async () => {
+    await createProfile('forklift-operator', ['forklift.inspect'])
+    const database = testEnvironment.authenticatedContext('forklift-operator').firestore()
+    await assertFails(setDoc(doc(database, 'forkliftInspections', 'incomplete'), forkliftInspectionData('forklift-operator', { answers: [] })))
+    await assertFails(setDoc(doc(database, 'forkliftInspections', 'unsafe-result'), forkliftInspectionData('forklift-operator', { criticalFailures: 1, overallResult: 'fit' })))
+  })
+
+  it('impide eliminar físicamente una inspección', async () => {
+    await createProfile('forklift-manager', ['forklift.read', 'forklift.manage'])
+    await testEnvironment.withSecurityRulesDisabled(async (context) => {
+      await setDoc(doc(context.firestore(), 'forkliftInspections', 'inspection'), forkliftInspectionData('forklift-manager'))
+    })
+    const database = testEnvironment.authenticatedContext('forklift-manager').firestore()
+    await assertFails(deleteDoc(doc(database, 'forkliftInspections', 'inspection')))
   })
 })

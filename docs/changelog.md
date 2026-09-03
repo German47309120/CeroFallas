@@ -40,3 +40,8 @@
 - Se implementó el registro de ejecuciones preventivas, duración, repuestos y cumplimiento.
 - Se separaron permisos para leer, planificar, ejecutar y modificar preventivos.
 - Se validó la anulación con motivo sin eliminar el historial de ejecuciones.
+- Se creó la plantilla v1 del checklist diario de montacargas con 25 puntos.
+- Se incluyeron llantas, horquillas, mástil, cadenas, mangueras, cilindros, fugas, aceites, refrigerante, batería, frenos, dirección, elevación y dispositivos de seguridad.
+- Se implementó cálculo automático de apto, requiere atención y fuera de servicio.
+- Las fallas críticas impiden marcar el montacargas como apto y exigen observación.
+- Se agregaron permisos, persistencia, auditoría y pruebas para inspecciones.

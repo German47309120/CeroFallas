@@ -777,6 +777,97 @@ h2 {
   display: block;
 }
 
+.inspection-toolbar {
+  position: sticky;
+  top: 5.25rem;
+  z-index: 5;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.inspection-toolbar span,
+.inspection-toolbar strong,
+.inspection-toolbar small {
+  display: block;
+}
+
+.inspection-toolbar span,
+.inspection-toolbar small {
+  color: var(--color-muted);
+}
+
+.checklist-section {
+  display: grid;
+  gap: 1rem;
+  min-width: 0;
+}
+
+.checklist-section legend {
+  padding: 0 0.5rem;
+  font-size: 1.15rem;
+  font-weight: 850;
+}
+
+.checklist-item {
+  display: grid;
+  gap: 0.8rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.checklist-item:last-child {
+  padding-bottom: 0;
+  border-bottom: 0;
+}
+
+.critical-label {
+  display: inline-flex;
+  margin-left: 0.5rem;
+  padding: 0.15rem 0.4rem;
+  border-radius: 999px;
+  color: var(--color-danger);
+  background: #fff0ef;
+  font-size: 0.7rem;
+  font-weight: 800;
+}
+
+.answer-options {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.5rem;
+}
+
+.answer-options label {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.82rem;
+}
+
+.checklist-item > label {
+  display: grid;
+  gap: 0.35rem;
+  color: var(--color-muted);
+  font-size: 0.8rem;
+  font-weight: 750;
+}
+
+.checklist-item input[type='text'],
+.checklist-item > label input {
+  width: 100%;
+  min-height: 2.7rem;
+  padding: 0.65rem 0.75rem;
+  border: 1px solid var(--color-border);
+  border-radius: 0.65rem;
+}
+
+.result-badge--fit { color: #155d41; background: #e1f3ea; }
+.result-badge--attention_required { color: #7a4908; background: #fff1d9; }
+.result-badge--out_of_service { color: #842d29; background: #fff0ef; }
+
 .record-row span,
 .record-row small {
   margin-top: 0.2rem;
@@ -943,6 +1034,15 @@ h2 {
   .record-row {
     grid-template-columns: minmax(12rem, 1.5fr) minmax(10rem, 1fr) auto auto;
     align-items: center;
+  }
+
+  .checklist-item {
+    grid-template-columns: minmax(14rem, 1.25fr) minmax(18rem, 1fr) minmax(12rem, 0.9fr);
+    align-items: center;
+  }
+
+  .answer-options {
+    grid-template-columns: repeat(2, minmax(8rem, 1fr));
   }
 
   .form-field--wide {

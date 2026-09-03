@@ -140,6 +140,33 @@ service cloud.firestore {
       allow delete: if false;
     }
 
+    match /forkliftInspections/{inspectionId} {
+      allow read: if hasPermission('forklift.read');
+      allow create: if hasPermission('forklift.inspect')
+        && request.resource.data.templateId == 'forklift-daily-v1'
+        && request.resource.data.templateVersion == 1
+        && request.resource.data.shiftId in ['shift-1', 'shift-2']
+        && request.resource.data.hourMeter is number
+        && request.resource.data.hourMeter >= 0
+        && request.resource.data.answers is list
+        && request.resource.data.answers.size() == 25
+        && request.resource.data.criticalFailures is int
+        && request.resource.data.criticalFailures >= 0
+        && request.resource.data.overallResult in ['fit', 'attention_required', 'out_of_service']
+        && ((request.resource.data.criticalFailures > 0 && request.resource.data.overallResult == 'out_of_service')
+          || (request.resource.data.criticalFailures == 0 && request.resource.data.overallResult in ['fit', 'attention_required']))
+        && request.resource.data.status == 'completed'
+        && request.resource.data.operatorId == request.auth.uid
+        && request.resource.data.createdBy == request.auth.uid
+        && request.resource.data.createdAt == request.time;
+      allow update: if hasPermission('forklift.manage')
+        && request.resource.data.status in ['completed', 'voided']
+        && request.resource.data.createdAt == resource.data.createdAt
+        && request.resource.data.createdBy == resource.data.createdBy
+        && request.resource.data.operatorId == resource.data.operatorId;
+      allow delete: if false;
+    }
+
     match /{document=**} {
       allow read, write: if false;
     }
