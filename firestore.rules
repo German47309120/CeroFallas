@@ -66,6 +66,34 @@ service cloud.firestore {
       allow update, delete: if false;
     }
 
+    match /correctives/{correctiveId} {
+      allow read: if hasPermission('corrective.read');
+      allow create: if hasPermission('corrective.create')
+        && request.resource.data.keys().hasAll(['eventDate', 'startedAt', 'endedAt', 'durationMinutes', 'areaId', 'areaSnapshot', 'equipmentId', 'equipmentSnapshot', 'technicianIds', 'reportedSymptom', 'workPerformed', 'status', 'createdAt', 'createdBy', 'updatedAt', 'updatedBy'])
+        && request.resource.data.status in ['draft', 'completed']
+        && request.resource.data.durationMinutes is int
+        && request.resource.data.durationMinutes > 0
+        && request.resource.data.durationMinutes <= 1440
+        && request.resource.data.endedAt > request.resource.data.startedAt
+        && request.resource.data.createdBy == request.auth.uid
+        && request.auth.uid in request.resource.data.technicianIds
+        && request.resource.data.createdAt == request.time
+        && request.resource.data.updatedAt == request.time;
+      allow update: if hasPermission('corrective.manage')
+        && request.resource.data.status in ['draft', 'completed', 'voided']
+        && request.resource.data.durationMinutes is int
+        && request.resource.data.durationMinutes > 0
+        && request.resource.data.durationMinutes <= 1440
+        && request.resource.data.endedAt > request.resource.data.startedAt
+        && request.resource.data.createdAt == resource.data.createdAt
+        && request.resource.data.createdBy == resource.data.createdBy
+        && request.resource.data.technicianIds == resource.data.technicianIds
+        && request.resource.data.updatedBy == request.auth.uid
+        && request.resource.data.updatedAt == request.time
+        && (request.resource.data.status != 'voided' || (request.resource.data.voidReason is string && request.resource.data.voidReason.size() > 0));
+      allow delete: if false;
+    }
+
     match /{document=**} {
       allow read, write: if false;
     }

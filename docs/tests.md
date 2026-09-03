@@ -154,3 +154,42 @@ Resultado obtenido:
 Estado: APROBADA TÉCNICAMENTE.
 
 Limitación: el catálogo real continúa pendiente de nombres, códigos, modelos y líneas levantados en planta. Los datos del emulador desaparecen al detenerlo.
+
+## PRUEBA P-009 — Reglas y cálculo de correctivos
+
+Fecha: 2026-09-03
+
+Casos automatizados agregados:
+
+1. Técnico con permisos registra correctivo y auditoría atómicamente.
+2. Perfil de solo lectura no puede crear correctivos.
+3. Firestore rechaza duraciones inválidas.
+4. Firestore impide el borrado físico de correctivos.
+5. Duración calculada correctamente dentro del mismo día.
+6. Duración calculada correctamente al cruzar medianoche.
+7. Rango invertido rechazado si no se indica día siguiente.
+8. Duración superior a 24 horas rechazada.
+
+Resultado obtenido: suite completa con 14 de 14 pruebas aprobadas.
+
+Estado: APROBADA TÉCNICAMENTE.
+
+## PRUEBA P-010 — Flujo integral de correctivos
+
+Fecha: 2026-09-03
+
+Datos utilizados: usuario, equipo y mantenimiento ficticios en Firebase Emulator Suite.
+
+Resultado obtenido:
+
+1. El formulario rechazó campos obligatorios vacíos.
+2. Equipo se filtró por Línea 1.
+3. El rango 23:30–01:00 con finalización al día siguiente calculó 1 h 30 min.
+4. Se guardaron síntoma, clasificación provisional, componente, causa y trabajo.
+5. El listado mostró fecha, equipo, área, duración y estado.
+6. La edición recuperó todos los datos persistidos.
+7. La anulación exigió motivo y conservó el registro visible como anulado.
+
+Estado: APROBADA TÉCNICAMENTE.
+
+Limitaciones: la asignación de varios técnicos y la selección de repuestos desde SAP dependen de los módulos de usuarios y stock. El formulario ya admite repuestos manuales estructurados.

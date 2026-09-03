@@ -12,6 +12,7 @@ import {
   getDoc,
   serverTimestamp,
   setDoc,
+  Timestamp,
   writeBatch,
 } from 'firebase/firestore'
 
@@ -33,6 +34,32 @@ const equipmentData = (userId) => ({
   createdBy: userId,
   updatedAt: serverTimestamp(),
   updatedBy: userId,
+})
+
+const correctiveData = (userId, overrides = {}) => ({
+  workOrder: null,
+  eventDate: '2026-09-03',
+  startedAt: Timestamp.fromDate(new Date('2026-09-03T08:00:00')),
+  endedAt: Timestamp.fromDate(new Date('2026-09-03T09:30:00')),
+  durationMinutes: 90,
+  areaId: 'linea-1',
+  areaSnapshot: { id: 'linea-1', name: 'Línea 1' },
+  equipmentId: 'TEST-EQ-001',
+  equipmentSnapshot: { code: 'TEST-EQ-001', name: 'Equipo de prueba' },
+  technicianIds: [userId],
+  reportedSymptom: 'Falla de prueba',
+  failureType: null,
+  affectedComponent: null,
+  identifiedCause: null,
+  workPerformed: 'Trabajo de prueba',
+  observations: null,
+  status: 'completed',
+  voidReason: null,
+  createdAt: serverTimestamp(),
+  createdBy: userId,
+  updatedAt: serverTimestamp(),
+  updatedBy: userId,
+  ...overrides,
 })
 
 async function createProfile(userId, permissions, status = 'active') {
@@ -114,5 +141,39 @@ describe('reglas de equipos', () => {
     })
     const database = testEnvironment.authenticatedContext('manager').firestore()
     await assertFails(deleteDoc(doc(database, 'equipment', 'test-equipment')))
+  })
+})
+
+describe('reglas de correctivos', () => {
+  it('permite registrar un correctivo y su auditoría al técnico autorizado', async () => {
+    await createProfile('technician', ['corrective.read', 'corrective.create', 'audit.write'])
+    const database = testEnvironment.authenticatedContext('technician').firestore()
+    const correctiveRef = doc(collection(database, 'correctives'))
+    const auditRef = doc(collection(database, 'audit'))
+    const batch = writeBatch(database)
+    batch.set(correctiveRef, correctiveData('technician'))
+    batch.set(auditRef, { occurredAt: serverTimestamp(), actorId: 'technician', action: 'create', entityType: 'corrective', entityId: correctiveRef.id })
+    await assertSucceeds(batch.commit())
+  })
+
+  it('rechaza crear correctivos a un perfil de solo lectura', async () => {
+    await createProfile('corrective-viewer', ['corrective.read'])
+    const database = testEnvironment.authenticatedContext('corrective-viewer').firestore()
+    await assertFails(setDoc(doc(database, 'correctives', 'test-corrective'), correctiveData('corrective-viewer')))
+  })
+
+  it('rechaza duraciones inválidas', async () => {
+    await createProfile('technician', ['corrective.create'])
+    const database = testEnvironment.authenticatedContext('technician').firestore()
+    await assertFails(setDoc(doc(database, 'correctives', 'invalid-duration'), correctiveData('technician', { durationMinutes: -10 })))
+  })
+
+  it('impide eliminar físicamente un correctivo', async () => {
+    await createProfile('manager', ['corrective.read', 'corrective.create', 'corrective.manage'])
+    await testEnvironment.withSecurityRulesDisabled(async (context) => {
+      await setDoc(doc(context.firestore(), 'correctives', 'test-corrective'), correctiveData('manager'))
+    })
+    const database = testEnvironment.authenticatedContext('manager').firestore()
+    await assertFails(deleteDoc(doc(database, 'correctives', 'test-corrective')))
   })
 })

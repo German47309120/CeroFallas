@@ -657,6 +657,99 @@ h2 {
 .status-badge--inactive { color: #5b676c; background: #edf2f3; }
 .status-badge--out_of_service { color: #842d29; background: #fff0ef; }
 
+.records-list {
+  display: grid;
+  gap: 1rem;
+}
+
+.record-card {
+  display: grid;
+  gap: 1rem;
+}
+
+.record-card--voided {
+  opacity: 0.68;
+}
+
+.record-card dl {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.8rem;
+  margin: 0;
+}
+
+.record-card dt {
+  color: var(--color-muted);
+  font-size: 0.78rem;
+}
+
+.record-card dd {
+  margin: 0.2rem 0 0;
+  font-weight: 750;
+}
+
+.checkbox-field {
+  display: flex !important;
+  min-height: 2.8rem;
+  align-items: center;
+  gap: 0.65rem !important;
+}
+
+.checkbox-field input {
+  width: 1.15rem;
+  min-height: 1.15rem;
+}
+
+.calculated-field {
+  display: grid;
+  align-content: center;
+  padding: 0.7rem 0.8rem;
+  border: 1px dashed var(--color-border);
+  border-radius: 0.65rem;
+  color: var(--color-muted);
+}
+
+.calculated-field strong {
+  margin-top: 0.25rem;
+  color: var(--color-text);
+}
+
+.section-heading-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.section-heading-row p,
+.muted-copy {
+  margin-bottom: 0;
+  color: var(--color-muted);
+}
+
+.repeater-list {
+  display: grid;
+  gap: 0.75rem;
+}
+
+.repeater-row {
+  display: grid;
+  gap: 0.75rem;
+  padding: 0.9rem;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  background: var(--color-bg);
+}
+
+.repeater-row label {
+  display: grid;
+  gap: 0.35rem;
+  color: var(--color-muted);
+  font-size: 0.8rem;
+  font-weight: 750;
+}
+
 .login-page {
   display: grid;
   min-height: 100vh;
@@ -802,6 +895,16 @@ h2 {
   .form-grid,
   .equipment-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .record-card {
+    grid-template-columns: minmax(0, 1.4fr) minmax(18rem, 1fr) auto;
+    align-items: center;
+  }
+
+  .repeater-row {
+    grid-template-columns: minmax(8rem, 0.7fr) minmax(12rem, 1.5fr) minmax(6rem, 0.4fr) auto;
+    align-items: end;
   }
 
   .form-field--wide {

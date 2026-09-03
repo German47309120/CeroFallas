@@ -6,11 +6,13 @@ import ModulePage from '../pages/ModulePage.jsx'
 import NotFoundPage from '../pages/NotFoundPage.jsx'
 import EquipmentFormPage from '../pages/EquipmentFormPage.jsx'
 import EquipmentPage from '../pages/EquipmentPage.jsx'
+import CorrectiveFormPage from '../pages/CorrectiveFormPage.jsx'
+import CorrectivesPage from '../pages/CorrectivesPage.jsx'
 import { moduleContent } from '../config/navigation.js'
 import ProtectedRoute from '../features/auth/ProtectedRoute.jsx'
 
 function ModuleRoutes() {
-  return Object.entries(moduleContent).filter(([path]) => path !== '/equipos').map(([path, content]) => (
+  return Object.entries(moduleContent).filter(([path]) => !['/equipos', '/correctivos'].includes(path)).map(([path, content]) => (
     <Route key={path} path={path} element={<ModulePage {...content} />} />
   ))
 }
@@ -41,10 +43,12 @@ export default function App() {
       <Route element={<ProtectedRoute><AppShell /></ProtectedRoute>}>
         <Route index element={<DashboardPage />} />
         {ModuleRoutes()}
+        <Route path="/correctivos" element={<CorrectivesPage />} />
+        <Route path="/correctivos/nuevo" element={<CorrectiveFormPage />} />
+        <Route path="/correctivos/:correctiveId/editar" element={<CorrectiveFormPage />} />
         <Route path="/equipos" element={<EquipmentPage />} />
         <Route path="/equipos/nuevo" element={<EquipmentFormPage />} />
         <Route path="/equipos/:equipmentId/editar" element={<EquipmentFormPage />} />
-        <Route path="/correctivos/nuevo" element={<PlaceholderForm title="Nuevo correctivo" />} />
         <Route path="/preventivos/nuevo" element={<PlaceholderForm title="Programar preventivo" />} />
         <Route path="/montacargas/nuevo" element={<PlaceholderForm title="Nueva inspección" />} />
         <Route path="/incidentes/nuevo" element={<PlaceholderForm title="Reportar incidente" />} />

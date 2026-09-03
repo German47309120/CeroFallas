@@ -30,3 +30,8 @@
 - Se implementó el catálogo de equipos con alta, consulta, filtros, edición, desactivación lógica y auditoría.
 - Se agregaron reglas de seguridad y seis pruebas automatizadas para el módulo de equipos.
 - Se validó el flujo integral en navegador con datos ficticios y se confirmó el build de producción.
+- Se implementó el módulo de correctivos basado en el reporte de tiempos proporcionado.
+- Se agregó cálculo de duración para trabajos del mismo día y cruces de medianoche.
+- Se incorporaron permisos separados de lectura, registro y modificación/anulación.
+- Se agregó captura estructurada de repuestos, clasificación provisional de fallas y auditoría atómica.
+- Se aprobaron pruebas automáticas y de navegador para alta, consulta y anulación sin borrado.

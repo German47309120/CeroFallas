@@ -25,3 +25,15 @@ export const criticalityOptions = [
 export function getAreaName(areaId) {
   return areas.find((area) => area.id === areaId)?.name ?? areaId
 }
+
+export const provisionalFailureTypes = [
+  'Cadena de pulsunadora',
+  'Cilindro no enciende',
+  'Limpieza general',
+  'Habilitar cargadora 3',
+  'Presencia de agua en mangueras',
+  'Abrir sensores del Airlay',
+  'Cambio de cuchilla transversal',
+  'Falla en mezcladora',
+  'Cuchilla gira lento',
+]
