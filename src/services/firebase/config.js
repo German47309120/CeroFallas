@@ -1,0 +1,24 @@
+import { getApps, initializeApp } from 'firebase/app'
+
+const firebaseConfig = {
+  apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
+  authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN,
+  projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID,
+  storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET,
+  messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID,
+  appId: import.meta.env.VITE_FIREBASE_APP_ID,
+}
+
+const requiredKeys = ['apiKey', 'authDomain', 'projectId', 'appId']
+
+export const isFirebaseConfigured = requiredKeys.every((key) => Boolean(firebaseConfig[key]))
+export const isDemoMode = import.meta.env.VITE_DEMO_MODE !== 'false' || !isFirebaseConfigured
+export const useFirebaseEmulators = import.meta.env.VITE_USE_FIREBASE_EMULATORS === 'true'
+
+export function getFirebaseApp() {
+  if (!isFirebaseConfigured) {
+    throw new Error('Firebase no está configurado. Completa las variables VITE_FIREBASE_* requeridas.')
+  }
+
+  return getApps()[0] ?? initializeApp(firebaseConfig)
+}

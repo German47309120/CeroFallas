@@ -19,3 +19,7 @@
 - Se creó el esqueleto navegable y responsive de la aplicación React/Vite.
 - Se instalaron las dependencias frontend con versiones reproducibles.
 - Se verificaron build, escritorio, vista móvil y navegación básica.
+- Se instalaron Firebase SDK y Firebase CLI localmente.
+- Se configuraron Hosting, Firestore, variables y emuladores con denegación por defecto.
+- Se registraron la ausencia de Java y riesgos transitivos del CLI.
+- Se validó Firebase Hosting local y la reescritura directa de rutas SPA.

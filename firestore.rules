@@ -1,0 +1,11 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Estado inicial seguro: ningún documento puede leerse o escribirse.
+    // Cada colección se habilitará con pruebas durante su fase funcional.
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}

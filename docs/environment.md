@@ -14,7 +14,8 @@ Fecha de verificación: 2026-09-02
 - Node.js: 22.20.0.
 - npm: 10.9.3.
 - Python: 3.12.3.
-- Firebase CLI: no instalado.
+- Firebase CLI: 15.29.0, instalada localmente.
+- Java: no instalado o no disponible en PATH.
 
 ## Dependencias frontend instaladas
 
@@ -23,8 +24,11 @@ Fecha de verificación: 2026-09-02
 - React Router DOM: 7.18.3.
 - Vite: 8.2.2.
 - Plugin React para Vite: 6.1.1.
+- Firebase JavaScript SDK: 12.18.0.
 
-Auditoría de npm al instalar: 0 vulnerabilidades reportadas.
+Auditoría de producción (`npm audit --omit=dev`): 0 vulnerabilidades reportadas.
+
+Auditoría completa: 8 vulnerabilidades moderadas en dependencias transitivas de Firebase CLI; registradas en `docs/errors.md`.
 
 ## Estado inicial
 

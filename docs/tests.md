@@ -67,3 +67,21 @@ Evidencia: URL `http://127.0.0.1:5173/correctivos`, encabezado visible y captura
 ## Limitación de estas pruebas
 
 Las pruebas P-001 a P-004 validan únicamente el esqueleto visual local. No validan autenticación, permisos, persistencia, datos reales ni despliegue.
+
+## PRUEBA P-005 — Firebase Hosting local y ruta SPA
+
+Fecha: 2026-09-03
+
+Función: Configuración de Firebase Hosting.
+
+Datos utilizados: Build local y proyecto emulado `demo-cerofallas`.
+
+Resultado esperado: Hosting sirve `dist/` y una entrada directa a `/correctivos` regresa la SPA.
+
+Resultado obtenido: Respuesta HTTP 200; título CeroFallas; encabezado Correctivos visible; cero errores de consola.
+
+Estado: APROBADA TÉCNICAMENTE.
+
+Evidencia: Emulador en `127.0.0.1:5000` y revisión en navegador integrado.
+
+Limitación: No representa un despliegue público ni valida Firestore.
