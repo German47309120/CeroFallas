@@ -9,3 +9,5 @@
 - Se inicializó Git en la rama `main`.
 - Se creó el commit inicial `7907188`.
 - Se verificó la compatibilidad de Node.js con Firebase CLI.
+- Se documentaron requisitos funcionales, no funcionales y reglas de negocio.
+- Se crearon historias de usuario y casos de uso principales.

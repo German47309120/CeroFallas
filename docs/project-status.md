@@ -2,23 +2,23 @@
 
 Fecha: 2026-09-02
 
-Fase: Fase 1 — Preparación del entorno
+Fase: Fase 2 — Requerimientos
 
-Paso: 1.2 — Compatibilidad, costos y riesgos iniciales
+Paso: 2.1 — Requisitos, historias de usuario y casos de uso
 
 Estado: COMPLETADO
 
 Objetivo actual:
 
-Verificar compatibilidad de las herramientas base y documentar decisiones, riesgos y costos antes de instalar servicios.
+Convertir el alcance aprobado en requisitos verificables, historias de usuario y casos de uso principales.
 
 Último resultado confirmado:
 
-Node.js 22 cumple el requisito actual de Firebase CLI. Se documentaron costos gratuitos iniciales, riesgos y decisiones conocidas. No se habilitó facturación ni se instaló Firebase CLI.
+Se definieron requisitos funcionales y no funcionales, reglas de negocio, historias de usuario y casos de uso para los módulos confirmados.
 
 Última prueba exitosa:
 
-Git y `.gitignore` fueron verificados; la compatibilidad de Node.js fue contrastada con documentación oficial de Firebase.
+Pendiente de validación automática de estructura y trazabilidad documental.
 
 Archivos activos:
 
@@ -30,6 +30,9 @@ Archivos activos:
 - `docs/risks.md`
 - `docs/costs.md`
 - `docs/changelog.md`
+- `docs/functional-requirements.md`
+- `docs/user-stories.md`
+- `docs/use-cases.md`
 - `docs/project-status.md`
 - `.gitignore`
 
@@ -42,6 +45,9 @@ Archivos modificados:
 - `docs/risks.md` — creado.
 - `docs/costs.md` — creado.
 - `docs/changelog.md` — creado.
+- `docs/functional-requirements.md` — creado.
+- `docs/user-stories.md` — creado.
+- `docs/use-cases.md` — creado.
 - `docs/project-status.md` — creado.
 - `.gitignore` — creado.
 
@@ -66,4 +72,4 @@ Riesgo actual:
 
 Siguiente acción exacta:
 
-Crear un commit del cierre de la Fase 1 e iniciar la Fase 2 con historias de usuario y casos de uso verificables.
+Verificar identificadores y cobertura documental; crear el commit de la Fase 2 antes de iniciar el modelo de datos.
