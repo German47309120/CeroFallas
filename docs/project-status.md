@@ -2,23 +2,23 @@
 
 Fecha: 2026-09-02
 
-Fase: Fase 4 — Arquitectura
+Fase: Fase 5 — Diseño de interfaz
 
-Paso: 4.1 — Selección y documentación de arquitectura
+Paso: 5.1 — Navegación, wireframes y sistema visual
 
 Estado: COMPLETADO
 
 Objetivo actual:
 
-Seleccionar una arquitectura segura, mantenible, publicable y compatible con el entorno disponible.
+Definir la navegación, rutas, componentes, estados y comportamiento responsive antes de construir la interfaz.
 
 Último resultado confirmado:
 
-Se seleccionó React con Vite, Firebase Authentication, Cloud Firestore, Security Rules y Firebase Hosting. SAP, Power BI y el predictivo quedaron desacoplados.
+Se documentaron mapa de navegación, rutas con permisos, sistema visual provisional, wireframes, componentes y estados de interfaz.
 
 Última prueba exitosa:
 
-Pendiente de validar el documento arquitectónico y sus decisiones condicionadas.
+Pendiente de validar automáticamente la cobertura de rutas y secciones del diseño.
 
 Archivos activos:
 
@@ -35,6 +35,7 @@ Archivos activos:
 - `docs/use-cases.md`
 - `docs/data-model.md`
 - `docs/architecture.md`
+- `docs/ui-design.md`
 - `docs/decisions.md`
 - `docs/costs.md`
 - `docs/project-status.md`
@@ -54,6 +55,7 @@ Archivos modificados:
 - `docs/use-cases.md` — creado.
 - `docs/data-model.md` — creado.
 - `docs/architecture.md` — creado.
+- `docs/ui-design.md` — creado.
 - `docs/decisions.md` — actualizado.
 - `docs/costs.md` — actualizado.
 - `docs/project-status.md` — creado.
@@ -80,4 +82,4 @@ Riesgo actual:
 
 Siguiente acción exacta:
 
-Verificar y versionar la arquitectura; iniciar el mapa de navegación y los wireframes de la Fase 5.
+Verificar y versionar el diseño; crear el esqueleto React/Vite responsive sin conectar aún Firebase.

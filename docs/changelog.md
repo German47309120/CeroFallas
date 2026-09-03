@@ -15,3 +15,4 @@
 - Se seleccionó y documentó la arquitectura base de la solución.
 - Se desacoplaron SAP, Power BI y el servicio predictivo del frontend.
 - Se registró Cloud Storage como función condicionada a facturación Blaze.
+- Se definieron navegación, rutas, componentes, estados y wireframes responsive.
