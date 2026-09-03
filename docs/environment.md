@@ -16,6 +16,16 @@ Fecha de verificación: 2026-09-02
 - Python: 3.12.3.
 - Firebase CLI: no instalado.
 
+## Dependencias frontend instaladas
+
+- React: 19.2.8.
+- React DOM: 19.2.8.
+- React Router DOM: 7.18.3.
+- Vite: 8.2.2.
+- Plugin React para Vite: 6.1.1.
+
+Auditoría de npm al instalar: 0 vulnerabilidades reportadas.
+
 ## Estado inicial
 
 - Al iniciar el Paso 1.1, la carpeta no era un repositorio Git.

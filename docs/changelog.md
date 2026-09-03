@@ -16,3 +16,6 @@
 - Se desacoplaron SAP, Power BI y el servicio predictivo del frontend.
 - Se registró Cloud Storage como función condicionada a facturación Blaze.
 - Se definieron navegación, rutas, componentes, estados y wireframes responsive.
+- Se creó el esqueleto navegable y responsive de la aplicación React/Vite.
+- Se instalaron las dependencias frontend con versiones reproducibles.
+- Se verificaron build, escritorio, vista móvil y navegación básica.

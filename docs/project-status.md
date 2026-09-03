@@ -4,21 +4,21 @@ Fecha: 2026-09-02
 
 Fase: Fase 5 — Diseño de interfaz
 
-Paso: 5.1 — Navegación, wireframes y sistema visual
+Paso: 5.2 — Esqueleto navegable React/Vite
 
 Estado: COMPLETADO
 
 Objetivo actual:
 
-Definir la navegación, rutas, componentes, estados y comportamiento responsive antes de construir la interfaz.
+Construir una interfaz local navegable y responsive que represente las rutas y estados vacíos sin conectarse todavía a datos reales.
 
 Último resultado confirmado:
 
-Se documentaron mapa de navegación, rutas con permisos, sistema visual provisional, wireframes, componentes y estados de interfaz.
+La SPA React/Vite construye correctamente y fue revisada visualmente en escritorio y móvil. La navegación del módulo de correctivos funcionó sin errores de consola.
 
 Última prueba exitosa:
 
-Pendiente de validar automáticamente la cobertura de rutas y secciones del diseño.
+`npm run build` completado; dashboard y navegación revisados en escritorio y 390 × 844 px; cero errores de consola durante la ruta probada.
 
 Archivos activos:
 
@@ -36,6 +36,12 @@ Archivos activos:
 - `docs/data-model.md`
 - `docs/architecture.md`
 - `docs/ui-design.md`
+- `package.json`
+- `vite.config.js`
+- `index.html`
+- `src/`
+- `package-lock.json`
+- `docs/tests.md`
 - `docs/decisions.md`
 - `docs/costs.md`
 - `docs/project-status.md`
@@ -56,6 +62,13 @@ Archivos modificados:
 - `docs/data-model.md` — creado.
 - `docs/architecture.md` — creado.
 - `docs/ui-design.md` — creado.
+- `package.json` — creado.
+- `vite.config.js` — creado.
+- `index.html` — creado.
+- `src/` — creado.
+- `package-lock.json` — creado por npm.
+- `docs/tests.md` — creado.
+- `docs/environment.md` — actualizado con versiones frontend.
 - `docs/decisions.md` — actualizado.
 - `docs/costs.md` — actualizado.
 - `docs/project-status.md` — creado.
@@ -82,4 +95,4 @@ Riesgo actual:
 
 Siguiente acción exacta:
 
-Verificar y versionar el diseño; crear el esqueleto React/Vite responsive sin conectar aún Firebase.
+Versionar el prototipo y comenzar la Fase 6: preparar configuración local de Firebase sin crear todavía recursos cloud ni habilitar facturación.
