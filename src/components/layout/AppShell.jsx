@@ -2,8 +2,10 @@ import { useEffect, useState } from 'react'
 import { NavLink, Outlet, useLocation, useNavigate } from 'react-router-dom'
 import { navigationGroups } from '../../config/navigation.js'
 import { useAuth } from '../../features/auth/AuthContext.jsx'
+import { canViewNavigation } from '../../config/access.js'
 
 function Sidebar({ environment, open, onClose }) {
+  const { hasPermission } = useAuth()
   return (
     <>
       <button
@@ -22,10 +24,10 @@ function Sidebar({ environment, open, onClose }) {
         </div>
 
         <nav className="nav-groups">
-          {navigationGroups.map((group) => (
+          {navigationGroups.filter((group) => group.items.some((item) => canViewNavigation(item.to, hasPermission))).map((group) => (
             <div className="nav-group" key={group.label}>
               <p>{group.label}</p>
-              {group.items.map((item) => (
+              {group.items.filter((item) => canViewNavigation(item.to, hasPermission)).map((item) => (
                 <NavLink
                   key={item.to}
                   to={item.to}

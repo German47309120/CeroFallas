@@ -15,30 +15,15 @@ import ForkliftInspectionFormPage from '../pages/ForkliftInspectionFormPage.jsx'
 import ForkliftInspectionsPage from '../pages/ForkliftInspectionsPage.jsx'
 import { moduleContent } from '../config/navigation.js'
 import ProtectedRoute from '../features/auth/ProtectedRoute.jsx'
+import IncidentsPage from '../pages/IncidentsPage.jsx'
+import IncidentFormPage from '../pages/IncidentFormPage.jsx'
+import ResourceReadPage from '../pages/ResourceReadPage.jsx'
+import ProfilePage from '../pages/ProfilePage.jsx'
 
 function ModuleRoutes() {
-  return Object.entries(moduleContent).filter(([path]) => !['/equipos', '/correctivos', '/preventivos', '/montacargas'].includes(path)).map(([path, content]) => (
+  return Object.entries(moduleContent).filter(([path]) => !['/equipos', '/correctivos', '/preventivos', '/montacargas', '/incidentes', '/repuestos', '/admin/usuarios', '/admin/auditoria'].includes(path)).map(([path, content]) => (
     <Route key={path} path={path} element={<ModulePage {...content} />} />
   ))
-}
-
-function PlaceholderForm({ title }) {
-  return (
-    <section className="page-stack" aria-labelledby="placeholder-title">
-      <div className="page-heading">
-        <div>
-          <p className="eyebrow">Formulario en preparación</p>
-          <h1 id="placeholder-title">{title}</h1>
-          <p>La estructura visual está lista; los campos y la persistencia se activarán en su fase.</p>
-        </div>
-      </div>
-      <div className="panel empty-state">
-        <span className="empty-state__mark" aria-hidden="true">CF</span>
-        <h2>Esqueleto navegable</h2>
-        <p>Esta pantalla todavía no guarda datos. No ingreses información real.</p>
-      </div>
-    </section>
-  )
 }
 
 export default function App() {
@@ -60,8 +45,12 @@ export default function App() {
         <Route path="/preventivos/ejecutar" element={<PreventiveExecutionFormPage />} />
         <Route path="/montacargas" element={<ForkliftInspectionsPage />} />
         <Route path="/montacargas/nuevo" element={<ForkliftInspectionFormPage />} />
-        <Route path="/incidentes/nuevo" element={<PlaceholderForm title="Reportar incidente" />} />
-        <Route path="/perfil" element={<PlaceholderForm title="Mi perfil" />} />
+        <Route path="/incidentes" element={<IncidentsPage />} />
+        <Route path="/incidentes/nuevo" element={<IncidentFormPage />} />
+        <Route path="/admin/usuarios" element={<ResourceReadPage resource="users" />} />
+        <Route path="/admin/auditoria" element={<ResourceReadPage resource="audit" />} />
+        <Route path="/repuestos" element={<ResourceReadPage resource="stock" />} />
+        <Route path="/perfil" element={<ProfilePage />} />
       </Route>
       <Route path="/inicio" element={<Navigate to="/" replace />} />
       <Route path="*" element={<NotFoundPage />} />

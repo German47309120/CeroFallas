@@ -1,5 +1,25 @@
 # CEROFALLAS — ESTADO ACTUAL
 
+## Avance vigente — 2026-09-03
+
+Fase 12: incidentes implementados técnicamente; avance adicional en consultas administrativas y dashboard.
+
+- Reporte de incidentes con validación, prioridad, área y equipo opcional.
+- Seguimiento exclusivo de administrador/soporte con motivo y auditoría atómica obligatoria.
+- Vínculo a correctivo existente, con validación de área y equipo; sin conversión automática todavía.
+- Inicio con conteos agregados reales de correctivos, ejecuciones preventivas, planes activos e incidentes abiertos.
+- Consultas de perfiles/usuarios, auditoría y stock; Mi perfil funcional.
+- Navegación filtrada por permisos; nuevas reglas de Firestore y 14 pruebas adicionales.
+- Administrador existente del emulador actualizado con permisos de las nuevas consultas; no se cambiaron otros roles ni se crearon cuentas.
+
+Verificación: 43/43 pruebas automatizadas y build de producción aprobados. Revisión de navegador limitada a la pantalla de acceso; el nuevo flujo autenticado requiere validación manual del usuario. Advertencia no bloqueante de bundle de aproximadamente 875 kB; queda pendiente dividir carga por rutas.
+
+Siguiente trabajo: validar recorrido manual documentado en `docs/guia-avance-incidentes.md`, paginación de históricos, alta y administración privilegiada de usuarios, agregados gerenciales con mínimo privilegio, integración segura de stock y preparación de Power BI/predictivo.
+
+Pendiente externo: consulta/esquema SQL autorizado, conectividad de planta, equipos reales, histórico, modalidad Power BI y autorización de cualquier costo cloud. Stock no contiene existencias inventadas. El entregable académico se conserva como versión histórica.
+
+## Registro anterior — Fase 11
+
 Fecha: 2026-09-03
 
 Fase: Fase 11 — Checklist de montacargas

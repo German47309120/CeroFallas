@@ -19,7 +19,7 @@ service cloud.firestore {
     }
 
     match /users/{userId} {
-      allow read: if signedIn() && request.auth.uid == userId;
+      allow read: if (signedIn() && request.auth.uid == userId) || hasPermission('users.read');
       allow write: if false;
     }
 
@@ -165,6 +165,49 @@ service cloud.firestore {
         && request.resource.data.createdBy == resource.data.createdBy
         && request.resource.data.operatorId == resource.data.operatorId;
       allow delete: if false;
+    }
+
+    function incidentAudit(data, incidentId) {
+      let audit = getAfter(/databases/$(database)/documents/audit/$(data.auditId)).data;
+      return audit.actorId == request.auth.uid && audit.occurredAt == request.time
+        && audit.entityType == 'incident' && audit.entityId == incidentId;
+    }
+
+    match /incidents/{incidentId} {
+      allow read: if hasPermission('incident.read');
+      allow create: if hasPermission('incident.create')
+        && request.resource.data.keys().hasOnly(['areaId', 'areaName', 'equipmentId', 'equipmentSnapshot', 'description', 'priority', 'status', 'reporterId', 'createdBy', 'createdAt', 'updatedBy', 'updatedAt', 'linkedCorrectiveId', 'followUp', 'auditId'])
+        && request.resource.data.areaId in ['linea-1', 'linea-2', 'linea-3', 'linea-4', 'abastecimiento', 'mantenimiento', 'servicios-generales']
+        && request.resource.data.description is string
+        && request.resource.data.description.size() >= 10 && request.resource.data.description.size() <= 1500
+        && request.resource.data.priority in ['low', 'medium', 'high', 'critical']
+        && request.resource.data.status == 'reported'
+        && request.resource.data.linkedCorrectiveId == null && request.resource.data.followUp == ''
+        && request.resource.data.areaName is string && request.resource.data.areaName.size() > 0 && request.resource.data.areaName.size() <= 80
+        && ((request.resource.data.equipmentId == null && request.resource.data.equipmentSnapshot == null) || (get(/databases/$(database)/documents/equipment/$(request.resource.data.equipmentId)).data.status == 'active'
+          && get(/databases/$(database)/documents/equipment/$(request.resource.data.equipmentId)).data.areaId == request.resource.data.areaId
+          && request.resource.data.equipmentSnapshot.code == get(/databases/$(database)/documents/equipment/$(request.resource.data.equipmentId)).data.code
+          && request.resource.data.equipmentSnapshot.name == get(/databases/$(database)/documents/equipment/$(request.resource.data.equipmentId)).data.name))
+        && request.resource.data.reporterId == request.auth.uid
+        && request.resource.data.createdBy == request.auth.uid && request.resource.data.updatedBy == request.auth.uid
+        && request.resource.data.createdAt == request.time && request.resource.data.updatedAt == request.time
+        && incidentAudit(request.resource.data, incidentId);
+      allow update: if hasPermission('incident.manage') && ownProfile().roleId in ['administrator', 'support']
+        && resource.data.status != 'voided'
+        && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['status', 'followUp', 'linkedCorrectiveId', 'updatedAt', 'updatedBy', 'auditId'])
+        && request.resource.data.status in ['reported', 'acknowledged', 'in_progress', 'resolved', 'voided']
+        && request.resource.data.followUp is string && request.resource.data.followUp.size() > 0 && request.resource.data.followUp.size() <= 1000
+        && (request.resource.data.linkedCorrectiveId == null || (get(/databases/$(database)/documents/correctives/$(request.resource.data.linkedCorrectiveId)).data.status != 'voided'
+          && get(/databases/$(database)/documents/correctives/$(request.resource.data.linkedCorrectiveId)).data.areaId == resource.data.areaId
+          && (resource.data.equipmentId == null || get(/databases/$(database)/documents/correctives/$(request.resource.data.linkedCorrectiveId)).data.equipmentId == resource.data.equipmentId)))
+        && request.resource.data.updatedBy == request.auth.uid && request.resource.data.updatedAt == request.time
+        && request.resource.data.auditId != resource.data.auditId && incidentAudit(request.resource.data, incidentId);
+      allow delete: if false;
+    }
+
+    match /stock/{stockId} {
+      allow read: if hasPermission('stock.read');
+      allow write: if false;
     }
 
     match /{document=**} {

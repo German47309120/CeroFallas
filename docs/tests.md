@@ -1,5 +1,20 @@
 # CeroFallas — Registro de pruebas
 
+## PRUEBA P-015 — Incidentes, permisos y consultas (2026-09-03)
+
+Suite completa: **43/43 aprobadas** en Firestore Emulator. Build de producción aprobado.
+
+- Reporte sin equipo, descripción, área, prioridad y selección de equipo validados.
+- Creación autorizada con auditoría; rechazo sin auditoría y para lector/desactivado.
+- Rechazo de equipo inexistente, campos adicionales, edición por reportante y borrado físico.
+- Seguimiento por administrador con auditoría nueva; autor inmutable.
+- Conteo agregado de incidentes abiertos comprobado.
+- Stock sin escrituras cliente, usuarios sin autoasignación de permisos y consultas administrativas restringidas.
+- Navegación oculta administración a perfil montacarguista.
+
+Prueba inicial falló porque la suite anterior no especificaba host de emulador; se corrigió explícitamente a 127.0.0.1:8080 y se repitió exitosamente con `npm test`.
+No se validó todavía el recorrido autenticado de las nuevas pantallas en navegador. Sólo se comprobó apertura de login en http://127.0.0.1:5173. La guía de validación manual está en `docs/guia-avance-incidentes.md`.
+
 ## PRUEBA P-001 — Build de producción del prototipo
 
 Fecha: 2026-09-02

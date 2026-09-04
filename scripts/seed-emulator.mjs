@@ -34,7 +34,7 @@ await environment.withSecurityRulesDisabled(async (context) => {
     roleId: 'administrator',
     roleName: 'Administrador',
     status: 'active',
-    permissions: ['equipment.read', 'equipment.manage', 'corrective.read', 'corrective.create', 'corrective.manage', 'preventive.read', 'preventive.plan', 'preventive.execute', 'preventive.manage', 'forklift.read', 'forklift.inspect', 'forklift.manage', 'audit.read', 'audit.write'],
+    permissions: ['equipment.read', 'equipment.manage', 'corrective.read', 'corrective.create', 'corrective.manage', 'preventive.read', 'preventive.plan', 'preventive.execute', 'preventive.manage', 'forklift.read', 'forklift.inspect', 'forklift.manage', 'audit.read', 'audit.write', 'incident.read', 'incident.create', 'incident.manage', 'dashboard.read', 'users.read', 'stock.read'],
   })
 })
 

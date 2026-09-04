@@ -101,7 +101,7 @@ async function createProfile(userId, permissions, status = 'active') {
 beforeAll(async () => {
   testEnvironment = await initializeTestEnvironment({
     projectId,
-    firestore: { rules: readFileSync('firestore.rules', 'utf8') },
+    firestore: { host: '127.0.0.1', port: 8080, rules: readFileSync('firestore.rules', 'utf8') },
   })
 })
 
@@ -110,7 +110,7 @@ beforeEach(async () => {
 })
 
 afterAll(async () => {
-  await testEnvironment.cleanup()
+  await testEnvironment?.cleanup()
 })
 
 describe('reglas de equipos', () => {

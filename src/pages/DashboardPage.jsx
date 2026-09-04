@@ -1,67 +1,28 @@
+import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
-
-const stats = [
-  { label: 'Correctivos', value: '—', detail: 'Sin datos conectados', tone: 'brand' },
-  { label: 'Cumplimiento', value: '—', detail: 'Preventivos', tone: 'success' },
-  { label: 'Pendientes', value: '—', detail: 'Por ejecutar', tone: 'warning' },
-  { label: 'Atención', value: '—', detail: 'Equipos con alerta', tone: 'danger' },
-]
+import { useAuth } from '../features/auth/AuthContext.jsx'
+import { countMetric, dashboardMetrics } from '../services/firebase/reporting.js'
 
 export default function DashboardPage() {
-  return (
-    <section className="page-stack" aria-labelledby="dashboard-title">
-      <div className="page-heading">
-        <div>
-          <p className="eyebrow">Resumen operativo</p>
-          <h1 id="dashboard-title">Buenos días</h1>
-          <p>Supervisa mantenimiento, inspecciones e incidentes desde un solo lugar.</p>
-        </div>
-        <Link className="button button--primary" to="/correctivos/nuevo">
-          Registrar correctivo
-        </Link>
-      </div>
-
-      <div className="stats-grid" aria-label="Indicadores principales">
-        {stats.map((stat) => (
-          <article className={`stat-card stat-card--${stat.tone}`} key={stat.label}>
-            <p>{stat.label}</p>
-            <strong>{stat.value}</strong>
-            <span>{stat.detail}</span>
-          </article>
-        ))}
-      </div>
-
-      <div className="dashboard-grid">
-        <article className="panel">
-          <div className="panel__heading">
-            <div>
-              <p className="eyebrow">Últimos movimientos</p>
-              <h2>Actividad reciente</h2>
-            </div>
-            <Link to="/correctivos">Ver históricos</Link>
-          </div>
-          <div className="empty-state empty-state--compact">
-            <span className="empty-state__mark" aria-hidden="true">01</span>
-            <h3>Aún no hay registros</h3>
-            <p>La actividad aparecerá cuando conectemos la base de datos.</p>
-          </div>
-        </article>
-
-        <article className="panel">
-          <div className="panel__heading">
-            <div>
-              <p className="eyebrow">Prioridad</p>
-              <h2>Alertas e incidentes</h2>
-            </div>
-            <Link to="/incidentes">Ver incidentes</Link>
-          </div>
-          <div className="empty-state empty-state--compact">
-            <span className="empty-state__mark" aria-hidden="true">OK</span>
-            <h3>Sin alertas conectadas</h3>
-            <p>Este estado no representa la condición real de planta.</p>
-          </div>
-        </article>
-      </div>
-    </section>
-  )
+  const { hasPermission, profile } = useAuth()
+  const [values, setValues] = useState({})
+  const [loading, setLoading] = useState(false)
+  const [revision, setRevision] = useState(0)
+  const canRead = hasPermission('dashboard.read')
+  const permitted = dashboardMetrics.filter((m) => hasPermission(m.permission))
+  const key = permitted.map((m) => m.key).join(',')
+  useEffect(() => {
+    if (!canRead) return
+    let alive = true
+    setValues({}); setLoading(true)
+    Promise.all(permitted.map(async (m) => {
+      try { return [m.key, { value: await countMetric(m) }] }
+      catch { return [m.key, { error: 'No disponible: revisa conexión o permisos.' }] }
+    })).then((result) => { if (alive) { setValues(Object.fromEntries(result)); setLoading(false) } })
+    return () => { alive = false }
+  }, [canRead, key, revision])
+  return <section className="page-stack"><div className="page-heading"><div><p className="eyebrow">Resumen operativo</p><h1>Bienvenido, {profile?.displayName}</h1><p>{canRead ? 'Conteos de toda la base operacional, según tus permisos. Los anulados no se incluyen.' : 'Selecciona una operación autorizada en el menú.'}</p></div>{canRead && <button disabled={loading} className="button button--secondary" onClick={() => setRevision(revision + 1)}>Actualizar</button>}</div>
+    {canRead && <><div className="stats-grid">{dashboardMetrics.map((m) => <article key={m.key} className="stat-card stat-card--brand"><p>{m.label}</p><strong>{loading ? '…' : values[m.key]?.value ?? '—'}</strong><span>{!hasPermission(m.permission) ? 'Sin permiso de lectura de la fuente' : values[m.key]?.error || 'Conteo acumulado · no es un período mensual'}</span></article>)}</div><div className="panel"><h2>Cómo interpretar los indicadores</h2><p>Un plan activo no equivale a una tarea pendiente: puede tener varias ejecuciones. Por eso todavía no se presenta un porcentaje de cumplimiento global.</p><p>MTBF y OEE no se calculan sin tiempos de operación, producción y calidad. Un guion significa falta de permiso o datos no disponibles, nunca cero.</p></div></>}
+    <div className="panel"><h2>Accesos rápidos</h2><div className="form-actions">{hasPermission('corrective.create') && <Link className="button button--primary" to="/correctivos/nuevo">Registrar correctivo</Link>}{hasPermission('incident.create') && <Link className="button button--secondary" to="/incidentes/nuevo">Reportar incidente</Link>}{hasPermission('forklift.inspect') && <Link className="button button--secondary" to="/montacargas/nuevo">Inspeccionar montacargas</Link>}{hasPermission('incident.read') && <Link to="/incidentes">Consultar incidentes</Link>}</div></div>
+  </section>
 }
