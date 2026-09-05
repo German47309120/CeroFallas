@@ -1,0 +1,326 @@
+[
+  {
+    "page": 1,
+    "chars": 779,
+    "images": 0,
+    "start": "CEROFALLAS  |  PROPUESTA CONCEPTUAL DE LA SOLUCIÓN DE IT \nPágina 1 \n \nPROYECTO DE GRADUACIÓN II \nCeroFallas \nPropuesta conceptual de la solución de IT \nSEGUNDA ENTREGA \nDiseño e Im"
+  },
+  {
+    "page": 2,
+    "chars": 1992,
+    "images": 0,
+    "start": "CEROFALLAS  |  PROPUESTA CONCEPTUAL DE LA SOLUCIÓN DE IT \nPágina 2 \nControl del documento \nElemento Definición \nPropósito Presentar la propuesta conceptual completa de CeroFallas s"
+  },
+  {
+    "page": 3,
+    "chars": 353,
+    "images": 0,
+    "start": "CEROFALLAS  |  PROPUESTA CONCEPTUAL DE LA SOLUCIÓN DE IT \nPágina 3 \nContenido \n• 1. Contexto, alcance y objetivos \n• 2. Modelo de base de datos \n• 3. Diagramas de procesos \n• 4. Ca"
+  },
+  {
+    "page": 4,
+    "chars": 2245,
+    "images": 0,
+    "start": "CEROFALLAS  |  PROPUESTA CONCEPTUAL DE LA SOLUCIÓN DE IT \nPágina 4 \n1. Contexto, alcance y objetivos \n1.1 Problema \nActualmente parte de la información de mantenimiento se registra"
+  },
+  {
+    "page": 5,
+    "chars": 897,
+    "images": 1,
+    "start": "CEROFALLAS  |  PROPUESTA CONCEPTUAL DE LA SOLUCIÓN DE IT \nPágina 5 \n2. Modelo de base de datos \nSe presenta un modelo lógico documental con identificadores, referencias y cardinali"
+  },
+  {
+    "page": 6,
+    "chars": 1018,
+    "images": 1,
+    "start": "CEROFALLAS  |  PROPUESTA CONCEPTUAL DE LA SOLUCIÓN DE IT \nPágina 6 \n \nFigura 1B. Identidad e inspecciones. Los catálogos lógicos no implican colecciones ya desplegadas. \nRelaciones"
+  },
+  {
+    "page": 7,
+    "chars": 1514,
+    "images": 0,
+    "start": "CEROFALLAS  |  PROPUESTA CONCEPTUAL DE LA SOLUCIÓN DE IT \nPágina 7 \nEntidad lógica Materialización / condición \nRol / área / turno Catálogos lógicos; permisos en users y catálogos "
+  },
+  {
+    "page": 8,
+    "chars": 1168,
+    "images": 0,
+    "start": "CEROFALLAS  |  PROPUESTA CONCEPTUAL DE LA SOLUCIÓN DE IT \nPágina 8 \nÁREA \nCampo Tipo lógico Obligatorio Regla \nid string Sí Identificador estable \ncode string Sí Único \nname string"
+  },
+  {
+    "page": 9,
+    "chars": 1342,
+    "images": 0,
+    "start": "CEROFALLAS  |  PROPUESTA CONCEPTUAL DE LA SOLUCIÓN DE IT \nPágina 9 \nCampo Tipo lógico Obligatorio Regla \ncreatedAt/By audit Sí Servidor y usuario \nupdatedAt/By audit Sí Servidor y "
+  },
+  {
+    "page": 10,
+    "chars": 1329,
+    "images": 0,
+    "start": "CEROFALLAS  |  PROPUESTA CONCEPTUAL DE LA SOLUCIÓN DE IT \nPágina 10 \nPLAN_PREVENTIVO \nCampo Tipo lógico Obligatorio Regla \nid string Sí Generado \nequipmentId string Sí Equipo activ"
+  },
+  {
+    "page": 11,
+    "chars": 1289,
+    "images": 0,
+    "start": "CEROFALLAS  |  PROPUESTA CONCEPTUAL DE LA SOLUCIÓN DE IT \nPágina 11 \nCampo Tipo lógico Obligatorio Regla \nstatus enum Sí completed, draft, voided \ncreatedAt/By audit Sí Servidor y "
+  },
+  {
+    "page": 12,
+    "chars": 1254,
+    "images": 0,
+    "start": "CEROFALLAS  |  PROPUESTA CONCEPTUAL DE LA SOLUCIÓN DE IT \nPágina 12 \nCampo Tipo lógico Obligatorio Regla \ncreatedAt/By audit Sí Servidor y operador \nvoid fields audit No Solo admin"
+  },
+  {
+    "page": 13,
+    "chars": 1276,
+    "images": 0,
+    "start": "CEROFALLAS  |  PROPUESTA CONCEPTUAL DE LA SOLUCIÓN DE IT \nPágina 13 \nPREDICCIÓN_RIESGO \nCampo Tipo lógico Obligatorio Regla \nid string Sí Generado \nequipmentId string Sí Referencia"
+  },
+  {
+    "page": 14,
+    "chars": 1598,
+    "images": 0,
+    "start": "CEROFALLAS  |  PROPUESTA CONCEPTUAL DE LA SOLUCIÓN DE IT \nPágina 14 \n2.3 Integridad y diferencias que deben resolverse \nEl vínculo incidente -correctivo es 0..1 correctivo por inci"
+  },
+  {
+    "page": 15,
+    "chars": 427,
+    "images": 1,
+    "start": "CEROFALLAS  |  PROPUESTA CONCEPTUAL DE LA SOLUCIÓN DE IT \nPágina 15 \n3. Diagramas de procesos \n3.1 Proceso general \n \nFigura 2. Flujo general desde autenticación hasta explotación "
+  },
+  {
+    "page": 16,
+    "chars": 323,
+    "images": 1,
+    "start": "CEROFALLAS  |  PROPUESTA CONCEPTUAL DE LA SOLUCIÓN DE IT \nPágina 16 \n3.2 Mantenimiento correctivo \n \nFigura 3. Proceso específico: mantenimiento correctivo. \nLa duración se calcula"
+  },
+  {
+    "page": 17,
+    "chars": 285,
+    "images": 1,
+    "start": "CEROFALLAS  |  PROPUESTA CONCEPTUAL DE LA SOLUCIÓN DE IT \nPágina 17 \n3.3 Mantenimiento preventivo \n \nFigura 4. Proceso específico: mantenimiento preventivo. \nPlan y ejecución son e"
+  },
+  {
+    "page": 18,
+    "chars": 308,
+    "images": 1,
+    "start": "CEROFALLAS  |  PROPUESTA CONCEPTUAL DE LA SOLUCIÓN DE IT \nPágina 18 \n3.4 Checklist de montacargas \n \nFigura 5. Proceso específico: checklist de montacargas. \nUna falla crítica, por"
+  },
+  {
+    "page": 19,
+    "chars": 287,
+    "images": 1,
+    "start": "CEROFALLAS  |  PROPUESTA CONCEPTUAL DE LA SOLUCIÓN DE IT \nPágina 19 \n3.5 Incidentes \n \nFigura 6. Proceso específico: incidentes. \nEl incidente es un reporte gerencial breve; cuando"
+  },
+  {
+    "page": 20,
+    "chars": 322,
+    "images": 1,
+    "start": "CEROFALLAS  |  PROPUESTA CONCEPTUAL DE LA SOLUCIÓN DE IT \nPágina 20 \n3.6 Stock, Power BI y predictivo \n \nFigura 7. Proceso específico: stock, power bi y predictivo. \nEl navegador n"
+  },
+  {
+    "page": 21,
+    "chars": 941,
+    "images": 1,
+    "start": "CEROFALLAS  |  PROPUESTA CONCEPTUAL DE LA SOLUCIÓN DE IT \nPágina 21 \n4. Casos de uso y operaciones permitidas \n \nFigura 8. Mapa conceptual de actores y casos de uso. \n4.1 Actores \n"
+  },
+  {
+    "page": 22,
+    "chars": 749,
+    "images": 0,
+    "start": "CEROFALLAS  |  PROPUESTA CONCEPTUAL DE LA SOLUCIÓN DE IT \nPágina 22 \n4.2 Matriz de permisos \nRol Corr. Prev. Check Incid. Stock Dash Usuarios Anular \nAdministrador Sí Sí Sí Sí Sí S"
+  },
+  {
+    "page": 23,
+    "chars": 1834,
+    "images": 0,
+    "start": "CEROFALLAS  |  PROPUESTA CONCEPTUAL DE LA SOLUCIÓN DE IT \nPágina 23 \n4.3 Catálogo completo de operaciones \nID Operación Actor principal Estado \nCU-001 Autenticarse y cerrar sesión "
+  },
+  {
+    "page": 24,
+    "chars": 1465,
+    "images": 0,
+    "start": "CEROFALLAS  |  PROPUESTA CONCEPTUAL DE LA SOLUCIÓN DE IT \nPágina 24 \n4.4 Especificación de casos de uso \nIdentificadores propios de este documento maestro. Cada caso define condici"
+  },
+  {
+    "page": 25,
+    "chars": 1215,
+    "images": 0,
+    "start": "CEROFALLAS  |  PROPUESTA CONCEPTUAL DE LA SOLUCIÓN DE IT \nPágina 25 \nCU-011 · Editar o desactivar equipo \nActor / estado: Administrador / soporte / Implementado \nPrecondición: Equi"
+  },
+  {
+    "page": 26,
+    "chars": 1165,
+    "images": 0,
+    "start": "CEROFALLAS  |  PROPUESTA CONCEPTUAL DE LA SOLUCIÓN DE IT \nPágina 26 \nCU-021 · Filtrar histórico correctivo \nActor / estado: Autorizado / Implementado \nPrecondición: Permiso correct"
+  },
+  {
+    "page": 27,
+    "chars": 1192,
+    "images": 0,
+    "start": "CEROFALLAS  |  PROPUESTA CONCEPTUAL DE LA SOLUCIÓN DE IT \nPágina 27 \nCU-031 · Registrar ejecución preventiva \nActor / estado: Técnico / jefaturas / Implementado \nPrecondición: Perm"
+  },
+  {
+    "page": 28,
+    "chars": 1240,
+    "images": 0,
+    "start": "CEROFALLAS  |  PROPUESTA CONCEPTUAL DE LA SOLUCIÓN DE IT \nPágina 28 \nCU-040 · Completar checklist \nActor / estado: Montacarguista / Implementado \nPrecondición: Montacarguista; mont"
+  },
+  {
+    "page": 29,
+    "chars": 1260,
+    "images": 0,
+    "start": "CEROFALLAS  |  PROPUESTA CONCEPTUAL DE LA SOLUCIÓN DE IT \nPágina 29 \nCU-050 · Reportar incidente \nActor / estado: Digitador / Airlay / Prototipo local \nPrecondición: Digitador/Airl"
+  },
+  {
+    "page": 30,
+    "chars": 1284,
+    "images": 0,
+    "start": "CEROFALLAS  |  PROPUESTA CONCEPTUAL DE LA SOLUCIÓN DE IT \nPágina 30 \nCU-061 · Sincronizar snapshot de SAP \nActor / estado: Proceso seguro / Diseñado \nPrecondición: Propuesto: consu"
+  },
+  {
+    "page": 31,
+    "chars": 1269,
+    "images": 0,
+    "start": "CEROFALLAS  |  PROPUESTA CONCEPTUAL DE LA SOLUCIÓN DE IT \nPágina 31 \nCU-080 · Crear, editar o desactivar perfil \nActor / estado: Administrador / Diseñado \nPrecondición: Propuesto: "
+  },
+  {
+    "page": 32,
+    "chars": 1307,
+    "images": 0,
+    "start": "CEROFALLAS  |  PROPUESTA CONCEPTUAL DE LA SOLUCIÓN DE IT \nPágina 32 \nCU-091 · Entrenar/evaluar modelos \nActor / estado: Administrador técnico / Diseñado \nPrecondición: Propuesto: h"
+  },
+  {
+    "page": 33,
+    "chars": 1044,
+    "images": 1,
+    "start": "CEROFALLAS  |  PROPUESTA CONCEPTUAL DE LA SOLUCIÓN DE IT \nPágina 33 \n5. Arquitectura de software \n \nFigura 9. Arquitectura por capas e integraciones desacopladas. \n5.1 Decisiones t"
+  },
+  {
+    "page": 34,
+    "chars": 2187,
+    "images": 0,
+    "start": "CEROFALLAS  |  PROPUESTA CONCEPTUAL DE LA SOLUCIÓN DE IT \nPágina 34 \nComponente Elección Justificación \nBI Power BI Reporte publicado desde fuentes autorizadas; CeroFallas opera au"
+  },
+  {
+    "page": 35,
+    "chars": 1675,
+    "images": 0,
+    "start": "CEROFALLAS  |  PROPUESTA CONCEPTUAL DE LA SOLUCIÓN DE IT \nPágina 35 \n6. Mockups de los casos de uso \nDiseños conceptuales aprobados para comunicar la experiencia objetivo. No son c"
+  },
+  {
+    "page": 36,
+    "chars": 401,
+    "images": 1,
+    "start": "CEROFALLAS  |  PROPUESTA CONCEPTUAL DE LA SOLUCIÓN DE IT \nPágina 36 \n6.2 Bienvenido a CeroFallas \n \nFigura M1. Bienvenido a CeroFallas · CU-001 · datos de demostración. \nMensaje ap"
+  },
+  {
+    "page": 37,
+    "chars": 387,
+    "images": 1,
+    "start": "CEROFALLAS  |  PROPUESTA CONCEPTUAL DE LA SOLUCIÓN DE IT \nPágina 37 \n6.3 Centro de mantenimiento \n \nFigura M2. Centro de mantenimiento · CU-070 / CU-071 · datos de demostración. \nL"
+  },
+  {
+    "page": 38,
+    "chars": 352,
+    "images": 1,
+    "start": "CEROFALLAS  |  PROPUESTA CONCEPTUAL DE LA SOLUCIÓN DE IT \nPágina 38 \n6.4 Catálogo de equipos \n \nFigura M3. Catálogo de equipos · CU-010 a CU-012 · datos de demostración. \nPropósito"
+  },
+  {
+    "page": 39,
+    "chars": 354,
+    "images": 1,
+    "start": "CEROFALLAS  |  PROPUESTA CONCEPTUAL DE LA SOLUCIÓN DE IT \nPágina 39 \n6.5 Registrar correctivo \n \nFigura M4. Registrar correctivo · CU-020 a CU-022 · datos de demostración. \nPropósi"
+  },
+  {
+    "page": 40,
+    "chars": 362,
+    "images": 1,
+    "start": "CEROFALLAS  |  PROPUESTA CONCEPTUAL DE LA SOLUCIÓN DE IT \nPágina 40 \n6.6 Planificar mantenimiento \n \nFigura M5. Planificar mantenimiento · CU-030 / CU-033 · datos de demostración. "
+  },
+  {
+    "page": 41,
+    "chars": 354,
+    "images": 1,
+    "start": "CEROFALLAS  |  PROPUESTA CONCEPTUAL DE LA SOLUCIÓN DE IT \nPágina 41 \n6.7 Registrar preventivo \n \nFigura M6. Registrar preventivo · CU-031 / CU-032 · datos de demostración. \nPropósi"
+  },
+  {
+    "page": 42,
+    "chars": 380,
+    "images": 1,
+    "start": "CEROFALLAS  |  PROPUESTA CONCEPTUAL DE LA SOLUCIÓN DE IT \nPágina 42 \n6.8 Inspección de montacargas \n \nFigura M7. Inspección de montacargas · CU-040 a CU-042 · datos de demostración"
+  },
+  {
+    "page": 43,
+    "chars": 350,
+    "images": 1,
+    "start": "CEROFALLAS  |  PROPUESTA CONCEPTUAL DE LA SOLUCIÓN DE IT \nPágina 43 \n6.9 Reportar incidente \n \nFigura M8. Reportar incidente · CU-050 / CU-051 · datos de demostración. \nPropósito: "
+  },
+  {
+    "page": 44,
+    "chars": 342,
+    "images": 1,
+    "start": "CEROFALLAS  |  PROPUESTA CONCEPTUAL DE LA SOLUCIÓN DE IT \nPágina 44 \n6.10 Stock de repuestos \n \nFigura M9. Stock de repuestos · CU-060 · datos de demostración. \nPropósito: represen"
+  },
+  {
+    "page": 45,
+    "chars": 345,
+    "images": 1,
+    "start": "CEROFALLAS  |  PROPUESTA CONCEPTUAL DE LA SOLUCIÓN DE IT \nPágina 45 \n6.11 Usuarios y permisos \n \nFigura M10. Usuarios y permisos · CU-080 · datos de demostración. \nPropósito: repre"
+  },
+  {
+    "page": 46,
+    "chars": 349,
+    "images": 1,
+    "start": "CEROFALLAS  |  PROPUESTA CONCEPTUAL DE LA SOLUCIÓN DE IT \nPágina 46 \n6.12 Auditoría del sistema \n \nFigura M11. Auditoría del sistema · CU-081 · datos de demostración. \nPropósito: r"
+  },
+  {
+    "page": 47,
+    "chars": 368,
+    "images": 1,
+    "start": "CEROFALLAS  |  PROPUESTA CONCEPTUAL DE LA SOLUCIÓN DE IT \nPágina 47 \n6.13 Preparación del predictivo \n \nFigura M12. Preparación del predictivo · CU-091 / CU-092 · datos de demostra"
+  },
+  {
+    "page": 48,
+    "chars": 319,
+    "images": 1,
+    "start": "CEROFALLAS  |  PROPUESTA CONCEPTUAL DE LA SOLUCIÓN DE IT \nPágina 48 \n6.14 Inicio \n \nFigura M13. Inicio · CU-070 · datos de demostración. \nPropósito: representar el caso de uso y la"
+  },
+  {
+    "page": 49,
+    "chars": 329,
+    "images": 1,
+    "start": "CEROFALLAS  |  PROPUESTA CONCEPTUAL DE LA SOLUCIÓN DE IT \nPágina 49 \n6.15 Montacargas \n \nFigura M14. Montacargas · CU-040 · datos de demostración. \nPropósito: representar el caso d"
+  },
+  {
+    "page": 50,
+    "chars": 343,
+    "images": 1,
+    "start": "CEROFALLAS  |  PROPUESTA CONCEPTUAL DE LA SOLUCIÓN DE IT \nPágina 50 \n6.16 Reportar incidente \n \nFigura M15. Reportar incidente · CU-050 · datos de demostración. \nPropósito: represe"
+  },
+  {
+    "page": 51,
+    "chars": 2361,
+    "images": 0,
+    "start": "CEROFALLAS  |  PROPUESTA CONCEPTUAL DE LA SOLUCIÓN DE IT \nPágina 51 \n7. Trazabilidad y estado de la solución \n7.1 Cobertura de la rúbrica \nRequisito de segunda entrega Evidencia en"
+  },
+  {
+    "page": 52,
+    "chars": 2594,
+    "images": 0,
+    "start": "CEROFALLAS  |  PROPUESTA CONCEPTUAL DE LA SOLUCIÓN DE IT \nPágina 52 \n8. Guía para presentación y defensa \n8.1 Explicación de 90 segundos \n“CeroFallas digitaliza procesos de manteni"
+  },
+  {
+    "page": 53,
+    "chars": 1664,
+    "images": 0,
+    "start": "CEROFALLAS  |  PROPUESTA CONCEPTUAL DE LA SOLUCIÓN DE IT \nPágina 53 \nPregunta Respuesta breve sugerida \n¿Cómo se conecta SAP? Una credencial de solo lectura vive fuera del navegado"
+  },
+  {
+    "page": 54,
+    "chars": 2162,
+    "images": 0,
+    "start": "CEROFALLAS  |  PROPUESTA CONCEPTUAL DE LA SOLUCIÓN DE IT \nPágina 54 \nReferencias \n1. Firebase. Cloud Firestore data model. https://firebase.google.com/docs/firestore/data-model \n2."
+  }
+]

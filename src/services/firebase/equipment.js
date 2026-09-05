@@ -1,11 +1,13 @@
 import {
   collection,
+  documentId,
   doc,
   getDoc,
   getDocs,
   limit,
   orderBy,
   query,
+  startAfter,
   serverTimestamp,
   writeBatch,
 } from 'firebase/firestore'
@@ -14,8 +16,22 @@ import { getFirebaseFirestore } from './firestore.js'
 const equipmentCollection = () => collection(getFirebaseFirestore(), 'equipment')
 
 export async function listEquipment() {
-  const snapshot = await getDocs(query(equipmentCollection(), orderBy('code'), limit(50)))
-  return snapshot.docs.map((item) => ({ id: item.id, ...item.data() }))
+  const records = []
+  let cursor = null
+  // Los formularios necesitan el catálogo completo para no omitir opciones válidas.
+  // Se pagina automáticamente y falla de forma explícita antes de crecer sin límite.
+  for (let page = 0; page < 10; page++) {
+    const clauses = [orderBy('code'), orderBy(documentId()), limit(101)]
+    if (cursor) clauses.splice(2, 0, startAfter(cursor))
+    const snapshot = await getDocs(query(equipmentCollection(), ...clauses))
+    const visible = snapshot.docs.slice(0, 100)
+    records.push(...visible.map((item) => ({ id: item.id, ...item.data() })))
+    if (snapshot.docs.length <= 100) return records
+    cursor = visible.at(-1)
+  }
+  const error = new Error('El catálogo supera 1000 equipos; utiliza un selector con búsqueda en servidor.')
+  error.code = 'equipment/selection-limit'
+  throw error
 }
 
 export async function createEquipment(values, userId) {

@@ -1,41 +1,29 @@
-import { useEffect, useMemo, useState } from 'react'
+import { useMemo, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { equipmentStatuses, getAreaName } from '../config/catalogs.js'
 import { useAuth } from '../features/auth/AuthContext.jsx'
-import { listEquipment } from '../services/firebase/equipment.js'
+import { resourceReaders } from '../services/firebase/history.js'
+import { usePagedHistory } from '../features/usePagedHistory.js'
+import HistoryControls from '../components/HistoryControls.jsx'
 
 const statusNames = Object.fromEntries(equipmentStatuses.map((status) => [status.value, status.label]))
 
 export default function EquipmentPage() {
-  const { hasPermission, profileLoading } = useAuth()
-  const [equipment, setEquipment] = useState([])
-  const [loading, setLoading] = useState(true)
-  const [error, setError] = useState('')
+  const { hasPermission, profileLoading, user } = useAuth()
   const [search, setSearch] = useState('')
   const [status, setStatus] = useState('all')
 
   const canRead = hasPermission('equipment.read')
   const canManage = hasPermission('equipment.manage')
-
-  useEffect(() => {
-    if (profileLoading) return
-    if (!canRead) {
-      setLoading(false)
-      return
-    }
-
-    listEquipment()
-      .then(setEquipment)
-      .catch(() => setError('No fue posible cargar el catálogo. Verifica Firestore e inténtalo nuevamente.'))
-      .finally(() => setLoading(false))
-  }, [canRead, profileLoading])
+  const history = usePagedHistory({ enabled: canRead && !profileLoading, scope: user?.uid, status, readPage: resourceReaders.equipment })
+  const { records: equipment, loading, error } = history
 
   const filteredEquipment = useMemo(() => {
     const term = search.trim().toLocaleLowerCase('es')
     return equipment.filter((item) => {
       const matchesTerm = !term || [item.code, item.name, item.type]
         .some((value) => value?.toLocaleLowerCase('es').includes(term))
-      return matchesTerm && (status === 'all' || item.status === status)
+      return matchesTerm
     })
   }, [equipment, search, status])
 
@@ -58,7 +46,7 @@ export default function EquipmentPage() {
         <div>
           <p className="eyebrow">Activos</p>
           <h1 id="equipment-title">Equipos</h1>
-          <p>Catálogo central de activos. Los datos definitivos se ingresarán al confirmar placas y modelos en planta.</p>
+          <p>Catálogo central paginado. El estado se aplica sobre todo el catálogo; el texto busca entre equipos cargados.</p>
         </div>
         {canManage && <Link className="button button--primary" to="/equipos/nuevo">Nuevo equipo</Link>}
       </div>
@@ -74,7 +62,7 @@ export default function EquipmentPage() {
         <div className="panel empty-state"><span className="empty-state__mark" aria-hidden="true">CF</span><h2>Catálogo pendiente</h2><p>No se han registrado equipos. Esto evita presentar como reales los datos aún pendientes de la visita a planta.</p></div>
       ) : !error && filteredEquipment.length === 0 ? (
         <div className="panel empty-state"><h2>Sin coincidencias</h2><p>Ajusta la búsqueda o el filtro de estado.</p></div>
-      ) : !error ? (
+      ) : (
         <div className="equipment-grid">
           {filteredEquipment.map((item) => (
             <article className="panel equipment-card" key={item.id}>
@@ -83,7 +71,8 @@ export default function EquipmentPage() {
             </article>
           ))}
         </div>
-      ) : null}
+      )}
+      <HistoryControls history={history} visibleCount={filteredEquipment.length} label="Catálogo de equipos" />
     </section>
   )
 }

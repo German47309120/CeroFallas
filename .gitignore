@@ -8,6 +8,7 @@ coverage/
 .cache/
 
 # Local environment and secrets
+.local/
 .env
 .env.*
 !.env.example
@@ -20,6 +21,7 @@ firebase-debug.*.log
 
 # Firebase local state
 .firebase/
+emulator-data*/
 
 # Python
 __pycache__/

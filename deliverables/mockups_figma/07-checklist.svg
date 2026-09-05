@@ -1,0 +1,52 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1440" height="1132" viewBox="0 0 1440 1132" role="img" aria-label="Inspección de montacargas"><title>Inspección de montacargas — CeroFallas</title><desc>Mockup conceptual editable. Datos ficticios. No es una captura de la aplicación.</desc><rect width="1440" height="1132" fill="#f4f7f8"/><rect x="0" y="0" width="240" height="1100" rx="0" fill="#0b4c52" stroke="none"/>
+<text x="28" y="57" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="27" font-weight="700" fill="#ffffff">CF</text>
+<text x="81" y="55" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="20" font-weight="600" fill="#ffffff">CeroFallas</text>
+<text x="28" y="111" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="10" font-weight="600" fill="#b8d9d8">GESTIÓN DE MANTENIMIENTO</text>
+<text x="30" y="144" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="16" font-weight="400" fill="#ffffff">Inicio</text>
+<text x="30" y="198" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="16" font-weight="400" fill="#ffffff">Correctivos</text>
+<text x="30" y="252" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="16" font-weight="400" fill="#ffffff">Preventivos</text>
+<rect x="16" y="280" width="208" height="44" rx="9" fill="#126b72" stroke="none"/>
+<text x="30" y="306" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="16" font-weight="600" fill="#ffffff">Montacargas</text>
+<text x="30" y="360" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="16" font-weight="400" fill="#ffffff">Incidentes</text>
+<text x="30" y="414" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="16" font-weight="400" fill="#ffffff">Equipos</text>
+<text x="30" y="468" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="16" font-weight="400" fill="#ffffff">Repuestos</text>
+<text x="30" y="522" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="16" font-weight="400" fill="#ffffff">Riesgo predictivo</text>
+<text x="30" y="576" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="16" font-weight="400" fill="#ffffff">Usuarios</text>
+<text x="30" y="630" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="16" font-weight="400" fill="#ffffff">Auditoría</text>
+<text x="28" y="780" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="11" font-weight="400" fill="#b8d9d8">WEB RESPONSIVE</text>
+<text x="28" y="801" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="11" font-weight="400" fill="#b8d9d8">Diseño conceptual · v1</text>
+<rect x="240" y="0" width="1200" height="80" rx="0" fill="#ffffff" stroke="none"/>
+<text x="280" y="47" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="15" font-weight="600" fill="#126b72">Operación / Montacargas</text>
+<text x="1080" y="47" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="14" font-weight="400" fill="#52636b">Perfil demo  ·  Cerrar sesión</text>
+<text x="280" y="124" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="32" font-weight="700" fill="#152329">Inspección de montacargas</text>
+<text x="280" y="153" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="16" font-weight="400" fill="#52636b">Revisión previa al uso. Registra cada condición y las observaciones.</text>
+<rect x="280" y="180" width="1116" height="132" rx="14" fill="#ffffff" stroke="#d6e0e3"/>
+<text x="296" y="204" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="14" font-weight="600" fill="#52636b">Montacargas</text>
+<rect x="296" y="216" width="530" height="48" rx="8" fill="#ffffff" stroke="#d6e0e3"/>
+<text x="309" y="246" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="15" font-weight="400" fill="#152329">DEMO-EQ-002</text>
+<text x="850" y="204" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="14" font-weight="600" fill="#52636b">Turno</text>
+<rect x="850" y="216" width="530" height="48" rx="8" fill="#ffffff" stroke="#d6e0e3"/>
+<text x="863" y="246" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="15" font-weight="400" fill="#152329">Turno 1 · 06:00–18:00</text>
+<rect x="280" y="336" width="1116" height="348" rx="14" fill="#ffffff" stroke="#d6e0e3"/>
+<text x="304" y="372" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="20" font-weight="600" fill="#152329">Condición de los puntos inspeccionados</text>
+<rect x="296" y="406" width="1084" height="48" rx="7" fill="#ffffff" stroke="none"/>
+<text x="312" y="436" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="16" font-weight="400" fill="#152329">Llantas y horquillas</text>
+<text x="1166" y="436" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="15" font-weight="600" fill="#126b72">Bueno</text>
+<rect x="296" y="464" width="1084" height="48" rx="7" fill="#f4f7f8" stroke="none"/>
+<text x="312" y="494" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="16" font-weight="400" fill="#152329">Mangueras y cilindros</text>
+<text x="1166" y="494" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="15" font-weight="600" fill="#b63832">Fuera de servicio</text>
+<rect x="296" y="522" width="1084" height="48" rx="7" fill="#ffffff" stroke="none"/>
+<text x="312" y="552" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="16" font-weight="400" fill="#152329">Frenos y dirección</text>
+<text x="1166" y="552" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="15" font-weight="600" fill="#126b72">Bueno</text>
+<rect x="296" y="580" width="1084" height="48" rx="7" fill="#f4f7f8" stroke="none"/>
+<text x="312" y="610" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="16" font-weight="400" fill="#152329">Aceite y refrigerante</text>
+<text x="1166" y="610" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="15" font-weight="600" fill="#126b72">Bueno</text>
+<text x="304" y="662" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="14" font-weight="400" fill="#52636b">Opciones: Bueno / Requiere atención / Fuera de servicio / No aplica</text>
+<rect x="280" y="708" width="1116" height="56" rx="10" fill="#fbeae8" stroke="none"/>
+<text x="300" y="737" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="16" font-weight="400" fill="#b63832">FUERA DE SERVICIO · No operar. Reportar la fuga a mantenimiento.</text>
+<text x="280" y="801" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="14" font-weight="400" fill="#52636b">Vista resumida del checklist de 25 puntos. Incluir niveles, mástil, cadenas, luces, bocina y cinturón; validar en planta.</text>
+<rect x="280" y="843" width="240" height="46" rx="9" fill="#126b72" stroke="none"/>
+<text x="298" y="872" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="15" font-weight="600" fill="#ffffff">Guardar inspección</text>
+<rect x="534" y="843" width="130" height="46" rx="9" fill="#ffffff" stroke="#d6e0e3"/>
+<text x="552" y="872" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="15" font-weight="600" fill="#126b72">Cancelar</text>
+<text x="280" y="935" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="12" font-weight="600" fill="#52636b">MOCKUP · DATOS DE DEMOSTRACIÓN</text></svg>

@@ -18,6 +18,18 @@ service cloud.firestore {
       return activeUser() && permission in ownProfile().permissions;
     }
 
+    function privilegedMaintainer() {
+      return activeUser() && ownProfile().roleId in ['administrator', 'support'];
+    }
+
+    function executionAfter(executionId) {
+      return getAfter(/databases/$(database)/documents/preventiveExecutions/$(executionId));
+    }
+
+    function planAfter(planId) {
+      return getAfter(/databases/$(database)/documents/preventivePlans/$(planId));
+    }
+
     match /users/{userId} {
       allow read: if (signedIn() && request.auth.uid == userId) || hasPermission('users.read');
       allow write: if false;
@@ -41,7 +53,7 @@ service cloud.firestore {
         && request.resource.data.updatedBy == request.auth.uid
         && request.resource.data.createdAt == request.time
         && request.resource.data.updatedAt == request.time;
-      allow update: if hasPermission('equipment.manage')
+      allow update: if hasPermission('equipment.manage') && privilegedMaintainer()
         && request.resource.data.keys().hasAll(['code', 'name', 'type', 'areaId', 'status', 'createdAt', 'createdBy', 'updatedAt', 'updatedBy'])
         && request.resource.data.keys().hasOnly(['code', 'name', 'type', 'areaId', 'status', 'criticality', 'brand', 'model', 'serialNumber', 'notes', 'createdAt', 'createdBy', 'updatedAt', 'updatedBy'])
         && request.resource.data.code == resource.data.code
@@ -79,7 +91,7 @@ service cloud.firestore {
         && request.auth.uid in request.resource.data.technicianIds
         && request.resource.data.createdAt == request.time
         && request.resource.data.updatedAt == request.time;
-      allow update: if hasPermission('corrective.manage')
+      allow update: if hasPermission('corrective.manage') && privilegedMaintainer()
         && request.resource.data.status in ['draft', 'completed', 'voided']
         && request.resource.data.durationMinutes is int
         && request.resource.data.durationMinutes > 0
@@ -106,14 +118,31 @@ service cloud.firestore {
         && request.resource.data.createdBy == request.auth.uid
         && request.resource.data.createdAt == request.time
         && request.resource.data.updatedAt == request.time;
-      allow update: if hasPermission('preventive.manage')
-        && request.resource.data.status in ['active', 'paused', 'completed', 'voided']
-        && request.resource.data.estimatedFrequency == true
-        && request.resource.data.createdAt == resource.data.createdAt
-        && request.resource.data.createdBy == resource.data.createdBy
-        && request.resource.data.updatedBy == request.auth.uid
-        && request.resource.data.updatedAt == request.time
-        && (request.resource.data.status != 'voided' || (request.resource.data.voidReason is string && request.resource.data.voidReason.size() > 0));
+      allow update: if (hasPermission('preventive.manage') && privilegedMaintainer()
+          && request.resource.data.status in ['active', 'paused', 'completed', 'voided']
+          && request.resource.data.estimatedFrequency == true
+          && request.resource.data.createdAt == resource.data.createdAt
+          && request.resource.data.createdBy == resource.data.createdBy
+          && request.resource.data.updatedBy == request.auth.uid
+          && request.resource.data.updatedAt == request.time
+          && (request.resource.data.status != 'voided' || (request.resource.data.voidReason is string && request.resource.data.voidReason.size() > 0)))
+        || (hasPermission('preventive.execute')
+          && resource.data.status == 'active'
+          && resource.data.frequencyType == 'calendar'
+          && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['nextDueAt', 'lastExecutedAt', 'lastExecutionId', 'updatedAt', 'updatedBy'])
+          && request.resource.data.lastExecutionId is string
+          && request.resource.data.nextDueAt is timestamp
+          && request.resource.data.lastExecutedAt is timestamp
+          && request.resource.data.nextDueAt >= resource.data.nextDueAt
+          && request.resource.data.nextDueAt > request.resource.data.lastExecutedAt
+          && request.resource.data.updatedBy == request.auth.uid
+          && request.resource.data.updatedAt == request.time
+          && executionAfter(request.resource.data.lastExecutionId).data.planId == planId
+          && executionAfter(request.resource.data.lastExecutionId).data.equipmentId == resource.data.equipmentId
+          && executionAfter(request.resource.data.lastExecutionId).data.createdBy == request.auth.uid
+          && executionAfter(request.resource.data.lastExecutionId).data.startedAt == request.resource.data.lastExecutedAt
+          && executionAfter(request.resource.data.lastExecutionId).data.rescheduleStatus == 'automatic'
+          && executionAfter(request.resource.data.lastExecutionId).data.nextDueAtAfterExecution == request.resource.data.nextDueAt);
       allow delete: if false;
     }
 
@@ -126,11 +155,26 @@ service cloud.firestore {
         && request.resource.data.durationMinutes <= 1440
         && request.resource.data.endedAt > request.resource.data.startedAt
         && request.resource.data.complianceStatus in ['on_time', 'late', 'unscheduled']
+        && request.resource.data.rescheduleStatus in ['automatic', 'manual_required', 'not_applicable']
         && request.resource.data.createdBy == request.auth.uid
         && request.auth.uid in request.resource.data.technicianIds
         && request.resource.data.createdAt == request.time
-        && request.resource.data.updatedAt == request.time;
-      allow update: if hasPermission('preventive.manage')
+        && request.resource.data.updatedAt == request.time
+        && ((request.resource.data.planId == null
+            && request.resource.data.rescheduleStatus == 'not_applicable'
+            && request.resource.data.nextDueAtAfterExecution == null)
+          || (request.resource.data.planId is string
+            && planAfter(request.resource.data.planId).data.status == 'active'
+            && planAfter(request.resource.data.planId).data.equipmentId == request.resource.data.equipmentId
+            && ((request.resource.data.rescheduleStatus == 'automatic'
+                && planAfter(request.resource.data.planId).data.frequencyType == 'calendar'
+                && request.resource.data.nextDueAtAfterExecution is timestamp
+                && planAfter(request.resource.data.planId).data.lastExecutionId == executionId
+                && planAfter(request.resource.data.planId).data.nextDueAt == request.resource.data.nextDueAtAfterExecution)
+              || (request.resource.data.rescheduleStatus == 'manual_required'
+                && planAfter(request.resource.data.planId).data.frequencyType in ['hours', 'condition']
+                && request.resource.data.nextDueAtAfterExecution == null))));
+      allow update: if hasPermission('preventive.manage') && privilegedMaintainer()
         && request.resource.data.status in ['completed', 'voided']
         && request.resource.data.createdAt == resource.data.createdAt
         && request.resource.data.createdBy == resource.data.createdBy
@@ -159,7 +203,7 @@ service cloud.firestore {
         && request.resource.data.operatorId == request.auth.uid
         && request.resource.data.createdBy == request.auth.uid
         && request.resource.data.createdAt == request.time;
-      allow update: if hasPermission('forklift.manage')
+      allow update: if hasPermission('forklift.manage') && privilegedMaintainer()
         && request.resource.data.status in ['completed', 'voided']
         && request.resource.data.createdAt == resource.data.createdAt
         && request.resource.data.createdBy == resource.data.createdBy

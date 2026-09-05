@@ -1,0 +1,52 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1440" height="1132" viewBox="0 0 1440 1132" role="img" aria-label="Reportar incidente"><title>Reportar incidente — CeroFallas</title><desc>Mockup conceptual editable. Datos ficticios. No es una captura de la aplicación.</desc><rect width="1440" height="1132" fill="#f4f7f8"/><rect x="0" y="0" width="240" height="1100" rx="0" fill="#0b4c52" stroke="none"/>
+<text x="28" y="57" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="27" font-weight="700" fill="#ffffff">CF</text>
+<text x="81" y="55" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="20" font-weight="600" fill="#ffffff">CeroFallas</text>
+<text x="28" y="111" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="10" font-weight="600" fill="#b8d9d8">GESTIÓN DE MANTENIMIENTO</text>
+<text x="30" y="144" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="16" font-weight="400" fill="#ffffff">Inicio</text>
+<text x="30" y="198" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="16" font-weight="400" fill="#ffffff">Correctivos</text>
+<text x="30" y="252" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="16" font-weight="400" fill="#ffffff">Preventivos</text>
+<text x="30" y="306" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="16" font-weight="400" fill="#ffffff">Montacargas</text>
+<rect x="16" y="334" width="208" height="44" rx="9" fill="#126b72" stroke="none"/>
+<text x="30" y="360" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="16" font-weight="600" fill="#ffffff">Incidentes</text>
+<text x="30" y="414" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="16" font-weight="400" fill="#ffffff">Equipos</text>
+<text x="30" y="468" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="16" font-weight="400" fill="#ffffff">Repuestos</text>
+<text x="30" y="522" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="16" font-weight="400" fill="#ffffff">Riesgo predictivo</text>
+<text x="30" y="576" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="16" font-weight="400" fill="#ffffff">Usuarios</text>
+<text x="30" y="630" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="16" font-weight="400" fill="#ffffff">Auditoría</text>
+<text x="28" y="780" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="11" font-weight="400" fill="#b8d9d8">WEB RESPONSIVE</text>
+<text x="28" y="801" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="11" font-weight="400" fill="#b8d9d8">Diseño conceptual · v1</text>
+<rect x="240" y="0" width="1200" height="80" rx="0" fill="#ffffff" stroke="none"/>
+<text x="280" y="47" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="15" font-weight="600" fill="#126b72">Operación / Incidentes</text>
+<text x="1080" y="47" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="14" font-weight="400" fill="#52636b">Perfil demo  ·  Cerrar sesión</text>
+<text x="280" y="124" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="32" font-weight="700" fill="#152329">Reportar incidente</text>
+<text x="280" y="153" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="16" font-weight="400" fill="#52636b">Informa una anomalía para seguimiento y reporte gerencial.</text>
+<rect x="280" y="180" width="1116" height="232" rx="14" fill="#ffffff" stroke="#d6e0e3"/>
+<text x="296" y="204" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="14" font-weight="600" fill="#52636b">Área</text>
+<rect x="296" y="216" width="530" height="48" rx="8" fill="#ffffff" stroke="#d6e0e3"/>
+<text x="309" y="246" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="15" font-weight="400" fill="#152329">Línea 1</text>
+<text x="850" y="204" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="14" font-weight="600" fill="#52636b">Equipo (opcional)</text>
+<rect x="850" y="216" width="530" height="48" rx="8" fill="#ffffff" stroke="#d6e0e3"/>
+<text x="863" y="246" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="15" font-weight="400" fill="#152329">DEMO-EQ-001</text>
+<text x="296" y="304" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="14" font-weight="600" fill="#52636b">Prioridad</text>
+<rect x="296" y="316" width="530" height="48" rx="8" fill="#ffffff" stroke="#d6e0e3"/>
+<text x="309" y="346" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="15" font-weight="400" fill="#152329">Alta</text>
+<text x="850" y="304" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="14" font-weight="600" fill="#52636b">Descripción</text>
+<rect x="850" y="316" width="530" height="48" rx="8" fill="#ffffff" stroke="#d6e0e3"/>
+<text x="863" y="346" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="15" font-weight="400" fill="#152329">Presencia de agua en una manguera</text>
+<rect x="280" y="436" width="1116" height="169" rx="14" fill="#ffffff" stroke="#d6e0e3"/>
+<text x="304" y="471" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="20" font-weight="600" fill="#152329">Seguimiento del reporte</text>
+<rect x="296" y="492" width="1084" height="38" rx="6" fill="#f4f7f8" stroke="none"/>
+<text x="304" y="516" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="13" font-weight="600" fill="#52636b">Código</text>
+<text x="571" y="516" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="13" font-weight="600" fill="#52636b">Fecha</text>
+<text x="838" y="516" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="13" font-weight="600" fill="#52636b">Prioridad</text>
+<text x="1105" y="516" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="13" font-weight="600" fill="#52636b">Estado</text>
+<text x="304" y="558" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="14" font-weight="400" fill="#152329">DEMO-003</text>
+<text x="571" y="558" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="14" font-weight="400" fill="#152329">03/09/2026</text>
+<text x="838" y="558" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="14" font-weight="400" fill="#152329">Alta</text>
+<text x="1105" y="558" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="14" font-weight="400" fill="#126b72">Reportado</text>
+<text x="280" y="645" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="14" font-weight="400" fill="#52636b">Digitadores y operadores Airlay reportan. Administración o soporte actualiza el seguimiento y vincula correctivos.</text>
+<rect x="280" y="687" width="240" height="46" rx="9" fill="#126b72" stroke="none"/>
+<text x="298" y="716" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="15" font-weight="600" fill="#ffffff">Enviar reporte</text>
+<rect x="534" y="687" width="130" height="46" rx="9" fill="#ffffff" stroke="#d6e0e3"/>
+<text x="552" y="716" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="15" font-weight="600" fill="#126b72">Cancelar</text>
+<text x="280" y="779" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="12" font-weight="600" fill="#52636b">MOCKUP · DATOS DE DEMOSTRACIÓN</text></svg>

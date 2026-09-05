@@ -9,7 +9,13 @@
     "preview": "vite preview",
     "lint": "eslint .",
     "test": "vitest run",
-    "seed:emulator": "node scripts/seed-emulator.mjs"
+    "seed:emulator": "node scripts/seed-emulator.mjs",
+    "seed:demo": "node scripts/seed-demo-data.mjs",
+    "seed:demo-user": "node scripts/create-demo-user.mjs",
+    "seed:demo-roles": "node scripts/seed-demo-role-users.mjs",
+    "emulators:start": "firebase emulators:start --only auth,firestore,functions --project demo-cerofallas --import=emulator-data --export-on-exit=emulator-data",
+    "emulators:fresh": "firebase emulators:start --only auth,firestore,functions --project demo-cerofallas --export-on-exit=emulator-data",
+    "emulators:save": "powershell -NoProfile -ExecutionPolicy Bypass -File scripts/save-emulator-data.ps1"
   },
   "dependencies": {
     "firebase": "^12.18.0",

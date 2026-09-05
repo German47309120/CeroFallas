@@ -1,11 +1,24 @@
-import { collection, doc, getDoc, getDocs, limit, orderBy, query, serverTimestamp, Timestamp, writeBatch } from 'firebase/firestore'
+import { collection, doc, documentId, getDoc, getDocs, limit, orderBy, query, runTransaction, serverTimestamp, startAfter, Timestamp, writeBatch } from 'firebase/firestore'
 import { getFirebaseFirestore } from './firestore.js'
+import { nextCalendarDueDate } from '../../utils/preventive.js'
 
 const cleanParts = (parts) => parts.filter((part) => part.code.trim() || part.description.trim()).map((part) => ({ code: part.code.trim().toUpperCase(), description: part.description.trim(), quantity: Number(part.quantity) }))
 
 export async function listPreventivePlans() {
-  const snapshot = await getDocs(query(collection(getFirebaseFirestore(), 'preventivePlans'), orderBy('nextDueAt'), limit(50)))
-  return snapshot.docs.map((item) => ({ id: item.id, ...item.data() }))
+  const records = []
+  let cursor = null
+  for (let page = 0; page < 10; page++) {
+    const clauses = [orderBy('nextDueAt'), orderBy(documentId()), limit(101)]
+    if (cursor) clauses.splice(2, 0, startAfter(cursor))
+    const snapshot = await getDocs(query(collection(getFirebaseFirestore(), 'preventivePlans'), ...clauses))
+    const visible = snapshot.docs.slice(0, 100)
+    records.push(...visible.map((item) => ({ id: item.id, ...item.data() })))
+    if (snapshot.docs.length <= 100) return records
+    cursor = visible.at(-1)
+  }
+  const error = new Error('El catálogo supera 1000 planes; utiliza un selector con búsqueda en servidor.')
+  error.code = 'preventive-plan/selection-limit'
+  throw error
 }
 
 export async function listPreventiveExecutions() {
@@ -62,20 +75,38 @@ export async function updatePreventivePlan(planId, values, equipment, userId) {
 export async function createPreventiveExecution(values, times, equipment, plan, compliance, userId) {
   const database = getFirebaseFirestore()
   const executionRef = doc(collection(database, 'preventiveExecutions'))
-  const auditRef = doc(collection(database, 'audit'))
-  const timestamp = serverTimestamp()
-  const execution = {
-    planId: plan?.id ?? null,
-    equipmentId: equipment.id,
-    equipmentSnapshot: { code: equipment.code, name: equipment.name },
-    scheduledAt: values.scheduledDate ? Timestamp.fromDate(new Date(`${values.scheduledDate}T12:00:00`)) : null,
-    startedAt: Timestamp.fromDate(times.startedAt), endedAt: Timestamp.fromDate(times.endedAt), durationMinutes: times.durationMinutes,
-    technicianIds: [userId], activityPerformed: values.activityPerformed.trim(), spareParts: cleanParts(values.spareParts),
-    observations: values.observations.trim() || null, complianceStatus: compliance, status: 'completed',
-    createdAt: timestamp, createdBy: userId, updatedAt: timestamp, updatedBy: userId,
-  }
-  const batch = writeBatch(database)
-  batch.set(executionRef, execution)
-  batch.set(auditRef, { occurredAt: timestamp, actorId: userId, action: 'create', entityType: 'preventiveExecution', entityId: executionRef.id, after: execution })
-  await batch.commit()
+  await runTransaction(database, async (transaction) => {
+    const planRef = plan?.id ? doc(database, 'preventivePlans', plan.id) : null
+    const currentPlan = planRef ? await transaction.get(planRef) : null
+    if (planRef && !currentPlan.exists()) throw new Error('preventive-plan/not-found')
+    const planData = currentPlan?.data() ?? null
+    if (planData && (planData.status !== 'active' || planData.equipmentId !== equipment.id)) throw new Error('preventive-plan/not-available')
+
+    const timestamp = serverTimestamp()
+    const automatic = planData?.frequencyType === 'calendar'
+    const nextDueDate = automatic ? nextCalendarDueDate(values.eventDate, planData.frequencyValue, planData.frequencyUnit) : null
+    const nextDueAt = nextDueDate ? Timestamp.fromDate(new Date(`${nextDueDate}T12:00:00`)) : null
+    const rescheduleStatus = !planData ? 'not_applicable' : automatic ? 'automatic' : 'manual_required'
+    const execution = {
+      planId: plan?.id ?? null,
+      equipmentId: equipment.id,
+      equipmentSnapshot: { code: equipment.code, name: equipment.name },
+      scheduledAt: values.scheduledDate ? Timestamp.fromDate(new Date(`${values.scheduledDate}T12:00:00`)) : null,
+      startedAt: Timestamp.fromDate(times.startedAt), endedAt: Timestamp.fromDate(times.endedAt), durationMinutes: times.durationMinutes,
+      technicianIds: [userId], activityPerformed: values.activityPerformed.trim(), spareParts: cleanParts(values.spareParts),
+      observations: values.observations.trim() || null, complianceStatus: compliance, rescheduleStatus,
+      nextDueAtAfterExecution: nextDueAt, status: 'completed',
+      createdAt: timestamp, createdBy: userId, updatedAt: timestamp, updatedBy: userId,
+    }
+    transaction.set(executionRef, execution)
+    const executionAuditRef = doc(collection(database, 'audit'))
+    transaction.set(executionAuditRef, { occurredAt: timestamp, actorId: userId, action: 'create', entityType: 'preventiveExecution', entityId: executionRef.id, after: execution })
+
+    if (automatic) {
+      const planUpdates = { nextDueAt, lastExecutedAt: Timestamp.fromDate(times.startedAt), lastExecutionId: executionRef.id, updatedAt: timestamp, updatedBy: userId }
+      transaction.update(planRef, planUpdates)
+      const planAuditRef = doc(collection(database, 'audit'))
+      transaction.set(planAuditRef, { occurredAt: timestamp, actorId: userId, action: 'reschedule', entityType: 'preventivePlan', entityId: planRef.id, reason: 'Reprogramación automática por ejecución completada', before: planData, after: planUpdates })
+    }
+  })
 }

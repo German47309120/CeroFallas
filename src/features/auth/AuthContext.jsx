@@ -1,7 +1,7 @@
 import { createContext, useContext, useEffect, useMemo, useState } from 'react'
 import { onAuthStateChanged } from 'firebase/auth'
 import { getFirebaseAuth, logout as firebaseLogout } from '../../services/firebase/auth.js'
-import { useFirebaseEmulators } from '../../services/firebase/config.js'
+import { isFirebaseConfigured, useFirebaseEmulators } from '../../services/firebase/config.js'
 import { subscribeToProfile } from '../../services/firebase/profiles.js'
 
 const AuthContext = createContext(null)
@@ -14,6 +14,12 @@ export function AuthProvider({ children }) {
   const [profileError, setProfileError] = useState('')
 
   useEffect(() => {
+    if (!isFirebaseConfigured) {
+      setLoading(false)
+      setProfileLoading(false)
+      return undefined
+    }
+
     const unsubscribe = onAuthStateChanged(getFirebaseAuth(), (nextUser) => {
       setUser(nextUser)
       setLoading(false)
@@ -48,6 +54,8 @@ export function AuthProvider({ children }) {
   const value = useMemo(() => ({
     user,
     loading,
+    configured: isFirebaseConfigured,
+    configurationError: isFirebaseConfigured ? '' : 'Firebase no está configurado para este build.',
     environment: useFirebaseEmulators ? 'emulator' : 'cloud',
     profile: profile ? {
       ...profile,

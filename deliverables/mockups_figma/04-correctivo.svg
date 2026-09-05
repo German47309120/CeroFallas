@@ -1,0 +1,65 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1440" height="1132" viewBox="0 0 1440 1132" role="img" aria-label="Registrar correctivo"><title>Registrar correctivo — CeroFallas</title><desc>Mockup conceptual editable. Datos ficticios. No es una captura de la aplicación.</desc><rect width="1440" height="1132" fill="#f4f7f8"/><rect x="0" y="0" width="240" height="1100" rx="0" fill="#0b4c52" stroke="none"/>
+<text x="28" y="57" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="27" font-weight="700" fill="#ffffff">CF</text>
+<text x="81" y="55" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="20" font-weight="600" fill="#ffffff">CeroFallas</text>
+<text x="28" y="111" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="10" font-weight="600" fill="#b8d9d8">GESTIÓN DE MANTENIMIENTO</text>
+<text x="30" y="144" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="16" font-weight="400" fill="#ffffff">Inicio</text>
+<rect x="16" y="172" width="208" height="44" rx="9" fill="#126b72" stroke="none"/>
+<text x="30" y="198" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="16" font-weight="600" fill="#ffffff">Correctivos</text>
+<text x="30" y="252" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="16" font-weight="400" fill="#ffffff">Preventivos</text>
+<text x="30" y="306" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="16" font-weight="400" fill="#ffffff">Montacargas</text>
+<text x="30" y="360" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="16" font-weight="400" fill="#ffffff">Incidentes</text>
+<text x="30" y="414" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="16" font-weight="400" fill="#ffffff">Equipos</text>
+<text x="30" y="468" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="16" font-weight="400" fill="#ffffff">Repuestos</text>
+<text x="30" y="522" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="16" font-weight="400" fill="#ffffff">Riesgo predictivo</text>
+<text x="30" y="576" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="16" font-weight="400" fill="#ffffff">Usuarios</text>
+<text x="30" y="630" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="16" font-weight="400" fill="#ffffff">Auditoría</text>
+<text x="28" y="780" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="11" font-weight="400" fill="#b8d9d8">WEB RESPONSIVE</text>
+<text x="28" y="801" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="11" font-weight="400" fill="#b8d9d8">Diseño conceptual · v1</text>
+<rect x="240" y="0" width="1200" height="80" rx="0" fill="#ffffff" stroke="none"/>
+<text x="280" y="47" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="15" font-weight="600" fill="#126b72">Operación / Correctivos</text>
+<text x="1080" y="47" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="14" font-weight="400" fill="#52636b">Perfil demo  ·  Cerrar sesión</text>
+<text x="280" y="124" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="32" font-weight="700" fill="#152329">Registrar correctivo</text>
+<text x="280" y="153" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="16" font-weight="400" fill="#52636b">Documenta la falla, la intervención y el tiempo invertido.</text>
+<rect x="280" y="180" width="1116" height="632" rx="14" fill="#ffffff" stroke="#d6e0e3"/>
+<text x="296" y="204" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="14" font-weight="600" fill="#52636b">Área</text>
+<rect x="296" y="216" width="530" height="48" rx="8" fill="#ffffff" stroke="#d6e0e3"/>
+<text x="309" y="246" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="15" font-weight="400" fill="#152329">Línea 1</text>
+<text x="850" y="204" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="14" font-weight="600" fill="#52636b">Equipo</text>
+<rect x="850" y="216" width="530" height="48" rx="8" fill="#ffffff" stroke="#d6e0e3"/>
+<text x="863" y="246" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="15" font-weight="400" fill="#152329">DEMO-EQ-001</text>
+<text x="296" y="304" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="14" font-weight="600" fill="#52636b">Fecha</text>
+<rect x="296" y="316" width="530" height="48" rx="8" fill="#ffffff" stroke="#d6e0e3"/>
+<text x="309" y="346" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="15" font-weight="400" fill="#152329">03/09/2026</text>
+<text x="850" y="304" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="14" font-weight="600" fill="#52636b">Inicio / Fin</text>
+<rect x="850" y="316" width="530" height="48" rx="8" fill="#ffffff" stroke="#d6e0e3"/>
+<text x="863" y="346" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="15" font-weight="400" fill="#152329">08:00 / 08:40</text>
+<text x="296" y="404" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="14" font-weight="600" fill="#52636b">Finaliza al día siguiente</text>
+<rect x="296" y="416" width="530" height="48" rx="8" fill="#ffffff" stroke="#d6e0e3"/>
+<text x="309" y="446" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="15" font-weight="400" fill="#152329">No · Duración calculada: 40 min</text>
+<text x="850" y="404" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="14" font-weight="600" fill="#52636b">Tipo de falla provisional</text>
+<rect x="850" y="416" width="530" height="48" rx="8" fill="#ffffff" stroke="#d6e0e3"/>
+<text x="863" y="446" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="15" font-weight="400" fill="#152329">Cuchilla gira lento</text>
+<text x="296" y="504" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="14" font-weight="600" fill="#52636b">Componente</text>
+<rect x="296" y="516" width="530" height="48" rx="8" fill="#ffffff" stroke="#d6e0e3"/>
+<text x="309" y="546" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="15" font-weight="400" fill="#152329">Transmisión</text>
+<text x="850" y="504" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="14" font-weight="600" fill="#52636b">Causa identificada</text>
+<rect x="850" y="516" width="530" height="48" rx="8" fill="#ffffff" stroke="#d6e0e3"/>
+<text x="863" y="546" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="15" font-weight="400" fill="#152329">Pendiente de diagnóstico</text>
+<text x="296" y="604" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="14" font-weight="600" fill="#52636b">Síntoma observado</text>
+<rect x="296" y="616" width="530" height="48" rx="8" fill="#ffffff" stroke="#d6e0e3"/>
+<text x="309" y="646" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="15" font-weight="400" fill="#152329">Velocidad de corte irregular</text>
+<text x="850" y="604" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="14" font-weight="600" fill="#52636b">Trabajo realizado</text>
+<rect x="850" y="616" width="530" height="48" rx="8" fill="#ffffff" stroke="#d6e0e3"/>
+<text x="863" y="646" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="15" font-weight="400" fill="#152329">Revisión y ajuste de transmisión</text>
+<text x="296" y="704" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="14" font-weight="600" fill="#52636b">Repuestos utilizados</text>
+<rect x="296" y="716" width="530" height="48" rx="8" fill="#ffffff" stroke="#d6e0e3"/>
+<text x="309" y="746" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="15" font-weight="400" fill="#152329">Sin consumo · ejemplo académico</text>
+<text x="850" y="704" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="14" font-weight="600" fill="#52636b">Observaciones</text>
+<rect x="850" y="716" width="530" height="48" rx="8" fill="#ffffff" stroke="#d6e0e3"/>
+<text x="863" y="746" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="15" font-weight="400" fill="#152329">Prueba funcional registrada</text>
+<text x="280" y="852" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="14" font-weight="400" fill="#52636b">El tiempo se calcula a partir del inicio y fin. Solo administrador o soporte puede modificar o anular.</text>
+<rect x="280" y="894" width="240" height="46" rx="9" fill="#126b72" stroke="none"/>
+<text x="298" y="923" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="15" font-weight="600" fill="#ffffff">Guardar correctivo</text>
+<rect x="534" y="894" width="130" height="46" rx="9" fill="#ffffff" stroke="#d6e0e3"/>
+<text x="552" y="923" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="15" font-weight="600" fill="#126b72">Cancelar</text>
+<text x="280" y="986" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="12" font-weight="600" fill="#52636b">MOCKUP · DATOS DE DEMOSTRACIÓN</text></svg>

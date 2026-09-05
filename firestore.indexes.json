@@ -1,4 +1,60 @@
 {
-  "indexes": [],
+  "indexes": [
+    { "collectionGroup": "correctives", "queryScope": "COLLECTION", "fields": [
+      { "fieldPath": "equipmentId", "order": "ASCENDING" }, { "fieldPath": "startedAt", "order": "DESCENDING" }
+    ] },
+    { "collectionGroup": "correctives", "queryScope": "COLLECTION", "fields": [
+      { "fieldPath": "status", "order": "ASCENDING" }, { "fieldPath": "equipmentId", "order": "ASCENDING" }, { "fieldPath": "startedAt", "order": "DESCENDING" }
+    ] },
+    { "collectionGroup": "incidents", "queryScope": "COLLECTION", "fields": [
+      { "fieldPath": "equipmentId", "order": "ASCENDING" }, { "fieldPath": "createdAt", "order": "DESCENDING" }
+    ] },
+    { "collectionGroup": "incidents", "queryScope": "COLLECTION", "fields": [
+      { "fieldPath": "status", "order": "ASCENDING" }, { "fieldPath": "equipmentId", "order": "ASCENDING" }, { "fieldPath": "createdAt", "order": "DESCENDING" }
+    ] },
+    { "collectionGroup": "preventiveExecutions", "queryScope": "COLLECTION", "fields": [
+      { "fieldPath": "status", "order": "ASCENDING" },
+      { "fieldPath": "startedAt", "order": "ASCENDING" }
+    ] },
+    { "collectionGroup": "correctives", "queryScope": "COLLECTION", "fields": [
+      { "fieldPath": "areaId", "order": "ASCENDING" },
+      { "fieldPath": "startedAt", "order": "DESCENDING" }
+    ] },
+    { "collectionGroup": "correctives", "queryScope": "COLLECTION", "fields": [
+      { "fieldPath": "status", "order": "ASCENDING" },
+      { "fieldPath": "areaId", "order": "ASCENDING" },
+      { "fieldPath": "startedAt", "order": "DESCENDING" }
+    ] },
+    { "collectionGroup": "incidents", "queryScope": "COLLECTION", "fields": [
+      { "fieldPath": "areaId", "order": "ASCENDING" },
+      { "fieldPath": "createdAt", "order": "DESCENDING" }
+    ] },
+    { "collectionGroup": "incidents", "queryScope": "COLLECTION", "fields": [
+      { "fieldPath": "status", "order": "ASCENDING" },
+      { "fieldPath": "areaId", "order": "ASCENDING" },
+      { "fieldPath": "createdAt", "order": "DESCENDING" }
+    ] },
+    { "collectionGroup": "equipment", "queryScope": "COLLECTION", "fields": [
+      { "fieldPath": "status", "order": "ASCENDING" },
+      { "fieldPath": "code", "order": "ASCENDING" }
+    ] },
+    { "collectionGroup": "incidents", "queryScope": "COLLECTION", "fields": [
+      { "fieldPath": "status", "order": "ASCENDING" },
+      { "fieldPath": "createdAt", "order": "DESCENDING" }
+    ] },
+    { "collectionGroup": "correctives", "queryScope": "COLLECTION", "fields": [
+      { "fieldPath": "status", "order": "ASCENDING" },
+      { "fieldPath": "startedAt", "order": "DESCENDING" }
+    ] },
+    { "collectionGroup": "preventivePlans", "queryScope": "COLLECTION", "fields": [
+      { "fieldPath": "status", "order": "ASCENDING" },
+      { "fieldPath": "nextDueAt", "order": "ASCENDING" }
+    ] },
+    { "collectionGroup": "incidents", "queryScope": "COLLECTION", "fields": [
+      { "fieldPath": "status", "order": "ASCENDING" },
+      { "fieldPath": "priority", "order": "ASCENDING" },
+      { "fieldPath": "createdAt", "order": "ASCENDING" }
+    ] }
+  ],
   "fieldOverrides": []
 }

@@ -1,5 +1,6 @@
 import { initializeTestEnvironment } from '@firebase/rules-unit-testing'
 import { doc, setDoc } from 'firebase/firestore'
+import { roleDefinitions } from '../src/config/roles.js'
 
 const email = process.env.CEROFALLAS_TEST_EMAIL
 const password = process.env.CEROFALLAS_TEST_PASSWORD
@@ -34,7 +35,7 @@ await environment.withSecurityRulesDisabled(async (context) => {
     roleId: 'administrator',
     roleName: 'Administrador',
     status: 'active',
-    permissions: ['equipment.read', 'equipment.manage', 'corrective.read', 'corrective.create', 'corrective.manage', 'preventive.read', 'preventive.plan', 'preventive.execute', 'preventive.manage', 'forklift.read', 'forklift.inspect', 'forklift.manage', 'audit.read', 'audit.write', 'incident.read', 'incident.create', 'incident.manage', 'dashboard.read', 'users.read', 'stock.read'],
+    permissions: roleDefinitions.administrator.permissions,
   })
 })
 

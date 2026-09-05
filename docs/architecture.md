@@ -56,7 +56,7 @@ No se utilizará Create React App porque está deprecado. No se necesita renderi
 - Método inicial: correo electrónico y contraseña.
 - El perfil, rol y estado operativo se conservarán en Firestore, vinculado por UID.
 - Una cuenta autenticada sin perfil activo no tendrá acceso a datos operativos.
-- La creación administrativa de cuentas deberá resolverse mediante backend privilegiado o consola controlada; nunca exponiendo credenciales administrativas al navegador.
+- La creación y actualización administrativa de cuentas ya se resuelve localmente mediante funciones privilegiadas emuladas; nunca se exponen credenciales administrativas al navegador. Su despliegue cloud y endurecimiento con App Check siguen pendientes.
 
 ### Cloud Firestore
 
@@ -101,7 +101,7 @@ Se reservarán para operaciones que no son seguras desde el cliente:
 - Exportar datasets.
 - Ejecutar lógica privilegiada y auditoría reforzada.
 
-Su implementación cloud puede requerir Blaze. Se desarrollarán primero contratos y emulación local; el despliegue esperará autorización de costos.
+Los contratos de alta y actualización de usuarios ya están implementados y probados en emulación local. Su implementación cloud puede requerir Blaze; el despliegue esperará autorización de costos y revisión de seguridad.
 
 ## Organización propuesta del frontend
 

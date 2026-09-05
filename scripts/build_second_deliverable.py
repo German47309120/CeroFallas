@@ -433,6 +433,8 @@ def build_assets():
 def build_docx():
     OUT.mkdir(parents=True, exist_ok=True)
     build_assets()
+    from second_deliverable_master import assets, upgrade
+    assets()
     doc = Document()
     setup_styles(doc)
 
@@ -831,6 +833,7 @@ def build_docx():
     doc.core_properties.subject = "Propuesta conceptual de la solución de IT"
     doc.core_properties.author = "Germán Hernández"
     doc.core_properties.keywords = "CeroFallas, mantenimiento, arquitectura, casos de uso, modelo de datos"
+    upgrade(doc, globals())
     doc.save(DOCX_PATH)
     print(DOCX_PATH)
 

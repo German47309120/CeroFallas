@@ -1,0 +1,46 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1440" height="1132" viewBox="0 0 1440 1132" role="img" aria-label="Auditoría del sistema"><title>Auditoría del sistema — CeroFallas</title><desc>Mockup conceptual editable. Datos ficticios. No es una captura de la aplicación.</desc><rect width="1440" height="1132" fill="#f4f7f8"/><rect x="0" y="0" width="240" height="1100" rx="0" fill="#0b4c52" stroke="none"/>
+<text x="28" y="57" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="27" font-weight="700" fill="#ffffff">CF</text>
+<text x="81" y="55" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="20" font-weight="600" fill="#ffffff">CeroFallas</text>
+<text x="28" y="111" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="10" font-weight="600" fill="#b8d9d8">GESTIÓN DE MANTENIMIENTO</text>
+<text x="30" y="144" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="16" font-weight="400" fill="#ffffff">Inicio</text>
+<text x="30" y="198" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="16" font-weight="400" fill="#ffffff">Correctivos</text>
+<text x="30" y="252" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="16" font-weight="400" fill="#ffffff">Preventivos</text>
+<text x="30" y="306" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="16" font-weight="400" fill="#ffffff">Montacargas</text>
+<text x="30" y="360" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="16" font-weight="400" fill="#ffffff">Incidentes</text>
+<text x="30" y="414" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="16" font-weight="400" fill="#ffffff">Equipos</text>
+<text x="30" y="468" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="16" font-weight="400" fill="#ffffff">Repuestos</text>
+<text x="30" y="522" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="16" font-weight="400" fill="#ffffff">Riesgo predictivo</text>
+<text x="30" y="576" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="16" font-weight="400" fill="#ffffff">Usuarios</text>
+<rect x="16" y="604" width="208" height="44" rx="9" fill="#126b72" stroke="none"/>
+<text x="30" y="630" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="16" font-weight="600" fill="#ffffff">Auditoría</text>
+<text x="28" y="780" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="11" font-weight="400" fill="#b8d9d8">WEB RESPONSIVE</text>
+<text x="28" y="801" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="11" font-weight="400" fill="#b8d9d8">Diseño conceptual · v1</text>
+<rect x="240" y="0" width="1200" height="80" rx="0" fill="#ffffff" stroke="none"/>
+<text x="280" y="47" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="15" font-weight="600" fill="#126b72">Operación / Auditoría</text>
+<text x="1080" y="47" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="14" font-weight="400" fill="#52636b">Perfil demo  ·  Cerrar sesión</text>
+<text x="280" y="124" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="32" font-weight="700" fill="#152329">Auditoría del sistema</text>
+<text x="280" y="153" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="16" font-weight="400" fill="#52636b">Consulta quién realizó cada acción y sobre qué registro.</text>
+<rect x="280" y="180" width="1116" height="109" rx="14" fill="#e4f1ef" stroke="none"/>
+<text x="304" y="217" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="21" font-weight="600" fill="#0b4c52">Motivo de la anulación</text>
+<text x="304" y="250" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="16" font-weight="400" fill="#52636b">Registro duplicado. Se conserva el evento para trazabilidad.</text>
+<rect x="280" y="313" width="1116" height="297" rx="14" fill="#ffffff" stroke="#d6e0e3"/>
+<text x="304" y="348" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="20" font-weight="600" fill="#152329">Eventos recientes · demostración</text>
+<rect x="296" y="369" width="1084" height="38" rx="6" fill="#f4f7f8" stroke="none"/>
+<text x="304" y="393" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="13" font-weight="600" fill="#52636b">Fecha / hora</text>
+<text x="571" y="393" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="13" font-weight="600" fill="#52636b">Responsable</text>
+<text x="838" y="393" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="13" font-weight="600" fill="#52636b">Acción</text>
+<text x="1105" y="393" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="13" font-weight="600" fill="#52636b">Registro</text>
+<text x="304" y="435" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="14" font-weight="400" fill="#152329">03/09/2026 09:30</text>
+<text x="571" y="435" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="14" font-weight="400" fill="#152329">Técnico demo</text>
+<text x="838" y="435" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="14" font-weight="400" fill="#152329">Creación</text>
+<text x="1105" y="435" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="14" font-weight="400" fill="#126b72">DEMO-PRE-012</text>
+<text x="304" y="499" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="14" font-weight="400" fill="#152329">03/09/2026 08:40</text>
+<text x="571" y="499" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="14" font-weight="400" fill="#152329">Técnico demo</text>
+<text x="838" y="499" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="14" font-weight="400" fill="#152329">Creación</text>
+<text x="1105" y="499" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="14" font-weight="400" fill="#126b72">DEMO-COR-018</text>
+<text x="304" y="563" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="14" font-weight="400" fill="#152329">03/09/2026 08:10</text>
+<text x="571" y="563" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="14" font-weight="400" fill="#152329">Admin demo</text>
+<text x="838" y="563" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="14" font-weight="400" fill="#152329">Anulación</text>
+<text x="1105" y="563" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="14" font-weight="400" fill="#126b72">DEMO-COR-017</text>
+<text x="280" y="650" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="14" font-weight="400" fill="#52636b">La bitácora es de consulta: no debe permitir editar o eliminar eventos desde esta pantalla.</text>
+<text x="280" y="710" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="12" font-weight="600" fill="#52636b">MOCKUP · DATOS DE DEMOSTRACIÓN</text></svg>

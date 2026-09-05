@@ -1,28 +1,86 @@
 import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { useAuth } from '../features/auth/AuthContext.jsx'
-import { countMetric, dashboardMetrics } from '../services/firebase/reporting.js'
+import { loadDashboardSource } from '../services/firebase/dashboard.js'
+import { dashboardDate, dashboardSources, dashboardWindow } from '../utils/dashboard.js'
+import { incidentPriorities, incidentStates } from '../utils/incidents.js'
+
+function PlanList({ rows }) {
+  return <ul className="dashboard-list">{rows.map((plan) => <li key={plan.id}>
+    <div><strong>{plan.activityName}</strong><span>{plan.equipmentSnapshot?.code} · {plan.equipmentSnapshot?.name}</span></div>
+    <time>{dashboardDate(plan.nextDueAt)}</time>
+  </li>)}</ul>
+}
 
 export default function DashboardPage() {
-  const { hasPermission, profile } = useAuth()
-  const [values, setValues] = useState({})
-  const [loading, setLoading] = useState(false)
-  const [revision, setRevision] = useState(0)
+  const { hasPermission, profile, user } = useAuth()
+  const [request, setRequest] = useState(() => new Date())
+  const [periodDays, setPeriodDays] = useState(30)
+  const [result, setResult] = useState(null)
+  const sources = dashboardSources(hasPermission)
+  const sourceKey = sources.join(',')
+  const trendEnabled = sources.some((key) => ['correctives', 'executions'].includes(key))
+  const identity = `${user?.uid || ''}:${sourceKey}:${periodDays}`
   const canRead = hasPermission('dashboard.read')
-  const permitted = dashboardMetrics.filter((m) => hasPermission(m.permission))
-  const key = permitted.map((m) => m.key).join(',')
+  // Oculta resultados antiguos al cambiar usuario, permisos o fecha de corte.
+  const current = result?.identity === identity && result?.request === request ? result.values : null
+  const loading = canRead && sources.length > 0 && !current
   useEffect(() => {
-    if (!canRead) return
+    if (!sourceKey) return
     let alive = true
-    setValues({}); setLoading(true)
-    Promise.all(permitted.map(async (m) => {
-      try { return [m.key, { value: await countMetric(m) }] }
-      catch { return [m.key, { error: 'No disponible: revisa conexión o permisos.' }] }
-    })).then((result) => { if (alive) { setValues(Object.fromEntries(result)); setLoading(false) } })
+    const requestedSources = [...sourceKey.split(','), ...(trendEnabled ? ['trend'] : [])]
+    Promise.all(requestedSources.map(async (key) => {
+      try { return [key, { data: await loadDashboardSource(key, request, { periodDays, activitySources: sources }) }] }
+      catch { return [key, { error: 'No disponible. Revisa conexión, permisos o índices de Firestore y vuelve a actualizar.' }] }
+    })).then((values) => { if (alive) setResult({ identity, request, values: Object.fromEntries(values) }) })
     return () => { alive = false }
-  }, [canRead, key, revision])
-  return <section className="page-stack"><div className="page-heading"><div><p className="eyebrow">Resumen operativo</p><h1>Bienvenido, {profile?.displayName}</h1><p>{canRead ? 'Conteos de toda la base operacional, según tus permisos. Los anulados no se incluyen.' : 'Selecciona una operación autorizada en el menú.'}</p></div>{canRead && <button disabled={loading} className="button button--secondary" onClick={() => setRevision(revision + 1)}>Actualizar</button>}</div>
-    {canRead && <><div className="stats-grid">{dashboardMetrics.map((m) => <article key={m.key} className="stat-card stat-card--brand"><p>{m.label}</p><strong>{loading ? '…' : values[m.key]?.value ?? '—'}</strong><span>{!hasPermission(m.permission) ? 'Sin permiso de lectura de la fuente' : values[m.key]?.error || 'Conteo acumulado · no es un período mensual'}</span></article>)}</div><div className="panel"><h2>Cómo interpretar los indicadores</h2><p>Un plan activo no equivale a una tarea pendiente: puede tener varias ejecuciones. Por eso todavía no se presenta un porcentaje de cumplimiento global.</p><p>MTBF y OEE no se calculan sin tiempos de operación, producción y calidad. Un guion significa falta de permiso o datos no disponibles, nunca cero.</p></div></>}
-    <div className="panel"><h2>Accesos rápidos</h2><div className="form-actions">{hasPermission('corrective.create') && <Link className="button button--primary" to="/correctivos/nuevo">Registrar correctivo</Link>}{hasPermission('incident.create') && <Link className="button button--secondary" to="/incidentes/nuevo">Reportar incidente</Link>}{hasPermission('forklift.inspect') && <Link className="button button--secondary" to="/montacargas/nuevo">Inspeccionar montacargas</Link>}{hasPermission('incident.read') && <Link to="/incidentes">Consultar incidentes</Link>}</div></div>
+  }, [identity, sourceKey, request, trendEnabled])
+
+  const data = (key) => current?.[key]?.data
+  const message = (key) => !sources.includes(key) ? 'Tu perfil no tiene acceso a esta fuente.' : loading ? 'Consultando registros…' : current?.[key]?.error
+  const metric = (key, field) => message(key) ? '—' : data(key)?.[field] ?? '—'
+  const cards = [
+    ['incidents', 'total', 'Incidentes abiertos', 'Reportados, revisados o en atención', 'danger'],
+    ['plans', 'overdueCount', 'Planes con fecha vencida', 'Fecha programada anterior al corte', 'warning'],
+    ['plans', 'upcomingCount', 'Próximos en 7 días', 'Planes activos dentro de la ventana', 'success'],
+    ['correctives', 'total', 'Correctivos completados', `Últimos ${periodDays} días · excluye anulados`, 'brand'],
+  ]
+  return <section className="page-stack dashboard-page" aria-busy={loading}>
+    <header className="dashboard-hero">
+      <div><p className="eyebrow eyebrow--light">Operación y mantenimiento</p><h1>Centro de mantenimiento</h1><p>Hola, {profile?.displayName || 'equipo'}. {canRead ? 'Revisa prioridades y coordina el trabajo de planta.' : 'Tu trabajo mantiene la operación en marcha.'}</p></div>
+      <div className="dashboard-hero__badge"><span>CEROFALLAS</span><strong>Prevenir · Atender · Mejorar</strong></div>
+    </header>
+    <div className="panel dashboard-actions"><div><h2>¿Qué necesitas registrar?</h2><p className="muted-copy">Accesos disponibles para tu perfil.</p></div><div className="heading-actions">
+      {hasPermission('corrective.create') && <Link className="button button--primary" to="/correctivos/nuevo">Registrar correctivo</Link>}
+      {hasPermission('preventive.execute') && <Link className="button button--secondary" to="/preventivos/ejecutar">Registrar preventivo</Link>}
+      {hasPermission('incident.create') && <Link className="button button--secondary" to="/incidentes/nuevo">Reportar incidente</Link>}
+      {hasPermission('forklift.inspect') && <Link className="button button--secondary" to="/montacargas/nuevo">Inspeccionar montacargas</Link>}
+      <Link to="/perfil">Mi perfil</Link>
+    </div></div>
+    {canRead && <>
+      <div className="dashboard-cutoff"><div><strong>Corte: {dashboardDate(request)}</strong><span>Hora de Guatemala · todas las áreas autorizadas por las reglas actuales</span></div><label>Período de actividad<select value={periodDays} disabled={loading} onChange={(event) => setPeriodDays(Number(event.target.value))}><option value="7">7 días</option><option value="30">30 días</option><option value="90">90 días</option></select></label><button disabled={loading} className="button button--secondary" onClick={() => setRequest(new Date())}>{loading ? 'Actualizando…' : 'Actualizar datos'}</button></div>
+      <div className="stats-grid" aria-live="polite">{cards.map(([key, field, label, note, tone]) => <article key={field + key} className={`stat-card stat-card--${tone}`}><p>{label}</p><strong>{loading && sources.includes(key) ? '…' : metric(key, field)}</strong><span>{message(key) || note}</span></article>)}</div>
+      <div className="dashboard-columns">
+        <article className="panel"><div className="panel__heading"><div><p className="eyebrow">Atención prioritaria</p><h2>Incidentes críticos y altos</h2></div>{hasPermission('incident.read') && <Link to="/incidentes">Ver todos</Link>}</div>
+          {message('incidents') ? <p className="dashboard-notice" role="status">{message('incidents')}</p> : data('incidents')?.priorityRows.length ? <ul className="dashboard-list">{data('incidents').priorityRows.map((item) => <li key={item.id}><div><span className={`priority-tag priority-tag--${item.priority}`}>{incidentPriorities[item.priority]} · {incidentStates[item.status]}</span><strong>{item.description}</strong><span>{item.equipmentSnapshot?.code || 'Equipo sin identificar'} · {item.areaName}</span><small>{dashboardDate(item.createdAt)}</small></div></li>)}</ul> : <p className="dashboard-notice">No hay incidentes abiertos de prioridad alta o crítica.</p>}
+          <p className="dashboard-footnote">Hasta 5 críticos y 5 altos, los más antiguos primero dentro de cada prioridad. Los demás incidentes siguen incluidos en el conteo.</p>
+        </article>
+        <article className="panel"><div className="panel__heading"><div><p className="eyebrow">Revisión de programación</p><h2>Planes con fecha vencida</h2></div>{hasPermission('preventive.read') && <Link to="/preventivos">Ver planes</Link>}</div>
+          {message('plans') ? <p className="dashboard-notice" role="status">{message('plans')}</p> : data('plans')?.overdueRows.length ? <PlanList rows={data('plans').overdueRows} /> : <p className="dashboard-notice">No hay planes activos con fecha anterior al corte.</p>}
+          <p className="dashboard-footnote">Hasta 5 planes, los más antiguos primero. Los planes calendario se reprograman al completar una ejecución; los planes por horas o condición requieren revisión manual.</p>
+        </article>
+      </div>
+      <article className="panel"><div className="panel__heading"><div><p className="eyebrow">Agenda preventiva</p><h2>Próximos 7 días</h2></div><span className="muted-copy">Hasta {dashboardDate(dashboardWindow(request).end)} (sin incluir)</span></div>
+        {message('plans') ? <p className="dashboard-notice">{message('plans')}</p> : data('plans')?.upcomingRows.length ? <PlanList rows={data('plans').upcomingRows} /> : <p className="dashboard-notice">No hay planes programados en esta ventana.</p>}
+        <p className="dashboard-footnote">Se muestran los primeros 5; el indicador cuenta todos los planes activos de la ventana. Frecuencias estimadas pendientes de validación técnica.</p>
+      </article>
+      {trendEnabled && <article className="panel dashboard-trend"><div className="panel__heading"><div><p className="eyebrow">Tendencia operacional</p><h2>Actividad de mantenimiento</h2></div><div className="trend-legend"><span><i className="trend-key trend-key--corrective" />Correctivos</span><span><i className="trend-key trend-key--preventive" />Preventivos</span></div></div>
+        {loading || !current?.trend ? <p className="dashboard-notice">{current?.trend?.error || 'Preparando tendencia…'}</p> : <div className="trend-chart" role="img" aria-label={`Comparación de mantenimientos en los últimos ${periodDays} días`}>{current.trend.data.buckets.map((bucket) => <div className="trend-group" key={bucket.label}><div className="trend-bars"><span className="trend-bar trend-bar--corrective" style={{ height: `${Math.max(bucket.correctives ? 12 : 0, bucket.correctives / current.trend.data.max * 100)}%` }} title={`${bucket.correctives} correctivos`}><b>{bucket.correctives || ''}</b></span><span className="trend-bar trend-bar--preventive" style={{ height: `${Math.max(bucket.executions ? 12 : 0, bucket.executions / current.trend.data.max * 100)}%` }} title={`${bucket.executions} preventivos`}><b>{bucket.executions || ''}</b></span></div><small>{bucket.label}</small></div>)}</div>}
+        {!loading && current?.trend?.data?.areas?.rows.length ? <div className="area-breakdown"><div><p className="eyebrow">Distribución del período</p><h3>Correctivos por área</h3></div><div className="area-bars">{current.trend.data.areas.rows.map((area) => <div className="area-row" key={area.areaId}><span>{area.name}</span><div><i style={{ width: `${area.total / current.trend.data.areas.max * 100}%` }} /></div><strong>{area.total}</strong></div>)}</div></div> : null}
+        <p className="dashboard-footnote">Agrupa registros completados por intervalos equivalentes del período. Describe actividad registrada; no representa cumplimiento, disponibilidad, OEE ni MTBF.</p>
+      </article>}
+      <aside className="panel dashboard-explainer"><div><p className="eyebrow">Actividad registrada · últimos {periodDays} días</p><h2>{metric('executions', 'total')} preventivos ejecutados</h2><p>{message('executions') || 'Ejecuciones completadas iniciadas dentro del período; no es un porcentaje de cumplimiento.'}</p></div><p>Lectura de registros, sin modificar información. El corte fija la ventana de fechas; las consultas no forman una instantánea transaccional. Los incidentes abiertos no se limitan por antigüedad. MTBF, OEE y datos SAP aún no se presentan.</p></aside>
+    </>}
+    {!canRead && <div className="panel"><h2>Tu espacio de trabajo</h2><p>Utiliza los accesos anteriores o el menú para realizar las operaciones de tu rol. Los indicadores gerenciales requieren autorización adicional.</p></div>}
   </section>
 }

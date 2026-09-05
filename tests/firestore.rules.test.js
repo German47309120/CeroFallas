@@ -13,6 +13,7 @@ import {
   serverTimestamp,
   setDoc,
   Timestamp,
+  updateDoc,
   writeBatch,
 } from 'firebase/firestore'
 
@@ -75,6 +76,7 @@ const preventiveExecutionData = (userId, overrides = {}) => ({
   startedAt: Timestamp.fromDate(new Date('2026-09-03T08:00:00')), endedAt: Timestamp.fromDate(new Date('2026-09-03T09:00:00')),
   durationMinutes: 60, technicianIds: [userId], activityPerformed: 'Inspección preventiva de prueba', spareParts: [], observations: null,
   complianceStatus: 'unscheduled', status: 'completed', createdAt: serverTimestamp(), createdBy: userId, updatedAt: serverTimestamp(), updatedBy: userId, ...overrides,
+  rescheduleStatus: overrides.rescheduleStatus ?? 'not_applicable', nextDueAtAfterExecution: overrides.nextDueAtAfterExecution ?? null,
 })
 
 const forkliftInspectionData = (userId, overrides = {}) => ({
@@ -86,12 +88,12 @@ const forkliftInspectionData = (userId, overrides = {}) => ({
   createdAt: serverTimestamp(), createdBy: userId, ...overrides,
 })
 
-async function createProfile(userId, permissions, status = 'active') {
+async function createProfile(userId, permissions, status = 'active', roleId = userId) {
   await testEnvironment.withSecurityRulesDisabled(async (context) => {
     await setDoc(doc(context.firestore(), 'users', userId), {
       displayName: `Usuario ${userId}`,
-      roleId: userId,
-      roleName: userId,
+      roleId,
+      roleName: roleId,
       status,
       permissions,
     })
@@ -142,7 +144,7 @@ describe('reglas de equipos', () => {
   })
 
   it('permite al administrador crear equipo y auditoría en una operación atómica', async () => {
-    await createProfile('manager', ['equipment.read', 'equipment.manage', 'audit.write'])
+    await createProfile('manager', ['equipment.read', 'equipment.manage', 'audit.write'], 'active', 'administrator')
     const database = testEnvironment.authenticatedContext('manager').firestore()
     const equipmentRef = doc(database, 'equipment', 'TEST-EQ-001')
     const auditRef = doc(collection(database, 'audit'))
@@ -159,7 +161,7 @@ describe('reglas de equipos', () => {
   })
 
   it('impide eliminar físicamente un equipo incluso al administrador', async () => {
-    await createProfile('manager', ['equipment.read', 'equipment.manage', 'audit.write'])
+    await createProfile('manager', ['equipment.read', 'equipment.manage', 'audit.write'], 'active', 'administrator')
     await testEnvironment.withSecurityRulesDisabled(async (context) => {
       await setDoc(doc(context.firestore(), 'equipment', 'test-equipment'), { code: 'TEST-EQ-001' })
     })
@@ -193,7 +195,7 @@ describe('reglas de correctivos', () => {
   })
 
   it('impide eliminar físicamente un correctivo', async () => {
-    await createProfile('manager', ['corrective.read', 'corrective.create', 'corrective.manage'])
+    await createProfile('manager', ['corrective.read', 'corrective.create', 'corrective.manage'], 'active', 'administrator')
     await testEnvironment.withSecurityRulesDisabled(async (context) => {
       await setDoc(doc(context.firestore(), 'correctives', 'test-corrective'), correctiveData('manager'))
     })
@@ -231,6 +233,44 @@ describe('reglas de preventivos', () => {
     await assertSucceeds(batch.commit())
   })
 
+  it('permite reprogramar un plan calendario solo junto con su ejecución', async () => {
+    await createProfile('executor', ['preventive.read', 'preventive.execute', 'audit.write'])
+    await testEnvironment.withSecurityRulesDisabled(async (context) => {
+      await setDoc(doc(context.firestore(), 'preventivePlans', 'calendar-plan'), preventivePlanData('planner'))
+    })
+    const database = testEnvironment.authenticatedContext('executor').firestore()
+    const executionRef = doc(database, 'preventiveExecutions', 'calendar-execution')
+    const planRef = doc(database, 'preventivePlans', 'calendar-plan')
+    const nextDueAt = Timestamp.fromDate(new Date('2026-11-03T12:00:00'))
+    const startedAt = Timestamp.fromDate(new Date('2026-10-03T08:00:00'))
+    const batch = writeBatch(database)
+    batch.set(executionRef, preventiveExecutionData('executor', {
+      planId: planRef.id, scheduledAt: Timestamp.fromDate(new Date('2026-10-03T12:00:00')),
+      startedAt, endedAt: Timestamp.fromDate(new Date('2026-10-03T09:00:00')),
+      complianceStatus: 'on_time', rescheduleStatus: 'automatic', nextDueAtAfterExecution: nextDueAt,
+    }))
+    batch.update(planRef, { nextDueAt, lastExecutedAt: startedAt, lastExecutionId: executionRef.id, updatedAt: serverTimestamp(), updatedBy: 'executor' })
+    for (const entityType of ['preventiveExecution', 'preventivePlan']) {
+      const auditRef = doc(collection(database, 'audit'))
+      batch.set(auditRef, { occurredAt: serverTimestamp(), actorId: 'executor', action: entityType === 'preventivePlan' ? 'reschedule' : 'create', entityType, entityId: entityType === 'preventivePlan' ? planRef.id : executionRef.id })
+    }
+    await assertSucceeds(batch.commit())
+    expect((await getDoc(planRef)).data().lastExecutionId).toBe(executionRef.id)
+  })
+
+  it('rechaza que un ejecutor cambie la fecha del plan sin ejecución vinculada', async () => {
+    await createProfile('executor', ['preventive.read', 'preventive.execute'])
+    await testEnvironment.withSecurityRulesDisabled(async (context) => {
+      await setDoc(doc(context.firestore(), 'preventivePlans', 'calendar-plan'), preventivePlanData('planner'))
+    })
+    const database = testEnvironment.authenticatedContext('executor').firestore()
+    await assertFails(updateDoc(doc(database, 'preventivePlans', 'calendar-plan'), {
+      nextDueAt: Timestamp.fromDate(new Date('2026-11-03T12:00:00')),
+      lastExecutedAt: Timestamp.fromDate(new Date('2026-10-03T08:00:00')),
+      lastExecutionId: 'missing-execution', updatedAt: serverTimestamp(), updatedBy: 'executor',
+    }))
+  })
+
   it('rechaza ejecuciones a perfiles de solo lectura', async () => {
     await createProfile('preventive-viewer', ['preventive.read'])
     const database = testEnvironment.authenticatedContext('preventive-viewer').firestore()
@@ -238,7 +278,7 @@ describe('reglas de preventivos', () => {
   })
 
   it('impide borrar planes y ejecuciones', async () => {
-    await createProfile('preventive-manager', ['preventive.read', 'preventive.manage'])
+    await createProfile('preventive-manager', ['preventive.read', 'preventive.manage'], 'active', 'administrator')
     await testEnvironment.withSecurityRulesDisabled(async (context) => {
       await setDoc(doc(context.firestore(), 'preventivePlans', 'plan'), preventivePlanData('preventive-manager'))
       await setDoc(doc(context.firestore(), 'preventiveExecutions', 'execution'), preventiveExecutionData('preventive-manager'))
@@ -246,6 +286,27 @@ describe('reglas de preventivos', () => {
     const database = testEnvironment.authenticatedContext('preventive-manager').firestore()
     await assertFails(deleteDoc(doc(database, 'preventivePlans', 'plan')))
     await assertFails(deleteDoc(doc(database, 'preventiveExecutions', 'execution')))
+  })
+})
+
+describe('restricción institucional de modificaciones', () => {
+  it('rechaza permisos manage asignados a un rol que no sea administrador o soporte', async () => {
+    const permissions = ['equipment.manage', 'corrective.manage', 'preventive.manage', 'forklift.manage']
+    await createProfile('rogue-manager', permissions, 'active', 'supervisor')
+    await testEnvironment.withSecurityRulesDisabled(async (context) => {
+      const store = context.firestore()
+      await setDoc(doc(store, 'equipment', 'TEST-EQ-001'), equipmentData('owner'))
+      await setDoc(doc(store, 'correctives', 'corrective'), correctiveData('owner'))
+      await setDoc(doc(store, 'preventivePlans', 'plan'), preventivePlanData('owner'))
+      await setDoc(doc(store, 'preventiveExecutions', 'execution'), preventiveExecutionData('owner'))
+      await setDoc(doc(store, 'forkliftInspections', 'inspection'), forkliftInspectionData('owner'))
+    })
+    const database = testEnvironment.authenticatedContext('rogue-manager').firestore()
+    await assertFails(updateDoc(doc(database, 'equipment', 'TEST-EQ-001'), { name: 'Cambio prohibido', updatedBy: 'rogue-manager', updatedAt: serverTimestamp() }))
+    await assertFails(updateDoc(doc(database, 'correctives', 'corrective'), { status: 'voided', voidReason: 'Cambio prohibido', updatedBy: 'rogue-manager', updatedAt: serverTimestamp() }))
+    await assertFails(updateDoc(doc(database, 'preventivePlans', 'plan'), { status: 'paused', updatedBy: 'rogue-manager', updatedAt: serverTimestamp() }))
+    await assertFails(updateDoc(doc(database, 'preventiveExecutions', 'execution'), { status: 'voided', updatedBy: 'rogue-manager', updatedAt: serverTimestamp() }))
+    await assertFails(updateDoc(doc(database, 'forkliftInspections', 'inspection'), { status: 'voided' }))
   })
 })
 
@@ -269,7 +330,7 @@ describe('reglas de checklist de montacargas', () => {
   })
 
   it('impide eliminar físicamente una inspección', async () => {
-    await createProfile('forklift-manager', ['forklift.read', 'forklift.manage'])
+    await createProfile('forklift-manager', ['forklift.read', 'forklift.manage'], 'active', 'support')
     await testEnvironment.withSecurityRulesDisabled(async (context) => {
       await setDoc(doc(context.firestore(), 'forkliftInspections', 'inspection'), forkliftInspectionData('forklift-manager'))
     })

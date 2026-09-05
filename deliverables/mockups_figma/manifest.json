@@ -1,0 +1,92 @@
+[
+  {
+    "file": "01-acceso.svg",
+    "title": "Bienvenido a CeroFallas",
+    "width": 1440,
+    "height": 1032
+  },
+  {
+    "file": "02-dashboard.svg",
+    "title": "Centro de mantenimiento",
+    "width": 1440,
+    "height": 1182
+  },
+  {
+    "file": "03-equipos.svg",
+    "title": "Catálogo de equipos",
+    "width": 1440,
+    "height": 1132
+  },
+  {
+    "file": "04-correctivo.svg",
+    "title": "Registrar correctivo",
+    "width": 1440,
+    "height": 1132
+  },
+  {
+    "file": "05-plan-preventivo.svg",
+    "title": "Planificar mantenimiento",
+    "width": 1440,
+    "height": 1132
+  },
+  {
+    "file": "06-ejecucion-preventiva.svg",
+    "title": "Registrar preventivo",
+    "width": 1440,
+    "height": 1132
+  },
+  {
+    "file": "07-checklist.svg",
+    "title": "Inspección de montacargas",
+    "width": 1440,
+    "height": 1132
+  },
+  {
+    "file": "08-incidentes.svg",
+    "title": "Reportar incidente",
+    "width": 1440,
+    "height": 1132
+  },
+  {
+    "file": "09-stock.svg",
+    "title": "Stock de repuestos",
+    "width": 1440,
+    "height": 1132
+  },
+  {
+    "file": "10-usuarios.svg",
+    "title": "Usuarios y permisos",
+    "width": 1440,
+    "height": 1132
+  },
+  {
+    "file": "11-auditoria.svg",
+    "title": "Auditoría del sistema",
+    "width": 1440,
+    "height": 1132
+  },
+  {
+    "file": "12-predictivo.svg",
+    "title": "Preparación del predictivo",
+    "width": 1440,
+    "height": 1132
+  },
+  {
+    "file": "13-movil-inicio.svg",
+    "title": "Inicio",
+    "width": 390,
+    "height": 844
+  },
+  {
+    "file": "14-movil-checklist.svg",
+    "title": "Montacargas",
+    "width": 390,
+    "height": 844
+  },
+  {
+    "file": "15-movil-incidente.svg",
+    "title": "Reportar incidente",
+    "width": 390,
+    "height": 844
+  }
+]

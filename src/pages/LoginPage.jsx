@@ -8,7 +8,7 @@ export default function LoginPage() {
   const [password, setPassword] = useState('')
   const [error, setError] = useState('')
   const [submitting, setSubmitting] = useState(false)
-  const { environment, loading, user } = useAuth()
+  const { configured, configurationError, environment, loading, user } = useAuth()
   const location = useLocation()
   const navigate = useNavigate()
 
@@ -23,6 +23,11 @@ export default function LoginPage() {
   async function handleSubmit(event) {
     event.preventDefault()
     setError('')
+
+    if (configured === false) {
+      setError(configurationError || 'Firebase no está configurado para este ambiente.')
+      return
+    }
 
     if (!email.trim() || !password) {
       setError('Ingresa tu correo y contraseña.')
@@ -53,8 +58,8 @@ export default function LoginPage() {
         </div>
         <div>
           <p className="eyebrow eyebrow--light">Operación conectada</p>
-          <h1>Información clara para actuar antes y después de cada falla.</h1>
-          <p>Correctivos, preventivos, inspecciones e indicadores en una sola aplicación.</p>
+          <h1>Cuida tus equipos. Fortalece tu operación.</h1>
+          <p>Coordina el mantenimiento, atiende incidentes y acompaña el trabajo de tu equipo desde un solo lugar.</p>
         </div>
         <small>
           {environment === 'emulator'
@@ -98,9 +103,14 @@ export default function LoginPage() {
               required
             />
 
+            {configured === false ? (
+              <div className="form-error" role="alert">
+                Este build todavía no tiene un proyecto Firebase configurado. Define las variables del ambiente antes de publicarlo.
+              </div>
+            ) : null}
             {error ? <div className="form-error" role="alert">{error}</div> : null}
 
-            <button className="button button--primary button--full" type="submit" disabled={submitting || loading}>
+            <button className="button button--primary button--full" type="submit" disabled={configured === false || submitting || loading}>
               {submitting ? 'Comprobando…' : 'Iniciar sesión'}
             </button>
           </form>

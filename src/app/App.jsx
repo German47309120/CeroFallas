@@ -1,24 +1,25 @@
+import { lazy, Suspense } from 'react'
 import { Navigate, Route, Routes } from 'react-router-dom'
 import AppShell from '../components/layout/AppShell.jsx'
-import DashboardPage from '../pages/DashboardPage.jsx'
-import LoginPage from '../pages/LoginPage.jsx'
-import ModulePage from '../pages/ModulePage.jsx'
-import NotFoundPage from '../pages/NotFoundPage.jsx'
-import EquipmentFormPage from '../pages/EquipmentFormPage.jsx'
-import EquipmentPage from '../pages/EquipmentPage.jsx'
-import CorrectiveFormPage from '../pages/CorrectiveFormPage.jsx'
-import CorrectivesPage from '../pages/CorrectivesPage.jsx'
-import PreventiveExecutionFormPage from '../pages/PreventiveExecutionFormPage.jsx'
-import PreventivePlanFormPage from '../pages/PreventivePlanFormPage.jsx'
-import PreventivesPage from '../pages/PreventivesPage.jsx'
-import ForkliftInspectionFormPage from '../pages/ForkliftInspectionFormPage.jsx'
-import ForkliftInspectionsPage from '../pages/ForkliftInspectionsPage.jsx'
 import { moduleContent } from '../config/navigation.js'
 import ProtectedRoute from '../features/auth/ProtectedRoute.jsx'
-import IncidentsPage from '../pages/IncidentsPage.jsx'
-import IncidentFormPage from '../pages/IncidentFormPage.jsx'
-import ResourceReadPage from '../pages/ResourceReadPage.jsx'
-import ProfilePage from '../pages/ProfilePage.jsx'
+const DashboardPage = lazy(() => import('../pages/DashboardPage.jsx'))
+const LoginPage = lazy(() => import('../pages/LoginPage.jsx'))
+const ModulePage = lazy(() => import('../pages/ModulePage.jsx'))
+const NotFoundPage = lazy(() => import('../pages/NotFoundPage.jsx'))
+const EquipmentFormPage = lazy(() => import('../pages/EquipmentFormPage.jsx'))
+const EquipmentPage = lazy(() => import('../pages/EquipmentPage.jsx'))
+const CorrectiveFormPage = lazy(() => import('../pages/CorrectiveFormPage.jsx'))
+const CorrectivesPage = lazy(() => import('../pages/CorrectivesPage.jsx'))
+const PreventiveExecutionFormPage = lazy(() => import('../pages/PreventiveExecutionFormPage.jsx'))
+const PreventivePlanFormPage = lazy(() => import('../pages/PreventivePlanFormPage.jsx'))
+const PreventivesPage = lazy(() => import('../pages/PreventivesPage.jsx'))
+const ForkliftInspectionFormPage = lazy(() => import('../pages/ForkliftInspectionFormPage.jsx'))
+const ForkliftInspectionsPage = lazy(() => import('../pages/ForkliftInspectionsPage.jsx'))
+const IncidentsPage = lazy(() => import('../pages/IncidentsPage.jsx'))
+const IncidentFormPage = lazy(() => import('../pages/IncidentFormPage.jsx'))
+const ResourceReadPage = lazy(() => import('../pages/ResourceReadPage.jsx'))
+const ProfilePage = lazy(() => import('../pages/ProfilePage.jsx'))
 
 function ModuleRoutes() {
   return Object.entries(moduleContent).filter(([path]) => !['/equipos', '/correctivos', '/preventivos', '/montacargas', '/incidentes', '/repuestos', '/admin/usuarios', '/admin/auditoria'].includes(path)).map(([path, content]) => (
@@ -28,7 +29,7 @@ function ModuleRoutes() {
 
 export default function App() {
   return (
-    <Routes>
+    <Suspense fallback={<div className="auth-loading" role="status">Cargando pantalla…</div>}><Routes>
       <Route path="/login" element={<LoginPage />} />
       <Route element={<ProtectedRoute><AppShell /></ProtectedRoute>}>
         <Route index element={<DashboardPage />} />
@@ -54,6 +55,6 @@ export default function App() {
       </Route>
       <Route path="/inicio" element={<Navigate to="/" replace />} />
       <Route path="*" element={<NotFoundPage />} />
-    </Routes>
+    </Routes></Suspense>
   )
 }

@@ -1,0 +1,90 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1440" height="1182" viewBox="0 0 1440 1182" role="img" aria-label="Centro de mantenimiento"><title>Centro de mantenimiento — CeroFallas</title><desc>Mockup conceptual editable. Datos ficticios. No es una captura de la aplicación.</desc><rect width="1440" height="1182" fill="#f4f7f8"/><rect x="0" y="0" width="240" height="1100" rx="0" fill="#0b4c52" stroke="none"/>
+<text x="28" y="57" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="27" font-weight="700" fill="#ffffff">CF</text>
+<text x="81" y="55" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="20" font-weight="600" fill="#ffffff">CeroFallas</text>
+<text x="28" y="111" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="10" font-weight="600" fill="#b8d9d8">GESTIÓN DE MANTENIMIENTO</text>
+<rect x="16" y="118" width="208" height="44" rx="9" fill="#126b72" stroke="none"/>
+<text x="30" y="144" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="16" font-weight="600" fill="#ffffff">Inicio</text>
+<text x="30" y="198" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="16" font-weight="400" fill="#ffffff">Correctivos</text>
+<text x="30" y="252" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="16" font-weight="400" fill="#ffffff">Preventivos</text>
+<text x="30" y="306" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="16" font-weight="400" fill="#ffffff">Montacargas</text>
+<text x="30" y="360" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="16" font-weight="400" fill="#ffffff">Incidentes</text>
+<text x="30" y="414" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="16" font-weight="400" fill="#ffffff">Equipos</text>
+<text x="30" y="468" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="16" font-weight="400" fill="#ffffff">Repuestos</text>
+<text x="30" y="522" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="16" font-weight="400" fill="#ffffff">Riesgo predictivo</text>
+<text x="30" y="576" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="16" font-weight="400" fill="#ffffff">Usuarios</text>
+<text x="30" y="630" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="16" font-weight="400" fill="#ffffff">Auditoría</text>
+<text x="28" y="780" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="11" font-weight="400" fill="#b8d9d8">WEB RESPONSIVE</text>
+<text x="28" y="801" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="11" font-weight="400" fill="#b8d9d8">Diseño conceptual · v1</text>
+<rect x="240" y="0" width="1200" height="80" rx="0" fill="#ffffff" stroke="none"/>
+<text x="280" y="47" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="15" font-weight="600" fill="#126b72">Operación / Inicio</text>
+<text x="1080" y="47" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="14" font-weight="400" fill="#52636b">Perfil demo  ·  Cerrar sesión</text>
+<text x="280" y="124" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="32" font-weight="700" fill="#152329">Centro de mantenimiento</text>
+<text x="280" y="153" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="16" font-weight="400" fill="#52636b">Prioriza la atención y coordina el trabajo de planta.</text>
+<rect x="280" y="180" width="1116" height="48" rx="9" fill="#e4f1ef" stroke="none"/>
+<text x="296" y="210" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="15" font-weight="400" fill="#0b4c52">Período: 01–03 sep 2026     |     Área: Todas     |     Corte: 03 sep · 18:00</text>
+<text x="1171" y="210" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="14" font-weight="700" fill="#126b72">DEMOSTRACIÓN</text>
+<rect x="280" y="248" width="267" height="122" rx="14" fill="#ffffff" stroke="#d6e0e3"/>
+<text x="300" y="295" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="34" font-weight="700" fill="#126b72">3</text>
+<text x="300" y="331" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="14" font-weight="400" fill="#52636b">Incidentes abiertos</text>
+<rect x="563" y="248" width="267" height="122" rx="14" fill="#ffffff" stroke="#d6e0e3"/>
+<text x="583" y="295" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="34" font-weight="700" fill="#126b72">2</text>
+<text x="583" y="331" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="14" font-weight="400" fill="#52636b">Preventivos vencidos</text>
+<rect x="846" y="248" width="267" height="122" rx="14" fill="#ffffff" stroke="#d6e0e3"/>
+<text x="866" y="295" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="34" font-weight="700" fill="#126b72">5</text>
+<text x="866" y="331" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="14" font-weight="400" fill="#52636b">Próximos en 7 días</text>
+<rect x="1129" y="248" width="267" height="122" rx="14" fill="#ffffff" stroke="#d6e0e3"/>
+<text x="1149" y="295" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="34" font-weight="700" fill="#126b72">12 h</text>
+<text x="1149" y="331" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="14" font-weight="400" fill="#52636b">Tiempo correctivo del período</text>
+<rect x="280" y="406" width="1116" height="112" rx="12" fill="#fff3dd" stroke="none"/>
+<text x="302" y="436" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="13" font-weight="700" fill="#875211">ATENCIÓN PRIORITARIA</text>
+<text x="302" y="465" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="19" font-weight="600" fill="#152329">Montacargas DEMO-EQ-002 · inspección fuera de servicio</text>
+<text x="302" y="494" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="15" font-weight="400" fill="#52636b">No operar · fuga hidráulica reportada · verificar atención con mantenimiento</text>
+<rect x="280" y="538" width="546" height="260" rx="12" fill="#ffffff" stroke="#d6e0e3"/>
+<rect x="850" y="538" width="546" height="260" rx="12" fill="#ffffff" stroke="#d6e0e3"/>
+<text x="302" y="571" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="19" font-weight="600" fill="#152329">Intervenciones por día</text>
+<text x="302" y="597" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="13" font-weight="400" fill="#52636b">Cantidad · correctivos / preventivos</text>
+<line x1="330" y1="748" x2="806" y2="748" stroke="#d6e0e3"/>
+<text x="302" y="752" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="11" font-weight="400" fill="#52636b">0</text>
+<line x1="330" y1="716" x2="806" y2="716" stroke="#d6e0e3"/>
+<text x="302" y="720" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="11" font-weight="400" fill="#52636b">2</text>
+<line x1="330" y1="684" x2="806" y2="684" stroke="#d6e0e3"/>
+<text x="302" y="688" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="11" font-weight="400" fill="#52636b">4</text>
+<line x1="330" y1="652" x2="806" y2="652" stroke="#d6e0e3"/>
+<text x="302" y="656" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="11" font-weight="400" fill="#52636b">6</text>
+<line x1="330" y1="620" x2="806" y2="620" stroke="#d6e0e3"/>
+<text x="302" y="624" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="11" font-weight="400" fill="#52636b">8</text>
+<rect x="375" y="684" width="28" height="64" rx="3" fill="#126b72" stroke="none"/>
+<rect x="409" y="700" width="28" height="48" rx="3" fill="#94c9c4" stroke="none"/>
+<text x="375" y="772" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="12" font-weight="400" fill="#52636b">01 sep</text>
+<rect x="507" y="652" width="28" height="96" rx="3" fill="#126b72" stroke="none"/>
+<rect x="541" y="684" width="28" height="64" rx="3" fill="#94c9c4" stroke="none"/>
+<text x="507" y="772" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="12" font-weight="400" fill="#52636b">02 sep</text>
+<rect x="639" y="620" width="28" height="128" rx="3" fill="#126b72" stroke="none"/>
+<rect x="673" y="668" width="28" height="80" rx="3" fill="#94c9c4" stroke="none"/>
+<text x="639" y="772" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="12" font-weight="400" fill="#52636b">03 sep</text>
+<text x="872" y="571" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="19" font-weight="600" fill="#152329">Equipos con más correctivos</text>
+<text x="872" y="597" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="13" font-weight="400" fill="#52636b">Cantidad del período · demostración</text>
+<text x="872" y="633" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="12" font-weight="400" fill="#52636b">DEMO-EQ-001</text>
+<rect x="1022" y="615" width="200" height="24" rx="4" fill="#126b72" stroke="none"/>
+<text x="1232" y="633" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="13" font-weight="600" fill="#152329">8</text>
+<text x="872" y="681" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="12" font-weight="400" fill="#52636b">DEMO-EQ-002</text>
+<rect x="1022" y="663" width="150" height="24" rx="4" fill="#126b72" stroke="none"/>
+<text x="1182" y="681" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="13" font-weight="600" fill="#152329">6</text>
+<text x="872" y="729" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="12" font-weight="400" fill="#52636b">DEMO-EQ-003</text>
+<rect x="1022" y="711" width="100" height="24" rx="4" fill="#126b72" stroke="none"/>
+<text x="1132" y="729" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="13" font-weight="600" fill="#152329">4</text>
+<rect x="280" y="822" width="1116" height="150" rx="12" fill="#ffffff" stroke="#d6e0e3"/>
+<text x="302" y="854" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="19" font-weight="600" fill="#152329">Agenda preventiva · próximos 7 días</text>
+<text x="302" y="891" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="14" font-weight="600" fill="#126b72">04 sep</text>
+<text x="422" y="891" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="14" font-weight="400" fill="#152329">DEMO-EQ-001</text>
+<text x="620" y="891" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="14" font-weight="400" fill="#152329">Inspección general</text>
+<text x="302" y="929" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="14" font-weight="600" fill="#126b72">05 sep</text>
+<text x="422" y="929" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="14" font-weight="400" fill="#152329">DEMO-EQ-003</text>
+<text x="620" y="929" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="14" font-weight="400" fill="#152329">Revisión de transmisión</text>
+<text x="1136" y="944" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="12" font-weight="400" fill="#52636b">2 de 5 actividades próximas</text>
+<text x="280" y="1010" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="14" font-weight="400" fill="#52636b">Propuesta aprobada · datos ficticios. Tiempo de intervención no equivale a tiempo de paro.</text>
+<rect x="280" y="1052" width="240" height="46" rx="9" fill="#126b72" stroke="none"/>
+<text x="298" y="1081" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="15" font-weight="600" fill="#ffffff">Registrar correctivo</text>
+<rect x="534" y="1052" width="130" height="46" rx="9" fill="#ffffff" stroke="#d6e0e3"/>
+<text x="552" y="1081" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="15" font-weight="600" fill="#126b72">Cancelar</text>
+<text x="280" y="1144" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="12" font-weight="600" fill="#52636b">MOCKUP · DATOS DE DEMOSTRACIÓN</text></svg>
