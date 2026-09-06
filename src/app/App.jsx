@@ -20,9 +20,10 @@ const IncidentsPage = lazy(() => import('../pages/IncidentsPage.jsx'))
 const IncidentFormPage = lazy(() => import('../pages/IncidentFormPage.jsx'))
 const ResourceReadPage = lazy(() => import('../pages/ResourceReadPage.jsx'))
 const ProfilePage = lazy(() => import('../pages/ProfilePage.jsx'))
+const PredictionPage = lazy(() => import('../pages/PredictionPage.jsx'))
 
 function ModuleRoutes() {
-  return Object.entries(moduleContent).filter(([path]) => !['/equipos', '/correctivos', '/preventivos', '/montacargas', '/incidentes', '/repuestos', '/admin/usuarios', '/admin/auditoria'].includes(path)).map(([path, content]) => (
+  return Object.entries(moduleContent).filter(([path]) => !['/equipos', '/correctivos', '/preventivos', '/montacargas', '/incidentes', '/repuestos', '/riesgo', '/admin/usuarios', '/admin/auditoria'].includes(path)).map(([path, content]) => (
     <Route key={path} path={path} element={<ModulePage {...content} />} />
   ))
 }
@@ -51,6 +52,7 @@ export default function App() {
         <Route path="/admin/usuarios" element={<ResourceReadPage resource="users" />} />
         <Route path="/admin/auditoria" element={<ResourceReadPage resource="audit" />} />
         <Route path="/repuestos" element={<ResourceReadPage resource="stock" />} />
+        <Route path="/riesgo" element={<PredictionPage />} />
         <Route path="/perfil" element={<ProfilePage />} />
       </Route>
       <Route path="/inicio" element={<Navigate to="/" replace />} />
