@@ -1,6 +1,6 @@
 # CeroFallas — Preparación de Firebase
 
-Fecha: 2026-09-03
+Fecha de actualización: 2026-09-05
 
 Estado: CONFIGURACIÓN LOCAL PREPARADA; PROYECTO CLOUD PENDIENTE
 
@@ -72,7 +72,7 @@ npm run emulators:save
 
 El guardado conserva la copia anterior en `emulator-data-backup-*` y recupera automáticamente la exportación temporal si Windows impide al CLI renombrarla. Después se puede cerrar el emulador con `Ctrl+C`. El parámetro `--export-on-exit` se mantiene como respaldo adicional, pero un cierre forzado no garantiza los últimos cambios.
 
-La exportación verificada del 2026-09-04 contiene dos cuentas ficticias (`admin.demo@cerofallas.local` y `tecnico.demo@cerofallas.local`) y el conjunto demostrativo de Firestore. Las contraseñas no se registran en Git ni en esta documentación.
+La exportación vigente contiene 11 cuentas ficticias, una por cada rol institucional, y el conjunto demostrativo de Firestore. Las contraseñas no se registran en Git ni en esta documentación.
 
 ### Administración local de usuarios
 
@@ -85,9 +85,18 @@ Para la demostración preparada:
 ```powershell
 npm run seed:demo
 npm run seed:demo-user
+npm run seed:demo-roles
 ```
 
 El segundo comando crea una cuenta administrativa solo en Authentication Emulator y escribe una contraseña aleatoria en `.local/demo-login.txt`, también ignorado por Git. Ejecutarlo únicamente en un emulador limpio; después la cuenta se recupera mediante `npm run emulators:start`.
+
+El tercer comando completa los otros perfiles institucionales mediante el backend privilegiado y guarda accesos aleatorios en `.local/demo-role-users.json`. Puede repetirse sin duplicar cuentas. Para verificar perfiles, lecturas y rechazo de operaciones administrativas ejecutar:
+
+```powershell
+npm run verify:demo-roles
+```
+
+La evidencia del 2026-09-05 fue de 129 comprobaciones en diez cuentas; el Técnico de Mantenimiento fue validado separadamente en navegador.
 
 Como alternativa, para crear un administrador ficticio con credenciales elegidas por quien prueba:
 

@@ -1,6 +1,6 @@
 # CeroFallas — Plan de datos y modelos predictivos
 
-Fecha: 2026-09-05  
+Fecha: 2026-09-05
 Estado: laboratorio sintético reproducible; validación real pendiente
 
 ## Objetivo controlado

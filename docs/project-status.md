@@ -1,6 +1,6 @@
 # CEROFALLAS — ESTADO ACTUAL
 
-## Control maestro de fases — actualizado 2026-09-04
+## Control maestro de fases — actualizado 2026-09-05
 
 Este es el único documento de seguimiento de fases. Se conserva la numeración del apartado 33 de `../Prompt_Maestro_CeroFallas_V2.md`. Los registros históricos siguientes son evidencia de avances, no una segunda hoja de ruta. La entrega universitaria editable continúa en su archivo maestro independiente.
 
@@ -21,42 +21,42 @@ Estados: **Base lista** = definición o implementación local con evidencia; no 
 | 9 | Mantenimiento correctivo | Base funcional local | Registro, duración, consulta y anulación auditada; revisión integral y datos reales pendientes. |
 | 10 | Mantenimiento preventivo | Base funcional local | Planes, ejecuciones y reprogramación atómica para frecuencias calendario. Faltan validar frecuencias reales y definir horómetro/condición. |
 | 11 | Checklist de montacargas | Base funcional local | 25 puntos y resultado operativo; aprobación técnica de plantilla y equipos reales pendientes. |
-| 12 | Históricos y filtros | Parcial avanzado | Paginación de todos los listados; filtros de estado, área, equipo y fechas. Recorridos autenticados aprobados en correctivos, incidentes y preventivos. Faltan otros roles y decidir búsqueda global. |
-| 13 | Dashboard | Parcial avanzado | Agenda, prioridades, períodos 7/30/90, tendencia y correctivos por área conectados; recorrido autenticado aprobado localmente. Falta validación con datos reales y criterios gerenciales finales. |
-| 14 | Seguridad y roles | Parcial avanzado | Catálogo de 11 roles, doble validación rol + permiso y backend privilegiado local para crear/actualizar cuentas. Faltan despliegue cloud, asignación institucional y prueba integral de los 11 roles. |
+| 12 | Históricos y filtros | Base funcional local | Paginación transversal y filtros globales estructurados; búsqueda textual limitada de forma explícita a páginas cargadas. Recorridos y matriz de lectura aprobados localmente; faltan planta/cloud. |
+| 13 | Dashboard | Base funcional local | Agenda, prioridades, períodos, tendencia, correctivos por área, promedio de atención, preventivos a tiempo e incidentes por estado; falta aceptación con datos y criterios gerenciales reales. |
+| 14 | Seguridad y roles | Parcial avanzado | Once perfiles demo, matriz comprobada, recorridos UI representativos y backend local para alta, actualización, estado y contraseña temporal. Faltan cloud, validación institucional y recorridos de escritura con aceptación por rol. |
 | 15 | Power BI | Pendiente de integración | Obtener modalidad de acceso, consulta/esquema autorizado y conexión segura; licencia de publicación no demuestra acceso de todos los lectores. |
-| 16 | Publicación en Internet | Pendiente | Hosting preparado localmente; requiere proyecto, revisión de seguridad, configuración e índices y autorización de costos si aplica. |
-| 17 | Dataset predictivo | Pendiente | Sin histórico real; acordar recopilación, calidad y etiquetado. |
-| 18 | Ingeniería de variables | Propuesta, no validada | Variables descritas; construirlas y comprobar disponibilidad sin fuga de datos. |
-| 19 | Entrenamiento y comparación | Pendiente | Comparar modelos cuando existan datos suficientes; no hay métricas reales. |
-| 20 | Integración de predicciones | Pendiente | Pantalla conceptual; falta servicio y resultados versionados validados. |
+| 16 | Publicación en Internet | Preparación local | Checklist de autorización, seguridad, orden de despliegue, aceptación y reversión listo. Requiere proyecto, configuración, índices, costos autorizados y ejecución acompañada por el usuario. |
+| 17 | Dataset predictivo | Contrato y demo | Esquema, origen, etiqueta y generador sintético reproducible listos. Histórico real, definición oficial y calidad siguen pendientes. |
+| 18 | Ingeniería de variables | Base demostrativa | Once variables con corte temporal, validación y pruebas; falta confirmar disponibilidad y construirlas con fuentes reales. |
+| 19 | Entrenamiento y comparación | Laboratorio demo | Regresión logística y Random Forest comparados con división temporal y métricas reproducibles; no existen métricas reales ni modelo productivo. |
+| 20 | Integración de predicciones | Interfaz demostrativa segura | Pantalla responsive con comparación, trazabilidad, estado de preparación y advertencia de no uso operativo. Faltan servicio y resultados con histórico real validado. |
 | 21 | Automatización cada 24 horas | Pendiente | Depende de fuentes, modelo, infraestructura y costos autorizados. |
-| 22 | Pruebas generales | En curso | Suite del 2026-09-04: 123/123, build y recorridos autenticados administrador/técnico; no es aceptación final. Faltan nube y matriz integral de roles. |
+| 22 | Pruebas generales | En curso | Suite vigente: 133/133 web y 3/3 predictivas; matriz adicional de 129 verificaciones y recorridos responsive/roles. ESLint activo sin errores ni advertencias. Faltan nube y aceptación institucional. |
 | 23 | Documentación | En curso | Entrega 2 Word/PDF y documentación técnica; actualizar al cerrar avances y completar datos académicos. |
 | 24 | Presentación final | Parcial | Guía de defensa incluida en entrega 2; falta ensayo final y evidencia del sistema terminado. |
 
 ### Medición del avance
 
-**Proyecto completo estimado: 62 %. Aplicación web principal en entorno local: 87 %.**
+**Proyecto completo estimado: 68 %. Aplicación web principal en entorno local: 91 %.**
 
 La medición completa incluye aquello que todavía depende de planta, nube y datos predictivos; por eso es menor que el estado de la aplicación local. Se usa una ponderación estable para no aumentar el porcentaje solo por agregar pantallas:
 
 | Bloque | Peso del proyecto | Cumplimiento verificable | Aporte |
 |---|---:|---:|---:|
 | Análisis, diseño y documentación | 15 % | 85 % | 12.75 % |
-| Aplicación web principal | 40 % | 87 % | 34.80 % |
-| Seguridad y pruebas | 15 % | 80 % | 12.00 % |
+| Aplicación web principal | 40 % | 91 % | 36.40 % |
+| Seguridad y pruebas | 15 % | 88 % | 13.20 % |
 | Publicación e integraciones SAP/Power BI | 15 % | 10 % | 1.50 % |
-| Predictivo y automatización | 15 % | 5 % | 0.75 % |
-| **Total redondeado** | **100 %** |  | **62 %** |
+| Predictivo y automatización | 15 % | 30 % | 4.50 % |
+| **Total redondeado** | **100 %** |  | **68 %** |
 
 Solo se acredita como cumplimiento aquello implementado o documentado con evidencia. Una base local no equivale a despliegue cloud, datos reales o aceptación de planta. Recalcular con estos mismos pesos al cerrar criterios verificables.
 
 ### Punto de reanudación y orden inmediato
 
-1. Fase 12: completar recorridos autenticados de históricos y decidir búsqueda global. Correctivos e incidentes ya filtran por estado, área, equipo y fechas; los selectores recorren hasta 1,000 opciones.
-2. Fase 14: ampliar pruebas negativas de las funciones de usuarios y validar la matriz institucional completa; publicar solo después de configurar proyecto, App Check/costos y ambiente cloud autorizado.
-3. Fase 10: validar en planta frecuencias y datos de horómetro/condición. No inventar reprogramaciones automáticas para esos dos métodos.
+1. Fase 14: completar recorridos de escritura por roles representativos y validar la matriz con responsables institucionales; publicar solo después de configurar proyecto, App Check/costos y ambiente cloud autorizado.
+2. Fase 10: validar en planta frecuencias y datos de horómetro/condición. No inventar reprogramaciones automáticas para esos dos métodos.
+3. Fase 16: preparar checklist y variables de publicación sin desplegar ni vincular cuentas todavía.
 4. Integraciones: recibir consulta SQL/esquema, conectividad, catálogo real y definición de acceso a Power BI. Avisar al usuario antes de SAP y no almacenar credenciales en frontend.
 
 Incidentes se conserva como **módulo adicional transversal**, relacionado con históricos (12), dashboard (13) y seguridad (14). Los encabezados anteriores «Fase 12: incidentes» fueron una desviación de nomenclatura, no el cierre de la fase original de históricos.
@@ -65,7 +65,36 @@ Incidentes se conserva como **módulo adicional transversal**, relacionado con h
 
 Al terminar un avance, actualizar esta tabla y registrar: cambio concreto, pruebas realmente ejecutadas, pendientes, dependencias y siguiente paso. No marcar una fase completa solo por tener pantalla o build exitoso. No atribuir porcentajes globales sin criterios de aceptación medibles. La evidencia de pruebas anterior conserva su fecha: no implica una nueva ejecución hoy.
 
-## Avance vigente — 2026-09-04
+## Avance vigente — 2026-09-05
+
+### Matriz demostrativa completa de roles
+
+- Se prepararon 11 cuentas ficticias: Administrador, Soporte, Técnico de Mantenimiento, Montacarguista, Jefe de Mantenimiento, Operador de Airlay, Digitador, Supervisor, Encargado de línea, Jefe de Producción y Gerencia.
+- `npm run seed:demo-roles` crea mediante el backend los nueve perfiles que faltaban y es idempotente: la segunda ejecución informó 0 creados y 9 existentes. Las credenciales aleatorias quedan únicamente en `.local/demo-role-users.json`, ignorado por Git.
+- Authentication y Firestore se exportaron nuevamente. La instantánea fue revisada y contiene 11 identidades; la pantalla Usuarios mostró 11 perfiles activos con sus roles correctos.
+- `npm run verify:demo-roles` inició sesión con diez cuentas cuyas credenciales están disponibles localmente y realizó 129 verificaciones: perfil propio, permisos almacenados, lectura permitida/denegada en nueve colecciones y rechazo del backend para todo rol no administrador.
+- El Técnico de Mantenimiento restante conserva la validación manual anterior: navegación limitada y acceso directo a Usuarios denegado. No se reemplazó su contraseña solo para incorporarlo al script.
+- Los emuladores se reiniciaron importando la instantánea persistente. No se accedió a SAP, SQL Server, Firebase cloud ni datos reales.
+- Se cerró el alcance local de búsqueda: estado, área, equipo y fechas operan en servidor sobre el histórico; el texto busca solo dentro de las páginas cargadas. No se integrará un motor externo de búsqueda en esta etapa sin necesidad, evaluación de datos y autorización de costo.
+- Fase 16 preparada en `docs/deployment-checklist.md`: incluye puertas de autorización, controles de secretos, preflight, orden de despliegue, aceptación por roles y recuperación. No se vinculó proyecto, no se inició sesión y no se ejecutó despliegue.
+- Dashboard ampliado con tres lecturas defendibles a partir de las fuentes ya autorizadas: promedio de duración correctiva, porcentaje de ejecuciones preventivas a tiempo e incidentes abiertos por estado. Los valores sin base evaluable muestran `—`; no se presentan como OEE o MTBF.
+- Evidencia demo de 30 días: promedio correctivo 1 h 0 min sobre 8 registros, 67 % de preventivos a tiempo (4 de 6) e incidentes abiertos 3 reportados, 1 revisado y 2 en atención. Escritorio y viewport 390 × 844 revisados sin desbordamiento.
+- Nueva función `resetAppUserPassword`: exclusiva del Administrador, valida contraseña temporal, impide restablecer la cuenta propia y registra solicitud/resultado sin almacenar el secreto. La pantalla solo muestra el control al editar otro usuario.
+- Functions Emulator reconoció `createAppUser`, `updateAppUser` y `resetAppUserPassword`. El restablecimiento real no se ejecutó sobre cuentas demo para no invalidar accesos; validadores y presentación sí fueron probados. Cierre técnico: 128/128 pruebas, 129 verificaciones de roles y build exitoso.
+- Laboratorio predictivo creado en `predictive/`: esquema estricto, generador de 1,200 filas sintéticas, división temporal 80/20, regresión logística y Random Forest. Tres pruebas Python aprobadas.
+- Resultado demostrativo reproducible: 380 eventos objetivo; PR-AUC 0.4737 para regresión y 0.4802 para Random Forest. El archivo declara `demonstration_only`, queda en `.local/` y no se integra como riesgo operativo.
+- `docs/predictive-plan.md` define campos, fuentes futuras, prevención de fuga, calidad, métricas, selección del segundo modelo y camino a ejecución cada 24 horas. No se usaron datos reales ni se entrenó un modelo productivo.
+- `/riesgo` dejó de ser una pantalla conceptual: presenta el laboratorio, comparación Regresión logística/Random Forest, avance 2 de 4, datos requeridos y huella reproducible. La advertencia impide confundir la demo sintética con una predicción de planta.
+- Se verificó `/riesgo` en navegador y en viewport 390 × 844; el desbordamiento inicial de la tabla se confinó a su contenedor y la página quedó sin desplazamiento horizontal global.
+- ESLint y sus complementos de React quedaron instalados como dependencias de desarrollo. Se corrigieron dependencias inestables o redundantes sin alterar los recorridos; `npm run lint` termina con 0 errores y 1 advertencia de organización del contexto de autenticación.
+- Cierre vigente: 133/133 pruebas web, 3/3 pruebas predictivas, build de producción y `git diff --check` exitosos. `npm run verify` reúne estos controles en un comando. La advertencia del bloque compartido de ~800 kB continúa documentada.
+- Recorridos reales de interfaz completados con Montacarguista, Operador Airlay, Jefe de Mantenimiento y Gerencia. Se comprobaron menús, acciones visibles, formularios permitidos y denegaciones por URL; no se guardaron operaciones ni se cambiaron contraseñas.
+- El recorrido de Montacargas detectó un resultado vacío causado por el valor demo legado `fit_with_observations`. La interfaz ahora lo presenta de forma compatible y el generador usa los valores oficiales `attention_required`/`fit`; se recargaron 75 registros demo y se añadió prueba contra etiquetas vacías.
+- ESLint quedó en 0 errores y 0 advertencias después de estabilizar dependencias de consultas y documentar la excepción de recarga rápida del contexto de autenticación.
+
+Siguiente paso: completar recorridos de escritura controlados con registros desechables, preparar evidencia de aceptación por rol y cerrar preflight de publicación sin ejecutar despliegue.
+
+## Avance anterior — 2026-09-04
 
 ### Administración privilegiada de usuarios y persistencia verificada
 
@@ -78,7 +107,7 @@ Al terminar un avance, actualizar esta tabla y registrar: cambio concreto, prueb
 - Suite vigente: 123/123 pruebas aprobadas y build de producción exitoso. Las pruebas nuevas verifican normalización, contraseña temporal, roles/estados inválidos, equivalencia exacta entre los 11 roles, autorización administrativa y bloqueo de auto-desactivación.
 - El build servido como producción ya no queda en blanco cuando faltan variables Firebase: muestra el login, explica que el ambiente no está configurado y deshabilita el acceso. Se verificó en `vite preview`; con configuración cloud válida deberá repetirse la prueba antes de publicar.
 - Se probaron dos estrategias de separación manual del bundle y se descartaron porque compilaban pero rompían el arranque servido. Se conserva el build funcional con advertencia no bloqueante del bloque compartido (~800 kB); la optimización requiere una estrategia compatible y prueba de navegador.
-- `npm run emulators:save` quedó probado: guarda Authentication y Firestore, recupera la exportación temporal ante el error de renombrado de Windows y conserva la copia anterior. La instantánea actual contiene dos cuentas locales y datos demo; todo está ignorado por Git.
+- `npm run emulators:save` quedó probado: guarda Authentication y Firestore, recupera la exportación temporal ante el error de renombrado de Windows y conserva la copia anterior. En ese avance contenía dos cuentas; la instantánea vigente fue ampliada a 11. Todo está ignorado por Git.
 - Backend instalado en `functions/` con Firebase Admin 14.3.0 y Functions 7.3.2 para Node 22. `npm audit --omit=dev` reporta siete vulnerabilidades moderadas en la cadena transitiva oficial de Storage/HTTP/UUID. No se aplicó `--force`, porque propone degradar Firebase Admin con cambio incompatible; se revisará antes de publicar.
 - No se accedió a SAP/SQL Server, Firebase cloud, cuentas reales ni datos productivos. Las funciones siguen únicamente en el emulador y todavía no tienen validación cloud/App Check.
 

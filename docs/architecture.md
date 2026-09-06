@@ -96,7 +96,7 @@ Realtime Database tendría ventaja en presencia en línea y sincronización extr
 
 Se reservarán para operaciones que no son seguras desde el cliente:
 
-- Crear o administrar identidades sin cambiar la sesión del administrador.
+- Crear o administrar identidades y restablecer contraseñas temporales sin cambiar la sesión del administrador.
 - Sincronizar stock autorizado.
 - Exportar datasets.
 - Ejecutar lógica privilegiada y auditoría reforzada.

@@ -69,6 +69,44 @@ No se aprovisionaron cuentas nuevas ni se cambiaron roles no administrativos exi
 
 ## Límites y siguientes pasos
 
+### Matriz de roles demostrativa — 2026-09-05
+
+- La pantalla Usuarios contiene 11 cuentas locales activas, una por cada rol institucional. Authentication y Firestore quedaron respaldados en la instantánea ignorada por Git.
+- `npm run seed:demo-roles` completa nueve cuentas usando las funciones privilegiadas y puede repetirse: en la comprobación creó 9 la primera vez y reconoció las 9 existentes en la segunda.
+- `npm run verify:demo-roles` realizó 129 verificaciones con diez cuentas: coincidencia del perfil, acceso permitido o denegado a nueve colecciones y rechazo de actualización administrativa para cada rol no administrador.
+- Los accesos aleatorios están en `.local/demo-role-users.json`; no copiarlos al repositorio ni utilizar contraseñas reales. El técnico demo mantiene la validación manual anterior.
+
+### Indicadores gerenciales y contraseña temporal — 2026-09-05
+
+- El dashboard calcula promedio de atención correctiva solo con duraciones positivas, y preventivos a tiempo solo entre ejecuciones marcadas `on_time` o `late`. Si no hay base evaluable presenta `—`.
+- Incidentes abiertos se separan en Reportados, Revisados y En atención. Resueltos y anulados continúan fuera del conteo.
+- Con datos demo de 30 días se observaron 1 h 0 min sobre 8 correctivos, 67 % (4 de 6) preventivos a tiempo y distribución 3/1/2 de incidentes. No explicar estas cifras como OEE, MTBF o disponibilidad.
+- En Usuarios, seleccionar otro perfil para mostrar `Nueva contraseña temporal`. La función exige de 10 a 128 caracteres, vuelve a comprobar rol Administrador y audita únicamente solicitud y resultado.
+- La cuenta propia no ofrece ese control; el cambio personal requerirá un flujo separado. No se ejecutó el restablecimiento sobre cuentas demo para conservar los accesos preparados.
+- Verificación vigente del proyecto: 133/133 pruebas web, 3/3 pruebas predictivas, 129 comprobaciones adicionales de roles, lint limpio y build exitoso. Ejecutar `npm run verify` para repetir lint, ambas suites y compilación.
+
+### Recorridos por rol — 2026-09-05
+
+- Montacarguista: Inicio, Equipos y Montacargas; muestra `Nueva inspección` y niega Usuarios aunque se escriba la URL.
+- Operador Airlay: Inicio, Equipos e Incidentes; abre `Reportar incidente`, pero no consulta el dashboard gerencial.
+- Jefe de Mantenimiento: dashboard, correctivos, preventivos, incidentes, equipos y stock; registra tiempos sin administrar usuarios.
+- Gerencia: indicadores e históricos de soporte en lectura. No aparecen acciones de registro y la URL de nuevo correctivo redirige al histórico.
+- Durante el recorrido se corrigió un resultado demo vacío de montacargas. Los registros nuevos usan `Apto`, `Requiere atención` o `Fuera de servicio`; el lector conserva una etiqueta explícita para datos legados o desconocidos.
+
+### Laboratorio de riesgo predictivo — 2026-09-05
+
+- La ruta `/riesgo` explica una predicción binaria a 30 días, pero identifica de forma permanente el estado **Laboratorio demostrativo**.
+- Los 1,200 registros son sintéticos: 960 se usan para entrenamiento y 240 para prueba temporal. No son datos de SAP ni resultados de planta.
+- PR-AUC mide qué tan bien prioriza el modelo los casos de falla cuando hay desbalance; Recall indica qué proporción de fallas logra detectar. Random Forest obtuvo 48.02 % de PR-AUC frente a 47.37 % de la regresión, una diferencia demasiado pequeña para afirmar superioridad real.
+- Para defenderlo: el sistema técnico ya genera, valida, divide y compara; faltan histórico autorizado y validación operativa. Por eso la pantalla muestra avance 2 de 4 y prohíbe usar la demo para decidir mantenimientos.
+
+### Decisión de búsqueda histórica — 2026-09-05
+
+- Estado, área, equipo y rango de fechas son filtros de servidor: aplican sobre todos los documentos que coinciden, antes de paginar.
+- La caja de texto busca únicamente en las páginas ya cargadas y la interfaz lo declara junto al contador. El usuario puede ampliar el alcance con `Cargar más` o reducirlo con filtros estructurados.
+- No se presenta como búsqueda global. Firestore no incluye búsqueda de texto completa nativa; incorporar un motor externo agregaría sincronización, seguridad y costo que todavía no han sido aprobados.
+- Con esta decisión, paginación, filtros y recorridos locales constituyen la base funcional de la Fase 12. La aceptación con datos de planta e índices cloud continúa pendiente.
+
 ### Administración de usuarios — 2026-09-04
 
 - Usuarios muestra un formulario de alta y edición solo cuando el perfil activo tiene rol `administrator`. Elegir el rol deriva automáticamente sus permisos; la contraseña temporal solo se usa para crear la identidad y no se guarda en Firestore ni en auditoría.
