@@ -8,11 +8,15 @@
     "build": "vite build",
     "preview": "vite preview",
     "lint": "eslint .",
+    "verify": "npm run lint && npm test && npm run predictive:test && npm run build",
     "test": "vitest run",
     "seed:emulator": "node scripts/seed-emulator.mjs",
     "seed:demo": "node scripts/seed-demo-data.mjs",
     "seed:demo-user": "node scripts/create-demo-user.mjs",
     "seed:demo-roles": "node scripts/seed-demo-role-users.mjs",
+    "verify:demo-roles": "node scripts/verify-demo-role-users.mjs",
+    "predictive:test": "python -m unittest discover -s predictive/tests -p \"test_*.py\"",
+    "predictive:demo": "python predictive/generate_demo_dataset.py --output .local/predictive-demo.csv && python predictive/train_compare.py --input .local/predictive-demo.csv --output .local/predictive-results.json",
     "emulators:start": "firebase emulators:start --only auth,firestore,functions --project demo-cerofallas --import=emulator-data --export-on-exit=emulator-data",
     "emulators:fresh": "firebase emulators:start --only auth,firestore,functions --project demo-cerofallas --export-on-exit=emulator-data",
     "emulators:save": "powershell -NoProfile -ExecutionPolicy Bypass -File scripts/save-emulator-data.ps1"
@@ -24,9 +28,14 @@
     "react-router-dom": "^7.18.3"
   },
   "devDependencies": {
+    "@eslint/js": "^10.0.1",
     "@firebase/rules-unit-testing": "^5.0.2",
     "@vitejs/plugin-react": "^6.1.1",
+    "eslint": "^10.10.0",
+    "eslint-plugin-react-hooks": "^7.1.1",
+    "eslint-plugin-react-refresh": "^0.5.6",
     "firebase-tools": "^15.29.0",
+    "globals": "^17.12.0",
     "vite": "^8.2.2",
     "vitest": "^5.0.0"
   }
