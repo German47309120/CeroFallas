@@ -31,7 +31,7 @@ export default function CorrectivesPage() {
       const match = !term || [item.equipmentSnapshot?.code, item.equipmentSnapshot?.name, item.reportedSymptom, item.workPerformed].some((value) => value?.toLocaleLowerCase('es').includes(term))
       return match
     })
-  }, [records, search, status])
+  }, [records, search])
 
   if (profileLoading) return <div className="panel empty-state"><p>Cargando perfil…</p></div>
   if (!canRead) return <section className="page-stack"><div className="page-heading"><div><p className="eyebrow">Mantenimiento</p><h1>Correctivos</h1></div></div><div className="panel empty-state"><h2>Acceso restringido</h2><p>Tu perfil no tiene permiso para consultar correctivos.</p></div></section>

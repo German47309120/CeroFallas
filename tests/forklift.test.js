@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
 import { forkliftChecklistTemplate } from '../src/config/forkliftChecklist.js'
-import { evaluateForkliftChecklist } from '../src/utils/forklift.js'
+import { evaluateForkliftChecklist, getForkliftResultPresentation } from '../src/utils/forklift.js'
 
 const answers = (status = 'good') => forkliftChecklistTemplate.sections.flatMap((section) => section.items.map((item) => ({ itemId: item.id, status })))
 
@@ -24,5 +24,11 @@ describe('evaluación de checklist de montacargas', () => {
   it('rechaza una inspección incompleta', () => {
     expect(() => evaluateForkliftChecklist(forkliftChecklistTemplate, answers().slice(1))).toThrow('checklist/incomplete')
     expect(() => evaluateForkliftChecklist(forkliftChecklistTemplate, answers(''))).toThrow('checklist/incomplete')
+  })
+
+  it('presenta resultados actuales, legados y desconocidos sin dejar etiquetas vacías', () => {
+    expect(getForkliftResultPresentation('attention_required')).toEqual({ label: 'Requiere atención', tone: 'attention_required' })
+    expect(getForkliftResultPresentation('fit_with_observations')).toEqual({ label: 'Apto con observaciones', tone: 'attention_required' })
+    expect(getForkliftResultPresentation('legacy_unknown')).toEqual({ label: 'Resultado no reconocido', tone: 'unknown' })
   })
 })

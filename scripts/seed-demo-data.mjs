@@ -147,8 +147,8 @@ for (let index = 0; index < 6; index++) {
     equipmentId: code, equipmentSnapshot: snapshot(code), templateId: 'forklift-daily-v1', templateVersion: 1,
     inspectedAt: stamp(inspectedAt), shiftId: index % 2 ? 'shift-2' : 'shift-1', operatorId: actorId,
     hourMeter: 1250 + index * 12.5,
-    answers: checklistItems.map((label, itemIndex) => ({ itemId: `item-${itemIndex}`, label, critical: ['Frenos', 'Horquillas', 'Dirección'].includes(label), status: hasObservation && label === 'Llantas' ? 'attention' : 'good', observation: hasObservation && label === 'Llantas' ? 'Desgaste moderado; programar revisión.' : null })),
-    criticalFailures: 0, overallResult: hasObservation ? 'fit_with_observations' : 'fit', generalObservations: hasObservation ? 'Revisar desgaste de llantas.' : null,
+    answers: checklistItems.map((label, itemIndex) => ({ itemId: `item-${itemIndex}`, label, critical: ['Frenos', 'Horquillas', 'Dirección'].includes(label), status: hasObservation && label === 'Llantas' ? 'attention_required' : 'good', observation: hasObservation && label === 'Llantas' ? 'Desgaste moderado; programar revisión.' : null })),
+    criticalFailures: 0, overallResult: hasObservation ? 'attention_required' : 'fit', generalObservations: hasObservation ? 'Revisar desgaste de llantas.' : null,
     evidenceUrls: [], status: 'completed', createdAt: stamp(inspectedAt), createdBy: actorId,
   })
 }

@@ -25,7 +25,7 @@ export default function EquipmentPage() {
         .some((value) => value?.toLocaleLowerCase('es').includes(term))
       return matchesTerm
     })
-  }, [equipment, search, status])
+  }, [equipment, search])
 
   if (profileLoading || loading) {
     return <div className="panel empty-state"><p>Cargando catálogo de equipos…</p></div>

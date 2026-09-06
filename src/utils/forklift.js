@@ -11,3 +11,15 @@ export function evaluateForkliftChecklist(template, answers) {
     overallResult: criticalFailures > 0 ? 'out_of_service' : hasOtherFailure ? 'attention_required' : 'fit',
   }
 }
+
+const resultPresentations = {
+  fit: { label: 'Apto', tone: 'fit' },
+  attention_required: { label: 'Requiere atención', tone: 'attention_required' },
+  out_of_service: { label: 'Fuera de servicio', tone: 'out_of_service' },
+  // Compatibilidad con datos demo generados antes de normalizar el catálogo.
+  fit_with_observations: { label: 'Apto con observaciones', tone: 'attention_required' },
+}
+
+export function getForkliftResultPresentation(result) {
+  return resultPresentations[result] ?? { label: 'Resultado no reconocido', tone: 'unknown' }
+}

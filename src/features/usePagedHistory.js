@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 
 export function usePagedHistory({ enabled, scope, status, options = {}, readPage }) {
   const [revision, setRevision] = useState(0)
@@ -6,6 +6,7 @@ export function usePagedHistory({ enabled, scope, status, options = {}, readPage
   const generation = useRef(0)
   const busy = useRef(false)
   const optionsKey = JSON.stringify(options)
+  const stableOptions = useMemo(() => JSON.parse(optionsKey), [optionsKey])
   const key = JSON.stringify([enabled, scope, status, optionsKey, revision])
   const current = state?.key === key ? state : null
 
@@ -14,13 +15,15 @@ export function usePagedHistory({ enabled, scope, status, options = {}, readPage
     busy.current = false
     if (!enabled) return
     busy.current = true
-    readPage({ status, ...options }).then((page) => {
+    readPage({ status, ...stableOptions }).then((page) => {
       if (generation.current === token) setState({ ...page, key, error: '', loadingMore: false })
     }).catch(() => {
       if (generation.current === token) setState({ key, records: [], cursor: null, hasMore: false, error: 'No fue posible cargar el histórico. Revisa conexión y permisos; puedes reintentar con Actualizar.', loadingMore: false })
     }).finally(() => { if (generation.current === token) busy.current = false })
+    // El contador invalida respuestas asíncronas de una consulta anterior.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     return () => { generation.current++ }
-  }, [enabled, key, status, optionsKey, readPage])
+  }, [enabled, key, status, stableOptions, readPage])
 
   async function loadMore() {
     if (!enabled || !current?.hasMore || busy.current) return
@@ -28,7 +31,7 @@ export function usePagedHistory({ enabled, scope, status, options = {}, readPage
     busy.current = true
     setState((old) => ({ ...old, loadingMore: true, error: '' }))
     try {
-      const page = await readPage({ status, ...options, cursor: current.cursor })
+      const page = await readPage({ status, ...stableOptions, cursor: current.cursor })
       if (generation.current !== token) return
       // Evita duplicados si un registro cambia de posición entre dos lecturas.
       const combined = new Map(current.records.map((record) => [record.id, record]))
