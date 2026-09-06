@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { buildActivityTrend, buildAreaBreakdown, dashboardDate, dashboardSources, dashboardWindow, OPEN_INCIDENT_STATES } from '../src/utils/dashboard.js'
+import { buildActivityTrend, buildAreaBreakdown, buildOperationalSummary, dashboardDate, dashboardSources, dashboardWindow, OPEN_INCIDENT_STATES } from '../src/utils/dashboard.js'
 
 describe('Dashboard: fechas y mínimo privilegio', () => {
   it('mantiene una ventana exacta de 7 días al cruzar mes y año', () => {
@@ -53,5 +53,14 @@ describe('Dashboard: fechas y mínimo privilegio', () => {
       { areaId: 'sin-area', name: 'Sin área registrada', total: 1 },
     ])
     expect(result.max).toBe(2)
+  })
+  it('calcula indicadores solo con duraciones y ejecuciones evaluables', () => {
+    expect(buildOperationalSummary({
+      correctives: [{ durationMinutes: 30 }, { durationMinutes: 61 }, { durationMinutes: 0 }, { durationMinutes: 'sin dato' }],
+      executions: [{ complianceStatus: 'on_time' }, { complianceStatus: 'on_time' }, { complianceStatus: 'late' }, { complianceStatus: 'not_applicable' }],
+    })).toEqual({ averageCorrectiveMinutes: 46, evaluatedPreventives: 3, onTimePreventives: 2, onTimePercent: 67 })
+  })
+  it('no inventa indicadores cuando no hay base evaluable', () => {
+    expect(buildOperationalSummary()).toEqual({ averageCorrectiveMinutes: null, evaluatedPreventives: 0, onTimePreventives: 0, onTimePercent: null })
   })
 })

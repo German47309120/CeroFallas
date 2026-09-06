@@ -1,6 +1,6 @@
 import { collection, getCountFromServer, getDocsFromServer, limit, orderBy, query, Timestamp, where } from 'firebase/firestore'
 import { getFirebaseFirestore } from './firestore.js'
-import { buildActivityTrend, buildAreaBreakdown, dashboardWindow, OPEN_INCIDENT_STATES } from '../../utils/dashboard.js'
+import { buildActivityTrend, buildAreaBreakdown, buildOperationalSummary, dashboardWindow, OPEN_INCIDENT_STATES } from '../../utils/dashboard.js'
 
 const count = async (q) => (await getCountFromServer(q)).data().count
 const rows = async (q) => (await getDocsFromServer(q)).docs.map((d) => ({ ...d.data(), id: d.id }))
@@ -24,12 +24,17 @@ export async function loadDashboardSource(source, cutoff, { periodDays = null, a
   if (source === 'incidents') {
     const ref = collection(db, 'incidents')
     const open = where('status', 'in', OPEN_INCIDENT_STATES)
-    const [total, critical, high] = await Promise.all([
+    const [total, critical, high, ...stateTotals] = await Promise.all([
       count(query(ref, open)),
       rows(query(ref, open, where('priority', '==', 'critical'), orderBy('createdAt'), limit(5))),
       rows(query(ref, open, where('priority', '==', 'high'), orderBy('createdAt'), limit(5))),
+      ...OPEN_INCIDENT_STATES.map((status) => count(query(ref, where('status', '==', status)))),
     ])
-    return { total, priorityRows: [...critical, ...high] }
+    return {
+      total,
+      priorityRows: [...critical, ...high],
+      statusCounts: Object.fromEntries(OPEN_INCIDENT_STATES.map((status, index) => [status, stateTotals[index]])),
+    }
   }
   if (source === 'correctives' || source === 'executions') {
     const clauses = [where('status', '==', 'completed')]
@@ -45,7 +50,11 @@ export async function loadDashboardSource(source, cutoff, { periodDays = null, a
       return [key, result]
     }))
     const records = Object.fromEntries(entries)
-    return { ...buildActivityTrend(records, cutoff, periodDays), areas: buildAreaBreakdown(records.correctives) }
+    return {
+      ...buildActivityTrend(records, cutoff, periodDays),
+      areas: buildAreaBreakdown(records.correctives),
+      summary: buildOperationalSummary(records),
+    }
   }
   throw new Error('Fuente de dashboard inválida')
 }

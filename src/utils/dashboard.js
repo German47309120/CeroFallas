@@ -58,3 +58,21 @@ export function buildAreaBreakdown(records) {
     .sort((left, right) => right.total - left.total || left.name.localeCompare(right.name, 'es'))
   return { rows, max: Math.max(1, ...rows.map((row) => row.total)) }
 }
+
+export function buildOperationalSummary(recordsBySource = {}) {
+  const durations = (recordsBySource.correctives ?? [])
+    .map((record) => Number(record.durationMinutes))
+    .filter((duration) => Number.isFinite(duration) && duration > 0)
+  const executions = (recordsBySource.executions ?? [])
+    .filter((record) => ['on_time', 'late'].includes(record.complianceStatus))
+  const onTime = executions.filter((record) => record.complianceStatus === 'on_time').length
+
+  return {
+    averageCorrectiveMinutes: durations.length
+      ? Math.round(durations.reduce((total, duration) => total + duration, 0) / durations.length)
+      : null,
+    evaluatedPreventives: executions.length,
+    onTimePreventives: onTime,
+    onTimePercent: executions.length ? Math.round(onTime / executions.length * 100) : null,
+  }
+}

@@ -2,8 +2,12 @@ import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { useAuth } from '../features/auth/AuthContext.jsx'
 import { loadDashboardSource } from '../services/firebase/dashboard.js'
-import { dashboardDate, dashboardSources, dashboardWindow } from '../utils/dashboard.js'
+import { dashboardDate, dashboardSources, dashboardWindow, OPEN_INCIDENT_STATES } from '../utils/dashboard.js'
 import { incidentPriorities, incidentStates } from '../utils/incidents.js'
+
+const formatAverageMinutes = (minutes) => Number.isFinite(minutes)
+  ? minutes >= 60 ? `${Math.floor(minutes / 60)} h ${minutes % 60} min` : `${minutes} min`
+  : '—'
 
 function PlanList({ rows }) {
   return <ul className="dashboard-list">{rows.map((plan) => <li key={plan.id}>
@@ -30,15 +34,17 @@ export default function DashboardPage() {
     let alive = true
     const requestedSources = [...sourceKey.split(','), ...(trendEnabled ? ['trend'] : [])]
     Promise.all(requestedSources.map(async (key) => {
-      try { return [key, { data: await loadDashboardSource(key, request, { periodDays, activitySources: sources }) }] }
+      try { return [key, { data: await loadDashboardSource(key, request, { periodDays, activitySources: sourceKey.split(',') }) }] }
       catch { return [key, { error: 'No disponible. Revisa conexión, permisos o índices de Firestore y vuelve a actualizar.' }] }
     })).then((values) => { if (alive) setResult({ identity, request, values: Object.fromEntries(values) }) })
     return () => { alive = false }
-  }, [identity, sourceKey, request, trendEnabled])
+  }, [identity, sourceKey, request, trendEnabled, periodDays])
 
   const data = (key) => current?.[key]?.data
   const message = (key) => !sources.includes(key) ? 'Tu perfil no tiene acceso a esta fuente.' : loading ? 'Consultando registros…' : current?.[key]?.error
   const metric = (key, field) => message(key) ? '—' : data(key)?.[field] ?? '—'
+  const trendMessage = !trendEnabled ? 'Tu perfil no tiene acceso a fuentes de actividad.' : loading ? 'Consultando registros…' : current?.trend?.error
+  const summary = current?.trend?.data?.summary
   const cards = [
     ['incidents', 'total', 'Incidentes abiertos', 'Reportados, revisados o en atención', 'danger'],
     ['plans', 'overdueCount', 'Planes con fecha vencida', 'Fecha programada anterior al corte', 'warning'],
@@ -60,9 +66,14 @@ export default function DashboardPage() {
     {canRead && <>
       <div className="dashboard-cutoff"><div><strong>Corte: {dashboardDate(request)}</strong><span>Hora de Guatemala · todas las áreas autorizadas por las reglas actuales</span></div><label>Período de actividad<select value={periodDays} disabled={loading} onChange={(event) => setPeriodDays(Number(event.target.value))}><option value="7">7 días</option><option value="30">30 días</option><option value="90">90 días</option></select></label><button disabled={loading} className="button button--secondary" onClick={() => setRequest(new Date())}>{loading ? 'Actualizando…' : 'Actualizar datos'}</button></div>
       <div className="stats-grid" aria-live="polite">{cards.map(([key, field, label, note, tone]) => <article key={field + key} className={`stat-card stat-card--${tone}`}><p>{label}</p><strong>{loading && sources.includes(key) ? '…' : metric(key, field)}</strong><span>{message(key) || note}</span></article>)}</div>
+      <div className="insight-grid" aria-live="polite">
+        <article className="panel insight-card"><p>Promedio de atención correctiva</p><strong>{trendMessage || !sources.includes('correctives') ? '—' : formatAverageMinutes(summary?.averageCorrectiveMinutes)}</strong><span>{trendMessage || (sources.includes('correctives') ? `Promedio de ${data('correctives')?.total ?? 0} correctivos completados del período` : 'Tu perfil no tiene acceso a correctivos.')}</span></article>
+        <article className="panel insight-card"><p>Preventivos ejecutados a tiempo</p><strong>{trendMessage || !sources.includes('executions') || summary?.onTimePercent == null ? '—' : `${summary.onTimePercent} %`}</strong><span>{trendMessage || (sources.includes('executions') ? `${summary?.onTimePreventives ?? 0} de ${summary?.evaluatedPreventives ?? 0} ejecuciones evaluables` : 'Tu perfil no tiene acceso a preventivos.')}</span></article>
+      </div>
       <div className="dashboard-columns">
         <article className="panel"><div className="panel__heading"><div><p className="eyebrow">Atención prioritaria</p><h2>Incidentes críticos y altos</h2></div>{hasPermission('incident.read') && <Link to="/incidentes">Ver todos</Link>}</div>
           {message('incidents') ? <p className="dashboard-notice" role="status">{message('incidents')}</p> : data('incidents')?.priorityRows.length ? <ul className="dashboard-list">{data('incidents').priorityRows.map((item) => <li key={item.id}><div><span className={`priority-tag priority-tag--${item.priority}`}>{incidentPriorities[item.priority]} · {incidentStates[item.status]}</span><strong>{item.description}</strong><span>{item.equipmentSnapshot?.code || 'Equipo sin identificar'} · {item.areaName}</span><small>{dashboardDate(item.createdAt)}</small></div></li>)}</ul> : <p className="dashboard-notice">No hay incidentes abiertos de prioridad alta o crítica.</p>}
+          {!message('incidents') && <div className="incident-status-summary" aria-label="Incidentes abiertos por estado">{OPEN_INCIDENT_STATES.map((status) => <div key={status}><span>{incidentStates[status]}</span><strong>{data('incidents')?.statusCounts?.[status] ?? 0}</strong></div>)}</div>}
           <p className="dashboard-footnote">Hasta 5 críticos y 5 altos, los más antiguos primero dentro de cada prioridad. Los demás incidentes siguen incluidos en el conteo.</p>
         </article>
         <article className="panel"><div className="panel__heading"><div><p className="eyebrow">Revisión de programación</p><h2>Planes con fecha vencida</h2></div>{hasPermission('preventive.read') && <Link to="/preventivos">Ver planes</Link>}</div>
