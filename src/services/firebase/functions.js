@@ -24,3 +24,8 @@ export async function updateAppUser(values) {
   const result = await httpsCallable(getFirebaseFunctions(), 'updateAppUser')(values)
   return result.data
 }
+
+export async function resetAppUserPassword(values) {
+  const result = await httpsCallable(getFirebaseFunctions(), 'resetAppUserPassword')(values)
+  return result.data
+}

@@ -27,6 +27,14 @@ export function normalizeUpdateUser(data = {}) {
   return { uid, displayName, roleId, status }
 }
 
+export function normalizePasswordReset(data = {}) {
+  const uid = text(data.uid)
+  const password = typeof data.password === 'string' ? data.password : ''
+  if (!/^[A-Za-z0-9_-]{1,128}$/.test(uid)) fail('Usuario inválido')
+  if (password.length < 10 || password.length > 128) fail('La contraseña temporal debe tener entre 10 y 128 caracteres')
+  return { uid, password }
+}
+
 export function profileForRole(roleId) {
   const role = backendRoles[roleId]
   if (!role) fail('Rol inválido')
@@ -45,4 +53,8 @@ export function assertSafeAdministratorUpdate(actorId, input) {
   if (input.uid === actorId && (input.status !== 'active' || input.roleId !== 'administrator')) {
     fail('No puedes desactivar ni retirar tu propio rol administrador.')
   }
+}
+
+export function assertPasswordResetTarget(actorId, targetId) {
+  if (actorId === targetId) fail('Utiliza el flujo personal para cambiar tu propia contraseña.')
 }

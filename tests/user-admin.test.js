@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
 import { backendRoles } from '../functions/src/roles.js'
-import { assertSafeAdministratorUpdate, evaluateAdministratorAccess, normalizeCreateUser, normalizeUpdateUser, profileForRole } from '../functions/src/user-admin.js'
+import { assertPasswordResetTarget, assertSafeAdministratorUpdate, evaluateAdministratorAccess, normalizeCreateUser, normalizePasswordReset, normalizeUpdateUser, profileForRole } from '../functions/src/user-admin.js'
 import { roleDefinitions } from '../src/config/roles.js'
 
 describe('administración privilegiada de usuarios', () => {
@@ -38,5 +38,14 @@ describe('administración privilegiada de usuarios', () => {
     expect(() => assertSafeAdministratorUpdate('admin-1', { uid: 'admin-1', roleId: 'support', status: 'active' })).toThrow('retirar tu propio rol')
     expect(() => assertSafeAdministratorUpdate('admin-1', { uid: 'admin-1', roleId: 'administrator', status: 'active' })).not.toThrow()
     expect(() => assertSafeAdministratorUpdate('admin-1', { uid: 'user-2', roleId: 'support', status: 'disabled' })).not.toThrow()
+  })
+  it('valida el restablecimiento sin conservar campos inesperados', () => {
+    expect(normalizePasswordReset({ uid: 'user_2', password: 'Temporal-123!', roleId: 'administrator' })).toEqual({ uid: 'user_2', password: 'Temporal-123!' })
+    expect(() => normalizePasswordReset({ uid: 'user_2', password: 'corta' })).toThrow('contraseña temporal')
+    expect(() => normalizePasswordReset({ uid: '../user', password: 'Temporal-123!' })).toThrow('Usuario inválido')
+  })
+  it('obliga al administrador a usar otro flujo para su propia contraseña', () => {
+    expect(() => assertPasswordResetTarget('admin-1', 'admin-1')).toThrow('flujo personal')
+    expect(() => assertPasswordResetTarget('admin-1', 'user-2')).not.toThrow()
   })
 })
