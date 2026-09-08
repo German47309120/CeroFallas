@@ -285,3 +285,68 @@ Resultado obtenido:
 Estado: APROBADA TÉCNICAMENTE.
 
 Limitaciones: la evidencia fotográfica queda pendiente porque Cloud Storage requiere una decisión explícita de facturación. Los modelos reales de montacargas se agregarán después de la visita a planta.
+
+## PRUEBA P-015 — Turnos institucionales automáticos
+
+Fecha: 2026-09-07
+
+Casos automatizados:
+
+1. Turno 2 permanece activo hasta las 05:59 y Turno 1 inicia exactamente a las 06:00.
+2. Turno 1 permanece activo hasta las 17:59 y Turno 2 inicia exactamente a las 18:00.
+3. El cálculo interpreta correctamente fechas UTC utilizando `America/Guatemala`.
+4. Jefaturas y Gerencia reciben turno mixto de 08:00 a 18:00, de lunes a viernes.
+5. El fin de semana se muestra fuera del turno mixto.
+6. Los roles operativos conservan Turno 1/Turno 2 y el checklist propone el turno correspondiente.
+
+Resultado obtenido: 6 de 6 casos aprobados.
+
+Estado: APROBADA TÉCNICAMENTE.
+
+## PRUEBA P-016 — Guía integrada y recuperación global
+
+Fecha: 2026-09-08
+
+Casos automatizados:
+
+1. La guía muestra al Montacarguista el checklist sin conceder formularios de mantenimiento.
+2. Gerencia recibe recorridos de consulta sin enlaces de escritura.
+3. La guía explica arquitectura, ruta de defensa y límites de los datos demostrativos.
+4. El control central permite `/ayuda` a los once roles y amplía la matriz a 231 decisiones.
+5. La aplicación mantiene el contenido normal mientras no exista una excepción.
+6. Una excepción sustituye la pantalla por recuperación segura sin revelar el error interno.
+
+Resultado obtenido: 5 pruebas nuevas de presentación aprobadas; matriz de rutas actualizada y suite integral aprobada con 187/187 pruebas web.
+
+Estado: APROBADA TÉCNICAMENTE.
+
+## PRUEBA P-017 — Resiliencia del dashboard ante índices en construcción
+
+Fecha: 2026-09-08
+
+Caso automatizado y verificación publicada:
+
+1. Una tendencia con error y sin datos muestra un aviso local con estado accesible.
+2. El componente no intenta leer `buckets` cuando la consulta no produjo datos.
+3. El resto del dashboard permanece visible con incidentes, agenda e indicadores disponibles.
+4. Las variantes ascendentes requeridas se publicaron en Firestore; durante su construcción la interfaz conserva el funcionamiento parcial.
+
+Resultado obtenido: suite integral aprobada con 188/188 pruebas web, lint limpio y build de producción exitoso. La URL HTTPS dejó de mostrar la recuperación global y presentó el aviso controlado en la tendencia.
+
+Estado: APROBADA TÉCNICAMENTE. El dashboard HTTPS volvió a presentar 18 correctivos, promedio de 1 h 14 min, 73 % preventivos a tiempo, tendencia y distribución por área sin recuperación global ni aviso temporal.
+
+## PRUEBA P-018 — Aceptación cloud por roles y rutas
+
+Fecha: 2026-09-08
+
+Casos ejecutados contra `cerofallas-pg2-german-2026`:
+
+1. Las once cuentas configuradas iniciaron sesión correctamente.
+2. Cada cuenta leyó su perfil y coincidió en rol, estado activo y permisos con el catálogo del código.
+3. Nueve colecciones permitieron o rechazaron lectura conforme al permiso efectivo de cada rol.
+4. Trece rutas publicadas respondieron HTTP 200.
+5. Cuatro encabezados HTTPS coincidieron con la configuración de seguridad.
+
+Resultado obtenido: 149 verificaciones aprobadas. La prueba fue de solo lectura, no generó registros y no imprimió contraseñas.
+
+Estado: APROBADA TÉCNICAMENTE. Pendientes recorridos institucionales de escritura y evidencia multidispositivo.

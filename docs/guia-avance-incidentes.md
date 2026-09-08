@@ -39,7 +39,7 @@ Una ejecución asociada a un plan calendario reprograma la siguiente fecha de fo
 
 ### Datos demostrativos y tendencia — 2026-09-04
 
-- Con los emuladores activos, `npm run seed:demo` crea o refresca 75 registros coherentes sin multiplicarlos. Todos usan identificadores deterministas y referencias válidas entre equipos y actividades.
+- Con los emuladores activos, `npm run seed:demo` crea o refresca 274 registros coherentes sin multiplicarlos. Todos usan identificadores deterministas y referencias válidas entre equipos y actividades. `npm run verify:demo-data` valida cantidades, cobertura de las siete áreas, relaciones y origen demostrativo del stock.
 - `npm run seed:demo-user` crea una cuenta administrativa exclusivamente local y guarda el acceso aleatorio en `.local/demo-login.txt`, ruta ignorada por Git. Se ejecuta una vez por sesión limpia del emulador.
 - En Inicio se validaron visualmente los conteos, las listas prioritarias, la agenda y la gráfica correctivos vs. preventivos. Cambiar 7/30/90 días vuelve a consultar y reagrupar el período.
 - La gráfica representa volumen de actividad completada. No debe explicarse como cumplimiento, disponibilidad, OEE, MTBF o predicción.
@@ -83,7 +83,13 @@ No se aprovisionaron cuentas nuevas ni se cambiaron roles no administrativos exi
 - Con datos demo de 30 días se observaron 1 h 0 min sobre 8 correctivos, 67 % (4 de 6) preventivos a tiempo y distribución 3/1/2 de incidentes. No explicar estas cifras como OEE, MTBF o disponibilidad.
 - En Usuarios, seleccionar otro perfil para mostrar `Nueva contraseña temporal`. La función exige de 10 a 128 caracteres, vuelve a comprobar rol Administrador y audita únicamente solicitud y resultado.
 - La cuenta propia no ofrece ese control; el cambio personal requerirá un flujo separado. No se ejecutó el restablecimiento sobre cuentas demo para conservar los accesos preparados.
-- Verificación vigente del proyecto: 133/133 pruebas web, 3/3 pruebas predictivas, 129 comprobaciones adicionales de roles, lint limpio y build exitoso. Ejecutar `npm run verify` para repetir lint, ambas suites y compilación.
+- Verificación vigente del proyecto: 139/139 pruebas web, 3/3 pruebas predictivas, 129 comprobaciones adicionales de roles, lint limpio y build exitoso. Ejecutar `npm run verify` para repetir lint, ambas suites y compilación.
+
+### Preflight de publicación — 2026-09-05
+
+- `npm run preflight` revisa archivos, Node 22, build, rewrite SPA, Rules, índices, Functions y rutas sensibles rastreadas por Git. Solo informa; no despliega ni inicia sesión.
+- Resultado actual: 13 controles listos, 1 advertencia informativa y 2 bloqueos intencionales. Faltan `.env.local` y `.firebaserc` porque aún no se ha autorizado ni seleccionado un proyecto Firebase Cloud.
+- `npm run preflight:cloud` debe fallar mientras exista cualquier bloqueo. En la defensa, esto demuestra que la aplicación evita confundir preparación local con publicación real.
 
 ### Recorridos por rol — 2026-09-05
 
@@ -92,6 +98,7 @@ No se aprovisionaron cuentas nuevas ni se cambiaron roles no administrativos exi
 - Jefe de Mantenimiento: dashboard, correctivos, preventivos, incidentes, equipos y stock; registra tiempos sin administrar usuarios.
 - Gerencia: indicadores e históricos de soporte en lectura. No aparecen acciones de registro y la URL de nuevo correctivo redirige al histórico.
 - Durante el recorrido se corrigió un resultado demo vacío de montacargas. Los registros nuevos usan `Apto`, `Requiere atención` o `Fuera de servicio`; el lector conserva una etiqueta explícita para datos legados o desconocidos.
+- Las fechas iniciales se calculan con la zona `America/Guatemala`, no recortando UTC. En la defensa: esto evita que un registro iniciado después de las 18:00 aparezca automáticamente con la fecha del día siguiente.
 
 ### Laboratorio de riesgo predictivo — 2026-09-05
 
