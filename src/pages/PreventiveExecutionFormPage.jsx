@@ -5,8 +5,9 @@ import { listEquipment } from '../services/firebase/equipment.js'
 import { createPreventiveExecution, listPreventivePlans } from '../services/firebase/preventives.js'
 import { buildMaintenanceTimes, formatDuration } from '../utils/duration.js'
 import { complianceStatus } from '../utils/preventive.js'
+import { guatemalaDateInputValue } from '../utils/dateInput.js'
 
-const today = () => new Date().toISOString().slice(0, 10)
+const today = () => guatemalaDateInputValue()
 const initialValues = { planId: '', equipmentId: '', scheduledDate: '', eventDate: today(), startTime: '', endTime: '', endsNextDay: false, activityPerformed: '', observations: '', spareParts: [] }
 
 export default function PreventiveExecutionFormPage() {
@@ -29,7 +30,7 @@ export default function PreventiveExecutionFormPage() {
     const { checked, name, type, value } = event.target
     setValues((current) => {
       const next = { ...current, [name]: type === 'checkbox' ? checked : value }
-      if (name === 'planId') { const plan = plans.find((item) => item.id === value); if (plan) { next.equipmentId = plan.equipmentId; next.scheduledDate = plan.nextDueAt.toDate().toISOString().slice(0, 10) } }
+      if (name === 'planId') { const plan = plans.find((item) => item.id === value); if (plan) { next.equipmentId = plan.equipmentId; next.scheduledDate = guatemalaDateInputValue(plan.nextDueAt.toDate()) } }
       return next
     })
   }

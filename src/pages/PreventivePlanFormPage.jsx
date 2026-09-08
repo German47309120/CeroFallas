@@ -3,6 +3,7 @@ import { Link, Navigate, useNavigate, useParams } from 'react-router-dom'
 import { useAuth } from '../features/auth/AuthContext.jsx'
 import { listEquipment } from '../services/firebase/equipment.js'
 import { createPreventivePlan, getPreventivePlan, updatePreventivePlan } from '../services/firebase/preventives.js'
+import { guatemalaDateInputValue } from '../utils/dateInput.js'
 
 const initialValues = { equipmentId: '', activityName: '', activityDescription: '', frequencyType: 'calendar', frequencyValue: '30', frequencyUnit: 'day', nextDueDate: '', status: 'active', voidReason: '' }
 
@@ -23,7 +24,7 @@ export default function PreventivePlanFormPage() {
     Promise.all([listEquipment(), isEditing ? getPreventivePlan(planId) : Promise.resolve(null)]).then(([items, plan]) => {
       setEquipment(items.filter((item) => item.status === 'active' || item.id === plan?.equipmentId))
       if (isEditing && !plan) { setError('El plan solicitado no existe.'); return }
-      if (plan) setValues({ equipmentId: plan.equipmentId, activityName: plan.activityName, activityDescription: plan.activityDescription ?? '', frequencyType: plan.frequencyType, frequencyValue: plan.frequencyValue?.toString() ?? '', frequencyUnit: plan.frequencyUnit === 'hour' ? 'day' : plan.frequencyUnit ?? 'day', nextDueDate: plan.nextDueAt.toDate().toISOString().slice(0, 10), status: plan.status, voidReason: plan.voidReason ?? '' })
+      if (plan) setValues({ equipmentId: plan.equipmentId, activityName: plan.activityName, activityDescription: plan.activityDescription ?? '', frequencyType: plan.frequencyType, frequencyValue: plan.frequencyValue?.toString() ?? '', frequencyUnit: plan.frequencyUnit === 'hour' ? 'day' : plan.frequencyUnit ?? 'day', nextDueDate: guatemalaDateInputValue(plan.nextDueAt.toDate()), status: plan.status, voidReason: plan.voidReason ?? '' })
     }).catch(() => setError('No fue posible cargar el formulario.')).finally(() => setLoading(false))
   }, [isEditing, permitted, planId, profileLoading])
 

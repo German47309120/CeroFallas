@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
 import { forkliftChecklistTemplate } from '../src/config/forkliftChecklist.js'
-import { evaluateForkliftChecklist, getForkliftResultPresentation } from '../src/utils/forklift.js'
+import { evaluateForkliftChecklist, getForkliftResultPresentation, validateInspectionVoidReason } from '../src/utils/forklift.js'
 
 const answers = (status = 'good') => forkliftChecklistTemplate.sections.flatMap((section) => section.items.map((item) => ({ itemId: item.id, status })))
 
@@ -30,5 +30,11 @@ describe('evaluación de checklist de montacargas', () => {
     expect(getForkliftResultPresentation('attention_required')).toEqual({ label: 'Requiere atención', tone: 'attention_required' })
     expect(getForkliftResultPresentation('fit_with_observations')).toEqual({ label: 'Apto con observaciones', tone: 'attention_required' })
     expect(getForkliftResultPresentation('legacy_unknown')).toEqual({ label: 'Resultado no reconocido', tone: 'unknown' })
+  })
+
+  it('normaliza el motivo de anulación y rechaza explicaciones insuficientes', () => {
+    expect(validateInspectionVoidReason('  Registro duplicado por error  ')).toBe('Registro duplicado por error')
+    expect(() => validateInspectionVoidReason('muy corto')).toThrow('al menos 10 caracteres')
+    expect(() => validateInspectionVoidReason('x'.repeat(501))).toThrow('500 caracteres')
   })
 })

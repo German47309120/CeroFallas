@@ -12,6 +12,13 @@ export function complianceStatus(scheduledDate, startedAt) {
   return startedAt <= scheduledEnd ? 'on_time' : 'late'
 }
 
+export function validatePreventiveVoidReason(reason) {
+  const normalized = typeof reason === 'string' ? reason.trim() : ''
+  if (normalized.length < 10) throw new Error('El motivo de anulación debe tener al menos 10 caracteres.')
+  if (normalized.length > 500) throw new Error('El motivo de anulación no puede exceder 500 caracteres.')
+  return normalized
+}
+
 const dateParts = (dateValue) => {
   const match = /^(\d{4})-(\d{2})-(\d{2})$/.exec(dateValue)
   if (!match) throw new Error('preventive/date-invalid')

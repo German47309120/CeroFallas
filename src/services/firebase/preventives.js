@@ -1,6 +1,6 @@
 import { collection, doc, documentId, getDoc, getDocs, limit, orderBy, query, runTransaction, serverTimestamp, startAfter, Timestamp, writeBatch } from 'firebase/firestore'
 import { getFirebaseFirestore } from './firestore.js'
-import { nextCalendarDueDate } from '../../utils/preventive.js'
+import { nextCalendarDueDate, validatePreventiveVoidReason } from '../../utils/preventive.js'
 
 const cleanParts = (parts) => parts.filter((part) => part.code.trim() || part.description.trim()).map((part) => ({ code: part.code.trim().toUpperCase(), description: part.description.trim(), quantity: Number(part.quantity) }))
 
@@ -107,6 +107,45 @@ export async function createPreventiveExecution(values, times, equipment, plan, 
       transaction.update(planRef, planUpdates)
       const planAuditRef = doc(collection(database, 'audit'))
       transaction.set(planAuditRef, { occurredAt: timestamp, actorId: userId, action: 'reschedule', entityType: 'preventivePlan', entityId: planRef.id, reason: 'Reprogramación automática por ejecución completada', before: planData, after: planUpdates })
+    }
+  })
+}
+
+export async function voidPreventiveExecution(executionId, reason, userId) {
+  const normalizedReason = validatePreventiveVoidReason(reason)
+  if (!executionId || !userId) throw new Error('No fue posible identificar la ejecución o el usuario.')
+  const database = getFirebaseFirestore()
+  const executionRef = doc(database, 'preventiveExecutions', executionId)
+
+  await runTransaction(database, async (transaction) => {
+    const current = await transaction.get(executionRef)
+    if (!current.exists()) throw new Error('preventive-execution/not-found')
+    if (current.data().status !== 'completed') throw new Error('preventive-execution/not-active')
+
+    const planRef = current.data().planId ? doc(database, 'preventivePlans', current.data().planId) : null
+    const plan = planRef ? await transaction.get(planRef) : null
+    const timestamp = serverTimestamp()
+    const auditRef = doc(collection(database, 'audit'))
+    const updates = {
+      status: 'voided', voidReason: normalizedReason, updatedAt: timestamp, updatedBy: userId, auditId: auditRef.id,
+    }
+    transaction.update(executionRef, updates)
+    transaction.set(auditRef, {
+      occurredAt: timestamp, actorId: userId, action: 'void', entityType: 'preventiveExecution',
+      entityId: executionId, reason: normalizedReason, before: current.data(), after: updates,
+    })
+
+    if (plan?.exists() && plan.data().lastExecutionId === executionId && current.data().scheduledAt) {
+      const planUpdates = {
+        nextDueAt: current.data().scheduledAt, lastExecutionId: null, lastExecutedAt: null,
+        updatedAt: timestamp, updatedBy: userId,
+      }
+      const planAuditRef = doc(collection(database, 'audit'))
+      transaction.update(planRef, planUpdates)
+      transaction.set(planAuditRef, {
+        occurredAt: timestamp, actorId: userId, action: 'reschedule_reverted', entityType: 'preventivePlan',
+        entityId: planRef.id, reason: `Ejecución ${executionId} anulada`, before: plan.data(), after: planUpdates,
+      })
     }
   })
 }

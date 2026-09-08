@@ -25,9 +25,11 @@ it('permite cargar más aun cuando no hay coincidencias de búsqueda', () => {
 })
 it('mantiene filas de stock visibles tras error en página adicional', () => {
   state.error = 'Error de consulta'
-  state.records = [{ id: 'part', code: 'PIEZA-PRUEBA', description: 'Prueba', quantity: 0, warehouse: 'A' }]
+  state.records = [{ id: 'part', code: 'PIEZA-PRUEBA', description: 'Prueba', quantity: 0, warehouse: 'A', source: 'demo-local' }]
   const html = render(<ResourceReadPage resource="stock" />)
   expect(html).toContain('PIEZA-PRUEBA')
+  expect(html).toContain('Estas cantidades no provienen de SAP')
+  expect(html).toContain('Demostración local · no proviene de SAP')
   expect(html).toContain('Error de consulta')
   expect(html).not.toContain('Sin coincidencias en lo cargado')
 })

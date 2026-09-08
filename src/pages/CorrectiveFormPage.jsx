@@ -5,8 +5,9 @@ import { useAuth } from '../features/auth/AuthContext.jsx'
 import { createCorrective, getCorrective, updateCorrective } from '../services/firebase/correctives.js'
 import { listEquipment } from '../services/firebase/equipment.js'
 import { buildMaintenanceTimes, formatDuration } from '../utils/duration.js'
+import { guatemalaDateInputValue } from '../utils/dateInput.js'
 
-const today = () => new Date().toISOString().slice(0, 10)
+const today = () => guatemalaDateInputValue()
 const initialValues = { workOrder: '', eventDate: today(), startTime: '', endTime: '', endsNextDay: false, areaId: '', equipmentId: '', reportedSymptom: '', failureType: '', affectedComponent: '', identifiedCause: '', workPerformed: '', spareParts: [], observations: '', status: 'completed', voidReason: '' }
 const timeValue = (timestamp) => timestamp?.toDate().toTimeString().slice(0, 5) ?? ''
 

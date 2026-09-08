@@ -23,3 +23,10 @@ const resultPresentations = {
 export function getForkliftResultPresentation(result) {
   return resultPresentations[result] ?? { label: 'Resultado no reconocido', tone: 'unknown' }
 }
+
+export function validateInspectionVoidReason(reason) {
+  const normalized = typeof reason === 'string' ? reason.trim() : ''
+  if (normalized.length < 10) throw new Error('El motivo de anulación debe tener al menos 10 caracteres.')
+  if (normalized.length > 500) throw new Error('El motivo de anulación no puede exceder 500 caracteres.')
+  return normalized
+}

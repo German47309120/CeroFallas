@@ -1,5 +1,6 @@
 import { collection, doc, getDocs, limit, orderBy, query, serverTimestamp, Timestamp, writeBatch } from 'firebase/firestore'
 import { forkliftChecklistTemplate } from '../../config/forkliftChecklist.js'
+import { validateInspectionVoidReason } from '../../utils/forklift.js'
 import { getFirebaseFirestore } from './firestore.js'
 
 export async function listForkliftInspections() {
@@ -34,5 +35,24 @@ export async function createForkliftInspection(values, equipment, result, userId
   const batch = writeBatch(database)
   batch.set(inspectionRef, inspection)
   batch.set(auditRef, { occurredAt: timestamp, actorId: userId, action: 'create', entityType: 'forkliftInspection', entityId: inspectionRef.id, after: inspection })
+  await batch.commit()
+}
+
+export async function voidForkliftInspection(inspectionId, reason, userId) {
+  const normalizedReason = validateInspectionVoidReason(reason)
+  if (!inspectionId || !userId) throw new Error('No fue posible identificar la inspección o el usuario.')
+  const database = getFirebaseFirestore()
+  const inspectionRef = doc(database, 'forkliftInspections', inspectionId)
+  const auditRef = doc(collection(database, 'audit'))
+  const timestamp = serverTimestamp()
+  const updates = {
+    status: 'voided', voidReason: normalizedReason, updatedAt: timestamp, updatedBy: userId, auditId: auditRef.id,
+  }
+  const batch = writeBatch(database)
+  batch.update(inspectionRef, updates)
+  batch.set(auditRef, {
+    occurredAt: timestamp, actorId: userId, action: 'void', entityType: 'forkliftInspection',
+    entityId: inspectionId, reason: normalizedReason, after: updates,
+  })
   await batch.commit()
 }

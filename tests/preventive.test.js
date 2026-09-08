@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { complianceStatus, frequencyLabel, nextCalendarDueDate } from '../src/utils/preventive.js'
+import { complianceStatus, frequencyLabel, nextCalendarDueDate, validatePreventiveVoidReason } from '../src/utils/preventive.js'
 
 describe('reglas funcionales preventivas', () => {
   it('describe frecuencias estimadas', () => {
@@ -31,5 +31,10 @@ describe('reglas funcionales preventivas', () => {
     expect(() => nextCalendarDueDate('2026-02-30', 1, 'month')).toThrow('preventive/date-invalid')
     expect(() => nextCalendarDueDate('2026-09-04', 0, 'day')).toThrow('preventive/frequency-invalid')
     expect(() => nextCalendarDueDate('2026-09-04', 1, 'year')).toThrow('preventive/unit-invalid')
+  })
+  it('valida y normaliza el motivo de anulación de una ejecución', () => {
+    expect(validatePreventiveVoidReason('  Registro preventivo duplicado  ')).toBe('Registro preventivo duplicado')
+    expect(() => validatePreventiveVoidReason('breve')).toThrow('al menos 10 caracteres')
+    expect(() => validatePreventiveVoidReason('x'.repeat(501))).toThrow('500 caracteres')
   })
 })

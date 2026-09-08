@@ -5,6 +5,8 @@ import { useAuth } from '../features/auth/AuthContext.jsx'
 import { listEquipment } from '../services/firebase/equipment.js'
 import { createForkliftInspection } from '../services/firebase/forkliftInspections.js'
 import { evaluateForkliftChecklist } from '../utils/forklift.js'
+import { guatemalaDateInputValue, guatemalaTimeInputValue } from '../utils/dateInput.js'
+import { getOperationalShiftId } from '../utils/shifts.js'
 
 const now = new Date()
 const initialAnswers = forkliftChecklistTemplate.sections.flatMap((section) => section.items.map((item) => ({ itemId: item.id, status: '', observation: '' })))
@@ -13,7 +15,7 @@ export default function ForkliftInspectionFormPage() {
   const navigate = useNavigate()
   const { hasPermission, profile, profileLoading, user } = useAuth()
   const [equipment, setEquipment] = useState([])
-  const [values, setValues] = useState({ equipmentId: '', inspectionDate: now.toISOString().slice(0, 10), inspectionTime: now.toTimeString().slice(0, 5), shiftId: '', hourMeter: '', answers: initialAnswers, generalObservations: '' })
+  const [values, setValues] = useState({ equipmentId: '', inspectionDate: guatemalaDateInputValue(now), inspectionTime: guatemalaTimeInputValue(now), shiftId: getOperationalShiftId(now), hourMeter: '', answers: initialAnswers, generalObservations: '' })
   const [loading, setLoading] = useState(true)
   const [saving, setSaving] = useState(false)
   const [error, setError] = useState('')

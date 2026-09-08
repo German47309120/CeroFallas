@@ -146,6 +146,12 @@ service cloud.firestore {
       allow delete: if false;
     }
 
+    function preventiveExecutionAudit(data, executionId) {
+      let audit = getAfter(/databases/$(database)/documents/audit/$(data.auditId)).data;
+      return audit.actorId == request.auth.uid && audit.occurredAt == request.time
+        && audit.entityType == 'preventiveExecution' && audit.entityId == executionId;
+    }
+
     match /preventiveExecutions/{executionId} {
       allow read: if hasPermission('preventive.read');
       allow create: if hasPermission('preventive.execute')
@@ -175,13 +181,26 @@ service cloud.firestore {
                 && planAfter(request.resource.data.planId).data.frequencyType in ['hours', 'condition']
                 && request.resource.data.nextDueAtAfterExecution == null))));
       allow update: if hasPermission('preventive.manage') && privilegedMaintainer()
-        && request.resource.data.status in ['completed', 'voided']
+        && resource.data.status == 'completed'
+        && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['status', 'voidReason', 'updatedAt', 'updatedBy', 'auditId'])
+        && request.resource.data.status == 'voided'
+        && request.resource.data.voidReason is string
+        && request.resource.data.voidReason.size() >= 10
+        && request.resource.data.voidReason.size() <= 500
         && request.resource.data.createdAt == resource.data.createdAt
         && request.resource.data.createdBy == resource.data.createdBy
         && request.resource.data.technicianIds == resource.data.technicianIds
         && request.resource.data.updatedBy == request.auth.uid
-        && request.resource.data.updatedAt == request.time;
+        && request.resource.data.updatedAt == request.time
+        && request.resource.data.auditId is string
+        && preventiveExecutionAudit(request.resource.data, executionId);
       allow delete: if false;
+    }
+
+    function inspectionAudit(data, inspectionId) {
+      let audit = getAfter(/databases/$(database)/documents/audit/$(data.auditId)).data;
+      return audit.actorId == request.auth.uid && audit.occurredAt == request.time
+        && audit.entityType == 'forkliftInspection' && audit.entityId == inspectionId;
     }
 
     match /forkliftInspections/{inspectionId} {
@@ -204,10 +223,19 @@ service cloud.firestore {
         && request.resource.data.createdBy == request.auth.uid
         && request.resource.data.createdAt == request.time;
       allow update: if hasPermission('forklift.manage') && privilegedMaintainer()
-        && request.resource.data.status in ['completed', 'voided']
+        && resource.data.status == 'completed'
+        && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['status', 'voidReason', 'updatedAt', 'updatedBy', 'auditId'])
+        && request.resource.data.status == 'voided'
+        && request.resource.data.voidReason is string
+        && request.resource.data.voidReason.size() >= 10
+        && request.resource.data.voidReason.size() <= 500
         && request.resource.data.createdAt == resource.data.createdAt
         && request.resource.data.createdBy == resource.data.createdBy
-        && request.resource.data.operatorId == resource.data.operatorId;
+        && request.resource.data.operatorId == resource.data.operatorId
+        && request.resource.data.updatedBy == request.auth.uid
+        && request.resource.data.updatedAt == request.time
+        && request.resource.data.auditId is string
+        && inspectionAudit(request.resource.data, inspectionId);
       allow delete: if false;
     }
 
