@@ -26,6 +26,7 @@ const firebaseConfig = useFirebaseEmulators ? emulatorConfig : environmentConfig
 
 export const isFirebaseConfigured = useFirebaseEmulators || hasCloudConfig
 export const isDemoMode = import.meta.env.VITE_DEMO_MODE !== 'false' && !useFirebaseEmulators
+export const adminFunctionsEnabled = useFirebaseEmulators || import.meta.env.VITE_ADMIN_FUNCTIONS_ENABLED === 'true'
 
 export function getFirebaseApp() {
   if (!isFirebaseConfigured) {

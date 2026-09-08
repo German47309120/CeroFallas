@@ -5,16 +5,7 @@ import { collection, connectFirestoreEmulator, doc, getDoc, getDocs, getFirestor
 import { connectFunctionsEmulator, getFunctions, httpsCallable } from 'firebase/functions'
 import { roleDefinitions } from '../src/config/roles.js'
 
-const adminAccess = await readFile('.local/demo-login.txt', 'utf8')
-const roleAccess = JSON.parse(await readFile('.local/demo-role-users.json', 'utf8'))
-const adminEmail = adminAccess.match(/^Correo:\s*(.+)$/m)?.[1]?.trim()
-const adminPassword = adminAccess.match(/^Contraseña:\s*(.+)$/m)?.[1]?.trim()
-if (!adminEmail || !adminPassword) throw new Error('El acceso administrativo local no es válido.')
-
-const accounts = [
-  { roleId: 'administrator', email: adminEmail, password: adminPassword },
-  ...Object.values(roleAccess),
-]
+const accounts = JSON.parse(await readFile('.local/project-users.json', 'utf8'))
 
 const checks = [
   ['users', 'users.read'],

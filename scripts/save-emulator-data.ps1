@@ -12,18 +12,38 @@ if (Test-Path -LiteralPath $stagingPath) {
 & node (Join-Path $workspacePath 'node_modules/firebase-tools/lib/bin/firebase.js') emulators:export $stagingPath --project demo-cerofallas --force
 $exportExitCode = $LASTEXITCODE
 
-$candidatePath = if (Test-Path -LiteralPath (Join-Path $stagingPath 'firebase-export-metadata.json')) {
-  $stagingPath
-} else {
-  Get-ChildItem -LiteralPath $workspacePath -Directory -Filter 'firebase-export-*' |
-    Where-Object { $_.LastWriteTime -ge $startedAt -and (Test-Path -LiteralPath (Join-Path $_.FullName 'firebase-export-metadata.json')) } |
-    Sort-Object LastWriteTime -Descending |
-    Select-Object -First 1 -ExpandProperty FullName
+function Test-ExportCandidate([string]$path) {
+  if (-not $path -or -not (Test-Path -LiteralPath $path -PathType Container)) { return $false }
+  $requiredFiles = @(
+    'firebase-export-metadata.json',
+    'auth_export/accounts.json',
+    'auth_export/config.json',
+    'firestore_export/firestore_export.overall_export_metadata',
+    'firestore_export/all_namespaces/all_kinds/all_namespaces_all_kinds.export_metadata',
+    'firestore_export/all_namespaces/all_kinds/output-0'
+  )
+  foreach ($relativePath in $requiredFiles) {
+    $filePath = Join-Path $path $relativePath
+    if (-not (Test-Path -LiteralPath $filePath -PathType Leaf) -or (Get-Item -LiteralPath $filePath).Length -le 0) { return $false }
+  }
+  try {
+    $metadata = Get-Content -LiteralPath (Join-Path $path 'firebase-export-metadata.json') -Raw | ConvertFrom-Json
+    return [bool]($metadata.firestore.path -and $metadata.auth.path)
+  } catch { return $false }
 }
 
-if (-not $candidatePath) { throw "No se encontró una exportación válida. Firebase finalizó con código $exportExitCode." }
+$candidatePaths = @()
+if (Test-Path -LiteralPath $stagingPath) { $candidatePaths += $stagingPath }
+$candidatePaths += Get-ChildItem -LiteralPath $workspacePath -Directory -Filter 'firebase-export-*' |
+  Where-Object { $_.LastWriteTime -ge $startedAt } |
+  Sort-Object LastWriteTime -Descending |
+  Select-Object -ExpandProperty FullName
+$candidatePath = $candidatePaths | Where-Object { Test-ExportCandidate $_ } | Select-Object -First 1
+
+if (-not $candidatePath) { throw "No se encontró una exportación completa. Firebase finalizó con código $exportExitCode. No se reemplazó emulator-data." }
 $resolvedCandidate = (Resolve-Path -LiteralPath $candidatePath).Path
 if (-not $resolvedCandidate.StartsWith($workspacePath + '\')) { throw 'La exportación quedó fuera del proyecto.' }
+if ($exportExitCode -ne 0) { Write-Warning "Firebase devolvió código $exportExitCode, pero se recuperó y validó estructuralmente la exportación completa generada por el emulador." }
 
 $backupPath = $null
 if (Test-Path -LiteralPath $targetPath) {

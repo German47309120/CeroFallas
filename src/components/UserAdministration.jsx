@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { useAuth } from '../features/auth/AuthContext.jsx'
 import { roleDefinitions } from '../config/roles.js'
 import { createAppUser, resetAppUserPassword, updateAppUser } from '../services/firebase/functions.js'
+import { adminFunctionsEnabled } from '../services/firebase/config.js'
 
 const initialCreate = { displayName: '', email: '', password: '', roleId: 'maintenance_technician' }
 const messageFor = (error) => {
@@ -25,6 +26,7 @@ export default function UserAdministration({ records, onSaved }) {
   const [notice, setNotice] = useState('')
   const [error, setError] = useState('')
   if (profile?.roleId !== 'administrator') return <div className="panel"><h2>Administración protegida</h2><p>Tu perfil puede consultar usuarios, pero solamente el Administrador de la aplicación puede crear cuentas o cambiar roles y estados.</p></div>
+  if (!adminFunctionsEnabled) return <div className="panel"><div className="panel__heading"><div><p className="eyebrow">Plan Spark</p><h2>Usuarios en modo consulta</h2></div><span className="status-badge">Functions no desplegadas</span></div><p>Los once accesos iniciales ya están configurados. Crear cuentas, cambiar roles, desactivar usuarios o restablecer contraseñas permanecerá oculto hasta habilitar y probar el backend administrativo en Blaze.</p></div>
 
   const updateCreate = (event) => setCreateValues((current) => ({ ...current, [event.target.name]: event.target.value }))
   const updateEdit = (event) => setEditing((current) => ({ ...current, [event.target.name]: event.target.value }))

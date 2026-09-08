@@ -22,6 +22,8 @@ firebase-debug.*.log
 # Firebase local state
 .firebase/
 emulator-data*/
+firebase-export-*/
+tmp/
 
 # Python
 __pycache__/
