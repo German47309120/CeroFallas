@@ -3,6 +3,8 @@ import { NavLink, Outlet, useLocation, useNavigate } from 'react-router-dom'
 import { navigationGroups } from '../../config/navigation.js'
 import { useAuth } from '../../features/auth/AuthContext.jsx'
 import { canViewNavigation } from '../../config/access.js'
+import RouteAccess from '../../features/auth/RouteAccess.jsx'
+import { getCurrentShift } from '../../utils/shifts.js'
 
 function Sidebar({ environment, open, onClose }) {
   const { hasPermission } = useAuth()
@@ -57,6 +59,7 @@ function Sidebar({ environment, open, onClose }) {
 
 export default function AppShell() {
   const [menuOpen, setMenuOpen] = useState(false)
+  const [currentTime, setCurrentTime] = useState(() => new Date())
   const location = useLocation()
   const navigate = useNavigate()
   const { environment, logout, profile, profileError, user } = useAuth()
@@ -64,6 +67,13 @@ export default function AppShell() {
   useEffect(() => {
     setMenuOpen(false)
   }, [location.pathname])
+
+  useEffect(() => {
+    const timer = window.setInterval(() => setCurrentTime(new Date()), 60_000)
+    return () => window.clearInterval(timer)
+  }, [])
+
+  const currentShift = getCurrentShift(currentTime, profile?.roleId)
 
   async function handleLogout() {
     await logout()
@@ -90,7 +100,7 @@ export default function AppShell() {
             <span className="environment-pill">
               {environment === 'emulator' ? 'Emulador local' : 'Firebase cloud'}
             </span>
-            <span>Turno actual: por configurar</span>
+            <span title={currentShift.schedule}>{currentShift.label}</span>
           </div>
           <NavLink className="profile-link" to="/perfil" aria-label="Abrir perfil">
             <span className="avatar" aria-hidden="true">{profile?.displayName?.slice(0, 2).toUpperCase() || 'CF'}</span>
@@ -108,7 +118,7 @@ export default function AppShell() {
           <div className="demo-banner" role="status">
             {profileError || `Sesión autenticada como ${user?.email}. Persistencia conectada a ${environment === 'emulator' ? 'Firestore local' : 'Firestore cloud'}.`}
           </div>
-          <Outlet />
+          <RouteAccess><Outlet /></RouteAccess>
         </main>
       </div>
     </div>

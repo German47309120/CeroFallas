@@ -1121,6 +1121,8 @@ h2 {
 .dashboard-cutoff span { display: block; margin-top: .4rem; color: var(--color-muted); font-size: .82rem; }
 .dashboard-cutoff label { display: grid; gap: .3rem; color: var(--color-muted); font-size: .78rem; font-weight: 750; }
 .dashboard-cutoff select { min-height: 2.8rem; padding: .6rem .8rem; border: 1px solid var(--color-border); border-radius: .65rem; background: #fff; }
+.dashboard-filters { display: flex; flex: 1 1 28rem; flex-wrap: wrap; justify-content: flex-end; align-items: end; gap: .75rem; }
+.dashboard-filters label { flex: 1 1 10rem; max-width: 15rem; }
 .dashboard-columns { display: grid; gap: 1.2rem; }
 .insight-grid { display: grid; gap: 1rem; }
 .insight-card { border-left: 4px solid var(--color-brand); }
@@ -1172,6 +1174,18 @@ h2 {
 .role-catalog summary span { color: var(--color-muted); font-size: .8rem; }
 .role-catalog ul { display: grid; gap: .5rem; padding: 0 .8rem .8rem 2rem; }
 .role-catalog li span { margin-left: .6rem; color: var(--color-muted); }
+.profile-summary { display: grid; gap: 1rem; align-items: center; }
+.profile-summary__avatar { width: 4rem; height: 4rem; font-size: 1.15rem; }
+.profile-summary h2, .profile-summary p { margin-bottom: .25rem; }
+.profile-summary p { color: var(--color-muted); overflow-wrap: anywhere; }
+.profile-summary dl { display: grid; gap: .75rem; margin: 0; }
+.profile-summary dl > div { padding: .75rem; border-radius: .65rem; background: var(--color-bg); }
+.profile-summary dt { color: var(--color-muted); font-size: .75rem; font-weight: 750; }
+.profile-summary dd { margin: .25rem 0 0; font-weight: 800; }
+.permission-list { display: grid; grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr)); gap: .75rem; padding: 1rem 0 0; list-style: none; }
+.permission-list li { display: grid; gap: .35rem; padding: .85rem; border: 1px solid var(--color-border); border-radius: .65rem; background: var(--color-bg); }
+.permission-list code { color: var(--color-muted); font-size: .72rem; overflow-wrap: anywhere; }
+.profile-help { margin: 1rem 0 0; padding-top: 1rem; border-top: 1px solid var(--color-border); color: var(--color-muted); line-height: 1.55; }
 .user-administration { display: grid; gap: 1.25rem; }
 .user-admin-form { padding: 1rem; border: 1px solid var(--color-border); border-radius: .8rem; background: var(--color-bg); }
 .user-admin-list { display: grid; gap: .55rem; }
@@ -1220,6 +1234,18 @@ h2 {
 .prediction-guardrail span { margin-bottom: .4rem; color: #a9d3d0; font-size: .7rem; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; }
 .prediction-guardrail strong { line-height: 1.5; }
 .prediction-trace { color: var(--color-muted); font-size: .75rem; line-height: 1.5; overflow-wrap: anywhere; }
+.help-hero h1 { max-width: 30ch; }
+.help-actions { display: flex; flex-wrap: wrap; gap: .7rem; }
+.help-grid { display: grid; gap: 1rem; }
+.help-card ol, .help-defense ol { display: grid; gap: .7rem; padding-left: 1.3rem; margin-bottom: 0; color: var(--color-muted); line-height: 1.55; }
+.fatal-error { display: grid; width: min(42rem, calc(100% - 2rem)); min-height: 100vh; align-content: center; justify-items: start; gap: 1rem; margin: 0 auto; padding: 2rem 0; }
+.fatal-error h1, .fatal-error p { margin: 0; }
+.fatal-error p:not(.eyebrow) { max-width: 58ch; color: var(--color-muted); line-height: 1.65; }
+.fatal-error small { max-width: 58ch; color: var(--color-muted); line-height: 1.5; }
+.architecture-steps { display: grid; gap: .8rem; }
+.architecture-steps > div { display: grid; grid-template-columns: 2.25rem minmax(0, 1fr); gap: .15rem .75rem; padding: 1rem; border: 1px solid var(--color-border); border-radius: .75rem; background: var(--color-bg); }
+.architecture-steps span { grid-row: 1 / span 2; display: grid; width: 2.1rem; height: 2.1rem; place-items: center; border-radius: 50%; color: #fff; background: var(--color-brand); font-weight: 900; }
+.architecture-steps p { margin: .25rem 0 0; color: var(--color-muted); font-size: .84rem; line-height: 1.5; }
 @media (min-width: 1200px) {
   .dashboard-columns { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); }
   .insight-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
@@ -1227,9 +1253,13 @@ h2 {
   .area-breakdown { grid-template-columns: minmax(180px, .7fr) minmax(0, 2fr); }
   .prediction-layout { grid-template-columns: minmax(0, 1.25fr) minmax(20rem, .75fr); }
   .prediction-next { grid-template-columns: minmax(0, 1.5fr) minmax(19rem, .8fr); }
+  .help-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .architecture-steps { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }
 @media (min-width: 700px) {
   .prediction-kpis { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .profile-summary { grid-template-columns: auto minmax(14rem, 1fr) minmax(24rem, 2fr); }
+  .profile-summary dl { grid-template-columns: repeat(3, minmax(0, 1fr)); }
 }
 @media (max-width: 800px) {
   .dashboard-page .stats-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }

@@ -1,11 +1,9 @@
 import { lazy, Suspense } from 'react'
 import { Navigate, Route, Routes } from 'react-router-dom'
 import AppShell from '../components/layout/AppShell.jsx'
-import { moduleContent } from '../config/navigation.js'
 import ProtectedRoute from '../features/auth/ProtectedRoute.jsx'
 const DashboardPage = lazy(() => import('../pages/DashboardPage.jsx'))
 const LoginPage = lazy(() => import('../pages/LoginPage.jsx'))
-const ModulePage = lazy(() => import('../pages/ModulePage.jsx'))
 const NotFoundPage = lazy(() => import('../pages/NotFoundPage.jsx'))
 const EquipmentFormPage = lazy(() => import('../pages/EquipmentFormPage.jsx'))
 const EquipmentPage = lazy(() => import('../pages/EquipmentPage.jsx'))
@@ -21,12 +19,7 @@ const IncidentFormPage = lazy(() => import('../pages/IncidentFormPage.jsx'))
 const ResourceReadPage = lazy(() => import('../pages/ResourceReadPage.jsx'))
 const ProfilePage = lazy(() => import('../pages/ProfilePage.jsx'))
 const PredictionPage = lazy(() => import('../pages/PredictionPage.jsx'))
-
-function ModuleRoutes() {
-  return Object.entries(moduleContent).filter(([path]) => !['/equipos', '/correctivos', '/preventivos', '/montacargas', '/incidentes', '/repuestos', '/riesgo', '/admin/usuarios', '/admin/auditoria'].includes(path)).map(([path, content]) => (
-    <Route key={path} path={path} element={<ModulePage {...content} />} />
-  ))
-}
+const HelpPage = lazy(() => import('../pages/HelpPage.jsx'))
 
 export default function App() {
   return (
@@ -34,7 +27,6 @@ export default function App() {
       <Route path="/login" element={<LoginPage />} />
       <Route element={<ProtectedRoute><AppShell /></ProtectedRoute>}>
         <Route index element={<DashboardPage />} />
-        {ModuleRoutes()}
         <Route path="/correctivos" element={<CorrectivesPage />} />
         <Route path="/correctivos/nuevo" element={<CorrectiveFormPage />} />
         <Route path="/correctivos/:correctiveId/editar" element={<CorrectiveFormPage />} />
@@ -54,6 +46,7 @@ export default function App() {
         <Route path="/repuestos" element={<ResourceReadPage resource="stock" />} />
         <Route path="/riesgo" element={<PredictionPage />} />
         <Route path="/perfil" element={<ProfilePage />} />
+        <Route path="/ayuda" element={<HelpPage />} />
       </Route>
       <Route path="/inicio" element={<Navigate to="/" replace />} />
       <Route path="*" element={<NotFoundPage />} />
