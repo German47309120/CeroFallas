@@ -20,18 +20,18 @@ beforeEach(async () => {
     await setDoc(doc(store, 'users', 'reader'), { status: 'active', permissions: ['dashboard.read', 'preventive.read', 'incident.read', 'corrective.read'] })
     await setDoc(doc(store, 'users', 'manager'), { status: 'active', permissions: ['dashboard.read'] })
     for (let n = 1; n <= 7; n++) {
-      await setDoc(doc(store, 'preventivePlans', `past-${n}`), { status: 'active', nextDueAt: stamp(-n * 1000) })
-      await setDoc(doc(store, 'incidents', `critical-${n}`), { status: 'reported', priority: 'critical', createdAt: stamp(-n * 1000) })
+      await setDoc(doc(store, 'preventivePlans', `past-${n}`), { status: 'active', areaId: n === 1 ? 'linea-2' : 'linea-1', nextDueAt: stamp(-n * 1000) })
+      await setDoc(doc(store, 'incidents', `critical-${n}`), { status: 'reported', areaId: n === 1 ? 'linea-2' : 'linea-1', priority: 'critical', createdAt: stamp(-n * 1000) })
     }
     for (const [id, status, offset] of [['at-cutoff', 'active', 0], ['before-end', 'active', 604799999], ['at-end', 'active', 604800000], ['voided', 'voided', -1000], ['paused', 'paused', -2000]]) {
-      await setDoc(doc(store, 'preventivePlans', id), { status, nextDueAt: stamp(offset) })
+      await setDoc(doc(store, 'preventivePlans', id), { status, areaId: 'linea-1', nextDueAt: stamp(offset) })
     }
     for (const [id, status, priority] of [['high', 'in_progress', 'high'], ['medium', 'acknowledged', 'medium'], ['resolved', 'resolved', 'critical'], ['voided', 'voided', 'high']]) {
-      await setDoc(doc(store, 'incidents', id), { status, priority, createdAt: stamp(0) })
+      await setDoc(doc(store, 'incidents', id), { status, areaId: 'linea-1', priority, createdAt: stamp(0) })
     }
     for (const collection of ['correctives', 'preventiveExecutions']) {
-      await setDoc(doc(store, collection, 'completed'), { status: 'completed', startedAt: stamp(-2 * 24 * 60 * 60 * 1000) })
-      await setDoc(doc(store, collection, 'old'), { status: 'completed', startedAt: stamp(-40 * 24 * 60 * 60 * 1000) })
+      await setDoc(doc(store, collection, 'completed'), { status: 'completed', areaId: 'linea-1', startedAt: stamp(-2 * 24 * 60 * 60 * 1000) })
+      await setDoc(doc(store, collection, 'old'), { status: 'completed', areaId: 'linea-2', startedAt: stamp(-40 * 24 * 60 * 60 * 1000) })
       await setDoc(doc(store, collection, 'voided'), { status: 'voided' })
     }
     await setDoc(doc(store, 'correctives', 'completed'), { durationMinutes: 30 }, { merge: true })
@@ -59,7 +59,7 @@ it('cuenta abiertos de todas las prioridades y limita críticos sin incluir resu
 it('calcula resumen del período desde las fuentes autorizadas', async () => {
   const result = await loadDashboardSource('trend', cutoff, { periodDays: 30, activitySources: ['correctives', 'executions'] })
   expect(result.summary).toEqual({ averageCorrectiveMinutes: 30, evaluatedPreventives: 1, onTimePreventives: 1, onTimePercent: 100 })
-  expect(result.areas.rows).toEqual([{ areaId: 'sin-area', name: 'Sin área registrada', total: 1 }])
+  expect(result.areas.rows).toEqual([{ areaId: 'linea-1', name: 'Línea 1', total: 1 }])
 })
 it('excluye anulados en los conteos de ejecuciones y correctivos', async () => {
   expect(await loadDashboardSource('correctives', cutoff)).toEqual({ total: 2 })
@@ -69,6 +69,18 @@ it('limita actividad completada al período sin alterar el estado actual', async
   expect(await loadDashboardSource('correctives', cutoff, { periodDays: 30 })).toEqual({ total: 1 })
   expect(await loadDashboardSource('executions', cutoff, { periodDays: 7 })).toEqual({ total: 1 })
   await expect(loadDashboardSource('correctives', cutoff, { periodDays: 0 })).rejects.toThrow('Período inválido')
+})
+it('aplica el área a agenda, incidentes, conteos y tendencia', async () => {
+  const plans = await loadDashboardSource('plans', cutoff, { areaId: 'linea-2' })
+  expect(plans.overdueCount).toBe(1)
+  expect(plans.overdueRows.map((row) => row.id)).toEqual(['past-1'])
+  const incidents = await loadDashboardSource('incidents', cutoff, { areaId: 'linea-2' })
+  expect(incidents.total).toBe(1)
+  expect(incidents.statusCounts).toEqual({ reported: 1, acknowledged: 0, in_progress: 0 })
+  expect(await loadDashboardSource('correctives', cutoff, { periodDays: 30, areaId: 'linea-1' })).toEqual({ total: 1 })
+  const trend = await loadDashboardSource('trend', cutoff, { periodDays: 30, areaId: 'linea-1', activitySources: ['correctives', 'executions'] })
+  expect(trend.areas.rows).toEqual([{ areaId: 'linea-1', name: 'Línea 1', total: 1 }])
+  await expect(loadDashboardSource('correctives', cutoff, { areaId: 'no-existe' })).rejects.toThrow('Área inválida')
 })
 it('no permite leer fuentes usando solamente dashboard.read', async () => {
   db = env.authenticatedContext('manager').firestore()

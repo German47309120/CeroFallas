@@ -4,7 +4,7 @@ import { MemoryRouter } from 'react-router-dom'
 import { expect, it, vi } from 'vitest'
 let permissions = []
 vi.mock('../src/features/auth/AuthContext.jsx', () => ({ useAuth: () => ({ user: { uid: 'test' }, profile: { displayName: 'Prueba' }, hasPermission: (p) => permissions.includes(p) }) }))
-import DashboardPage from '../src/pages/DashboardPage.jsx'
+import DashboardPage, { ActivityTrend } from '../src/pages/DashboardPage.jsx'
 const render = () => renderToStaticMarkup(<MemoryRouter><DashboardPage /></MemoryRouter>)
 it('muestra solamente accesos autorizados a montacarguistas', () => {
   permissions = ['forklift.inspect']
@@ -27,6 +27,13 @@ it('expone carga y acciones permitidas mientras llegan las consultas', () => {
   expect(html).toContain('Registrar preventivo')
   expect(html).toContain('Consultando registros')
   expect(html).toContain('Período de actividad')
+  expect(html).toContain('Todas las áreas')
   expect(html).toContain('30 días')
   expect(html).not.toContain('<strong>0</strong>')
+})
+it('mantiene visible el dashboard cuando la tendencia falla por un índice', () => {
+  const html = renderToStaticMarkup(<ActivityTrend trend={{ error: 'Índice temporalmente no disponible.' }} message="Índice temporalmente no disponible." />)
+  expect(html).toContain('Índice temporalmente no disponible.')
+  expect(html).toContain('role="status"')
+  expect(html).not.toContain('trend-chart')
 })

@@ -4,6 +4,7 @@ import { useAuth } from '../features/auth/AuthContext.jsx'
 import { loadDashboardSource } from '../services/firebase/dashboard.js'
 import { dashboardDate, dashboardSources, dashboardWindow, OPEN_INCIDENT_STATES } from '../utils/dashboard.js'
 import { incidentPriorities, incidentStates } from '../utils/incidents.js'
+import { areas, getAreaName } from '../config/catalogs.js'
 
 const formatAverageMinutes = (minutes) => Number.isFinite(minutes)
   ? minutes >= 60 ? `${Math.floor(minutes / 60)} h ${minutes % 60} min` : `${minutes} min`
@@ -16,15 +17,25 @@ function PlanList({ rows }) {
   </li>)}</ul>
 }
 
+export function ActivityTrend({ loading = false, trend, message, periodDays = 30 }) {
+  const trendData = trend?.data
+  if (loading || !trendData) return <p className="dashboard-notice" role="status">{message || 'Preparando tendencia…'}</p>
+
+  const buckets = Array.isArray(trendData.buckets) ? trendData.buckets : []
+  const max = Number.isFinite(trendData.max) && trendData.max > 0 ? trendData.max : 1
+  return <div className="trend-chart" role="img" aria-label={`Comparación de mantenimientos en los últimos ${periodDays} días`}>{buckets.map((bucket) => <div className="trend-group" key={bucket.label}><div className="trend-bars"><span className="trend-bar trend-bar--corrective" style={{ height: `${Math.max(bucket.correctives ? 12 : 0, bucket.correctives / max * 100)}%` }} title={`${bucket.correctives} correctivos`}><b>{bucket.correctives || ''}</b></span><span className="trend-bar trend-bar--preventive" style={{ height: `${Math.max(bucket.executions ? 12 : 0, bucket.executions / max * 100)}%` }} title={`${bucket.executions} preventivos`}><b>{bucket.executions || ''}</b></span></div><small>{bucket.label}</small></div>)}</div>
+}
+
 export default function DashboardPage() {
   const { hasPermission, profile, user } = useAuth()
   const [request, setRequest] = useState(() => new Date())
   const [periodDays, setPeriodDays] = useState(30)
+  const [areaId, setAreaId] = useState('')
   const [result, setResult] = useState(null)
   const sources = dashboardSources(hasPermission)
   const sourceKey = sources.join(',')
   const trendEnabled = sources.some((key) => ['correctives', 'executions'].includes(key))
-  const identity = `${user?.uid || ''}:${sourceKey}:${periodDays}`
+  const identity = `${user?.uid || ''}:${sourceKey}:${periodDays}:${areaId}`
   const canRead = hasPermission('dashboard.read')
   // Oculta resultados antiguos al cambiar usuario, permisos o fecha de corte.
   const current = result?.identity === identity && result?.request === request ? result.values : null
@@ -34,17 +45,18 @@ export default function DashboardPage() {
     let alive = true
     const requestedSources = [...sourceKey.split(','), ...(trendEnabled ? ['trend'] : [])]
     Promise.all(requestedSources.map(async (key) => {
-      try { return [key, { data: await loadDashboardSource(key, request, { periodDays, activitySources: sourceKey.split(',') }) }] }
+      try { return [key, { data: await loadDashboardSource(key, request, { periodDays, areaId, activitySources: sourceKey.split(',') }) }] }
       catch { return [key, { error: 'No disponible. Revisa conexión, permisos o índices de Firestore y vuelve a actualizar.' }] }
     })).then((values) => { if (alive) setResult({ identity, request, values: Object.fromEntries(values) }) })
     return () => { alive = false }
-  }, [identity, sourceKey, request, trendEnabled, periodDays])
+  }, [identity, sourceKey, request, trendEnabled, periodDays, areaId])
 
   const data = (key) => current?.[key]?.data
   const message = (key) => !sources.includes(key) ? 'Tu perfil no tiene acceso a esta fuente.' : loading ? 'Consultando registros…' : current?.[key]?.error
   const metric = (key, field) => message(key) ? '—' : data(key)?.[field] ?? '—'
   const trendMessage = !trendEnabled ? 'Tu perfil no tiene acceso a fuentes de actividad.' : loading ? 'Consultando registros…' : current?.trend?.error
   const summary = current?.trend?.data?.summary
+  const areaLabel = areaId ? getAreaName(areaId) : 'Todas las áreas'
   const cards = [
     ['incidents', 'total', 'Incidentes abiertos', 'Reportados, revisados o en atención', 'danger'],
     ['plans', 'overdueCount', 'Planes con fecha vencida', 'Fecha programada anterior al corte', 'warning'],
@@ -64,7 +76,7 @@ export default function DashboardPage() {
       <Link to="/perfil">Mi perfil</Link>
     </div></div>
     {canRead && <>
-      <div className="dashboard-cutoff"><div><strong>Corte: {dashboardDate(request)}</strong><span>Hora de Guatemala · todas las áreas autorizadas por las reglas actuales</span></div><label>Período de actividad<select value={periodDays} disabled={loading} onChange={(event) => setPeriodDays(Number(event.target.value))}><option value="7">7 días</option><option value="30">30 días</option><option value="90">90 días</option></select></label><button disabled={loading} className="button button--secondary" onClick={() => setRequest(new Date())}>{loading ? 'Actualizando…' : 'Actualizar datos'}</button></div>
+      <div className="dashboard-cutoff"><div><strong>Corte: {dashboardDate(request)}</strong><span>Hora de Guatemala · alcance: {areaLabel}</span></div><div className="dashboard-filters"><label>Área<select value={areaId} disabled={loading} onChange={(event) => setAreaId(event.target.value)}><option value="">Todas las áreas</option>{areas.map((area) => <option key={area.id} value={area.id}>{area.name}</option>)}</select></label><label>Período de actividad<select value={periodDays} disabled={loading} onChange={(event) => setPeriodDays(Number(event.target.value))}><option value="7">7 días</option><option value="30">30 días</option><option value="90">90 días</option></select></label><button disabled={loading} className="button button--secondary" onClick={() => setRequest(new Date())}>{loading ? 'Actualizando…' : 'Actualizar datos'}</button></div></div>
       <div className="stats-grid" aria-live="polite">{cards.map(([key, field, label, note, tone]) => <article key={field + key} className={`stat-card stat-card--${tone}`}><p>{label}</p><strong>{loading && sources.includes(key) ? '…' : metric(key, field)}</strong><span>{message(key) || note}</span></article>)}</div>
       <div className="insight-grid" aria-live="polite">
         <article className="panel insight-card"><p>Promedio de atención correctiva</p><strong>{trendMessage || !sources.includes('correctives') ? '—' : formatAverageMinutes(summary?.averageCorrectiveMinutes)}</strong><span>{trendMessage || (sources.includes('correctives') ? `Promedio de ${data('correctives')?.total ?? 0} correctivos completados del período` : 'Tu perfil no tiene acceso a correctivos.')}</span></article>
@@ -86,11 +98,11 @@ export default function DashboardPage() {
         <p className="dashboard-footnote">Se muestran los primeros 5; el indicador cuenta todos los planes activos de la ventana. Frecuencias estimadas pendientes de validación técnica.</p>
       </article>
       {trendEnabled && <article className="panel dashboard-trend"><div className="panel__heading"><div><p className="eyebrow">Tendencia operacional</p><h2>Actividad de mantenimiento</h2></div><div className="trend-legend"><span><i className="trend-key trend-key--corrective" />Correctivos</span><span><i className="trend-key trend-key--preventive" />Preventivos</span></div></div>
-        {loading || !current?.trend ? <p className="dashboard-notice">{current?.trend?.error || 'Preparando tendencia…'}</p> : <div className="trend-chart" role="img" aria-label={`Comparación de mantenimientos en los últimos ${periodDays} días`}>{current.trend.data.buckets.map((bucket) => <div className="trend-group" key={bucket.label}><div className="trend-bars"><span className="trend-bar trend-bar--corrective" style={{ height: `${Math.max(bucket.correctives ? 12 : 0, bucket.correctives / current.trend.data.max * 100)}%` }} title={`${bucket.correctives} correctivos`}><b>{bucket.correctives || ''}</b></span><span className="trend-bar trend-bar--preventive" style={{ height: `${Math.max(bucket.executions ? 12 : 0, bucket.executions / current.trend.data.max * 100)}%` }} title={`${bucket.executions} preventivos`}><b>{bucket.executions || ''}</b></span></div><small>{bucket.label}</small></div>)}</div>}
+        <ActivityTrend loading={loading} trend={current?.trend} message={trendMessage} periodDays={periodDays} />
         {!loading && current?.trend?.data?.areas?.rows.length ? <div className="area-breakdown"><div><p className="eyebrow">Distribución del período</p><h3>Correctivos por área</h3></div><div className="area-bars">{current.trend.data.areas.rows.map((area) => <div className="area-row" key={area.areaId}><span>{area.name}</span><div><i style={{ width: `${area.total / current.trend.data.areas.max * 100}%` }} /></div><strong>{area.total}</strong></div>)}</div></div> : null}
         <p className="dashboard-footnote">Agrupa registros completados por intervalos equivalentes del período. Describe actividad registrada; no representa cumplimiento, disponibilidad, OEE ni MTBF.</p>
       </article>}
-      <aside className="panel dashboard-explainer"><div><p className="eyebrow">Actividad registrada · últimos {periodDays} días</p><h2>{metric('executions', 'total')} preventivos ejecutados</h2><p>{message('executions') || 'Ejecuciones completadas iniciadas dentro del período; no es un porcentaje de cumplimiento.'}</p></div><p>Lectura de registros, sin modificar información. El corte fija la ventana de fechas; las consultas no forman una instantánea transaccional. Los incidentes abiertos no se limitan por antigüedad. MTBF, OEE y datos SAP aún no se presentan.</p></aside>
+      <aside className="panel dashboard-explainer"><div><p className="eyebrow">Actividad registrada · {areaLabel} · últimos {periodDays} días</p><h2>{metric('executions', 'total')} preventivos ejecutados</h2><p>{message('executions') || 'Ejecuciones completadas iniciadas dentro del período; no es un porcentaje de cumplimiento.'}</p></div><p>Lectura de registros, sin modificar información. El filtro de área se aplica a indicadores, agenda, incidentes y tendencia. El corte fija la ventana de fechas; las consultas no forman una instantánea transaccional. MTBF, OEE y datos SAP aún no se presentan.</p></aside>
     </>}
     {!canRead && <div className="panel"><h2>Tu espacio de trabajo</h2><p>Utiliza los accesos anteriores o el menú para realizar las operaciones de tu rol. Los indicadores gerenciales requieren autorización adicional.</p></div>}
   </section>

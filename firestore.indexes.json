@@ -16,6 +16,10 @@
       { "fieldPath": "status", "order": "ASCENDING" },
       { "fieldPath": "startedAt", "order": "ASCENDING" }
     ] },
+    { "collectionGroup": "preventiveExecutions", "queryScope": "COLLECTION", "fields": [
+      { "fieldPath": "status", "order": "ASCENDING" },
+      { "fieldPath": "startedAt", "order": "DESCENDING" }
+    ] },
     { "collectionGroup": "correctives", "queryScope": "COLLECTION", "fields": [
       { "fieldPath": "areaId", "order": "ASCENDING" },
       { "fieldPath": "startedAt", "order": "DESCENDING" }
@@ -46,9 +50,39 @@
       { "fieldPath": "status", "order": "ASCENDING" },
       { "fieldPath": "startedAt", "order": "DESCENDING" }
     ] },
+    { "collectionGroup": "correctives", "queryScope": "COLLECTION", "fields": [
+      { "fieldPath": "status", "order": "ASCENDING" },
+      { "fieldPath": "startedAt", "order": "ASCENDING" }
+    ] },
     { "collectionGroup": "preventivePlans", "queryScope": "COLLECTION", "fields": [
       { "fieldPath": "status", "order": "ASCENDING" },
       { "fieldPath": "nextDueAt", "order": "ASCENDING" }
+    ] },
+    { "collectionGroup": "preventivePlans", "queryScope": "COLLECTION", "fields": [
+      { "fieldPath": "status", "order": "ASCENDING" },
+      { "fieldPath": "areaId", "order": "ASCENDING" },
+      { "fieldPath": "nextDueAt", "order": "ASCENDING" }
+    ] },
+    { "collectionGroup": "preventiveExecutions", "queryScope": "COLLECTION", "fields": [
+      { "fieldPath": "status", "order": "ASCENDING" },
+      { "fieldPath": "areaId", "order": "ASCENDING" },
+      { "fieldPath": "startedAt", "order": "DESCENDING" }
+    ] },
+    { "collectionGroup": "preventiveExecutions", "queryScope": "COLLECTION", "fields": [
+      { "fieldPath": "status", "order": "ASCENDING" },
+      { "fieldPath": "areaId", "order": "ASCENDING" },
+      { "fieldPath": "startedAt", "order": "ASCENDING" }
+    ] },
+    { "collectionGroup": "correctives", "queryScope": "COLLECTION", "fields": [
+      { "fieldPath": "status", "order": "ASCENDING" },
+      { "fieldPath": "areaId", "order": "ASCENDING" },
+      { "fieldPath": "startedAt", "order": "ASCENDING" }
+    ] },
+    { "collectionGroup": "incidents", "queryScope": "COLLECTION", "fields": [
+      { "fieldPath": "status", "order": "ASCENDING" },
+      { "fieldPath": "areaId", "order": "ASCENDING" },
+      { "fieldPath": "priority", "order": "ASCENDING" },
+      { "fieldPath": "createdAt", "order": "ASCENDING" }
     ] },
     { "collectionGroup": "incidents", "queryScope": "COLLECTION", "fields": [
       { "fieldPath": "status", "order": "ASCENDING" },
