@@ -13,7 +13,7 @@ Estados: **Base lista** = definición o implementación local con evidencia; no 
 | 1 | Preparación del entorno | Base lista | React/Vite, Git y emuladores operativos; entorno documentado. |
 | 2 | Requerimientos | Base lista | Requisitos, casos de uso y aceptación documentados; validar datos reales pendientes. |
 | 3 | Modelo de datos | Base lista | Modelo lógico y colecciones operativas; reconciliar diferencias de implementación e integraciones. |
-| 4 | Arquitectura | Base lista | React + Firebase; SAP, BI y predictivo desacoplados; falta validar servicios externos. |
+| 4 | Arquitectura | Base lista avanzada | React + servicio cloud; SAP, BI y predictivo desacoplados. El agente local de stock SQL Server ya está implementado y probado sin credenciales; falta conectividad real. |
 | 5 | Diseño de interfaz | Parcial avanzado | UI responsive y 15 mockups; turno vigente visible según rol y hora Guatemala. Falta aceptación visual institucional y adaptar lo aún conceptual. |
 | 6 | Configuración de Firebase | Base cloud funcional | Proyecto personal enlazado; Firestore Standard en `us-central1`, configuración web, reglas e índices publicados. App Check y revisión final de costos permanecen pendientes. |
 | 7 | Autenticación | Base cloud funcional verificada | Correo/contraseña y once cuentas/perfiles operativos; inicio de sesión cloud comprobado y 231 decisiones de acceso por URL verificadas. Functions administrativas esperan decisión sobre Blaze. |
@@ -23,32 +23,32 @@ Estados: **Base lista** = definición o implementación local con evidencia; no 
 | 11 | Checklist de montacargas | Base funcional local avanzada | 25 puntos, resultado operativo y anulación privilegiada con motivo y auditoría atómica, sin alterar respuestas originales. Aprobación técnica de plantilla y equipos reales pendientes. |
 | 12 | Históricos y filtros | Base funcional local avanzada | Paginación transversal, filtros estructurados y auditoría con acciones, entidades y actores legibles sin perder UID. Búsqueda textual limitada de forma explícita a páginas cargadas; faltan planta/cloud. |
 | 13 | Dashboard | Base funcional local avanzada | Agenda, prioridades, períodos, filtro integral por las siete áreas, tendencia, correctivos por área, promedio de atención, preventivos a tiempo e incidentes por estado; falta aceptación con datos y criterios gerenciales reales. |
-| 14 | Seguridad y roles | Base cloud avanzada | Once perfiles institucionales estables, 149 verificaciones publicadas de autenticación/perfil/lectura/Hosting, 132 decisiones locales de escritura y 231 combinaciones de rol/ruta; backend local para alta, actualización, estado y contraseña temporal. Faltan recorridos de escritura cloud y firma de aceptación institucional. |
-| 15 | Power BI | Pendiente de integración | Obtener modalidad de acceso, consulta/esquema autorizado y conexión segura; licencia de publicación no demuestra acceso de todos los lectores. |
+| 14 | Seguridad y roles | Base cloud verificada | Once perfiles institucionales estables, 149 verificaciones publicadas de autenticación/perfil/lectura/Hosting, cuatro escrituras cloud permitidas con auditoría y cuatro prohibidas rechazadas, 132 decisiones locales de escritura y 231 combinaciones de rol/ruta. Faltan firma de aceptación institucional y backend administrativo cloud. |
+| 15 | Power BI y datos SAP | Preparación avanzada | Agente local de stock SQL Server implementado con consulta de solo lectura, validación, corrida seca y publicación protegida. Falta configurar acceso local, ejecutar contra SAP y definir acceso de lectores al reporte Power BI. |
 | 16 | Publicación en Internet | Base HTTPS publicada | Hosting Spark disponible en `https://cerofallas-pg2-german-2026.web.app`; 13 rutas directas y cuatro encabezados de seguridad respondieron correctamente. Faltan aceptación móvil/roles, dominio personalizado, App Check y Functions si se aprueba Blaze. |
 | 17 | Dataset predictivo | Contrato y demo | Esquema, origen, etiqueta y generador sintético reproducible listos. Histórico real, definición oficial y calidad siguen pendientes. |
 | 18 | Ingeniería de variables | Base demostrativa | Once variables con corte temporal, validación y pruebas; falta confirmar disponibilidad y construirlas con fuentes reales. |
 | 19 | Entrenamiento y comparación | Laboratorio demo | Regresión logística y Random Forest comparados con división temporal y métricas reproducibles; no existen métricas reales ni modelo productivo. |
 | 20 | Integración de predicciones | Interfaz demostrativa segura | Pantalla responsive con comparación, trazabilidad, estado de preparación y advertencia de no uso operativo. Faltan servicio y resultados con histórico real validado. |
 | 21 | Automatización cada 24 horas | Pendiente | Depende de fuentes, modelo, infraestructura y costos autorizados. |
-| 22 | Pruebas generales | En curso avanzado | Suite vigente: 188/188 web y 3/3 predictivas; 11 cuentas, 13 rutas y 149 verificaciones publicadas aprobadas. Se conservan las matrices locales de 142 cuentas, 132 escrituras y 231 rol/ruta. Falta aceptación institucional multidispositivo y de escrituras cloud. |
+| 22 | Pruebas generales | En curso avanzado | Suite vigente: 195/195 web y 3/3 predictivas; 11 cuentas, 13 rutas y 149 verificaciones publicadas aprobadas. Cuatro escrituras cloud con auditoría fueron aceptadas y cuatro intentos sin permiso rechazados; el verificador idempotente confirmó 293 documentos. Falta aceptación institucional multidispositivo. |
 | 23 | Documentación | Base local avanzada | Entrega 2 Word/PDF, documentación técnica y guía de uso integrada y personalizada por permisos. Falta actualizar al cierre definitivo y completar datos académicos. |
 | 24 | Presentación final | Parcial | Guía de defensa incluida en entrega 2; falta ensayo final y evidencia del sistema terminado. |
 
 ### Medición del avance
 
-**Proyecto completo estimado: 77 %. Aplicación web principal: 95 %. Base publicada en Internet: operativa.**
+**Proyecto completo estimado: 78 %. Aplicación web principal: 96 %. Base publicada en Internet: operativa.**
 
 La medición completa incluye aquello que todavía depende de planta, nube y datos predictivos; por eso es menor que el estado de la aplicación local. Se usa una ponderación estable para no aumentar el porcentaje solo por agregar pantallas:
 
 | Bloque | Peso del proyecto | Cumplimiento verificable | Aporte |
 |---|---:|---:|---:|
 | Análisis, diseño y documentación | 15 % | 85 % | 12.75 % |
-| Aplicación web principal | 40 % | 95 % | 38.00 % |
-| Seguridad y pruebas | 15 % | 97 % | 14.55 % |
-| Publicación e integraciones SAP/Power BI | 15 % | 45 % | 6.75 % |
+| Aplicación web principal | 40 % | 96 % | 38.40 % |
+| Seguridad y pruebas | 15 % | 99 % | 14.85 % |
+| Publicación e integraciones SAP/Power BI | 15 % | 50 % | 7.50 % |
 | Predictivo y automatización | 15 % | 30 % | 4.50 % |
-| **Total redondeado** | **100 %** |  | **77 %** |
+| **Total redondeado** | **100 %** |  | **78 %** |
 
 Solo se acredita como cumplimiento aquello implementado o documentado con evidencia. Una base local no equivale a despliegue cloud, datos reales o aceptación de planta. Recalcular con estos mismos pesos al cerrar criterios verificables.
 
@@ -57,7 +57,7 @@ Solo se acredita como cumplimiento aquello implementado o documentado con eviden
 1. Fase 14: validar recorridos de escritura con responsables institucionales en la URL HTTPS publicada y documentar su aceptación.
 2. Fase 10: validar en planta frecuencias y datos de horómetro/condición. No inventar reprogramaciones automáticas para esos dos métodos.
 3. Fase 16: completar aceptación móvil/roles, App Check y decisión de dominio personalizado; Hosting y Firestore ya están publicados.
-4. Integraciones: recibir consulta SQL/esquema, conectividad, catálogo real y definición de acceso a Power BI. Avisar al usuario antes de SAP y no almacenar credenciales en frontend.
+4. Integraciones: completar localmente servidor, base, autenticación y consulta SQL; ejecutar primero validación y corrida seca, y solo después publicar stock. Nunca almacenar credenciales en frontend o Git.
 
 Incidentes se conserva como **módulo adicional transversal**, relacionado con históricos (12), dashboard (13) y seguridad (14). Los encabezados anteriores «Fase 12: incidentes» fueron una desviación de nomenclatura, no el cierre de la fase original de históricos.
 
@@ -71,11 +71,15 @@ Al terminar un avance, actualizar esta tabla y registrar: cambio concreto, prueb
 
 - Se creó y vinculó el proyecto personal `cerofallas-pg2-german-2026` en plan Spark. Cloud Firestore Standard quedó en `us-central1` con protección contra eliminación; reglas e índices compilados se publicaron antes de cargar información.
 - La aplicación web `CeroFallas Web` quedó configurada mediante `.env.local`, ignorado por Git. Un importador cloud con doble confirmación de proyecto creó o reutilizó once identidades y publicó 274 registros demo sin cuenta de servicio ni reglas temporales abiertas.
-- La comprobación cloud inició sesión con el Administrador y leyó 285 documentos —once perfiles más 274 registros— bajo las reglas publicadas. Después, Hosting se publicó en `https://cerofallas-pg2-german-2026.web.app`.
+- La comprobación cloud inicial leyó 285 documentos —once perfiles más 274 registros— bajo las reglas publicadas. Tras la aceptación de escritura controlada, el verificador confirmó 293 documentos: cuatro operaciones técnicas y sus cuatro auditorías se sumaron sin alterar los registros base.
 - Las rutas `/`, login, módulos operativos, recursos, riesgo, administración, perfil y ayuda respondieron HTTP 200 directamente. La respuesta HTTPS incluyó `nosniff`, política de referencia, `SAMEORIGIN` y bloqueo de cámara/micrófono/ubicación.
 - Cloud Functions no se desplegó porque el proyecto continúa en Spark. Alta, actualización y contraseña desde el panel Usuarios requieren Blaze; las cuentas iniciales se prepararon con un procedimiento único local y credenciales fuera de Git.
 - Se corrigió una caída del dashboard publicada: una consulta agregada podía devolver `failed-precondition` mientras Firestore construía un índice y la vista intentaba leer una tendencia sin datos. El gráfico ahora presenta un aviso aislado sin ocultar los demás indicadores; la regresión quedó cubierta por la prueba web 188. Se publicaron las variantes ascendentes necesarias y la consulta de tendencia reutiliza ese orden, evitando depender de un índice descendente durante su construcción. En HTTPS se comprobaron 18 correctivos, promedio de 1 h 14 min, 73 % preventivos a tiempo, barras temporales y distribución por área.
 - `npm run verify:published-roles -- --project=cerofallas-pg2-german-2026` inició sesión con las once cuentas cloud y contrastó su perfil y permisos sobre nueve colecciones. Junto con trece rutas y cuatro encabezados HTTPS completó 149 verificaciones sin realizar escrituras ni imprimir contraseñas.
+- `npm run verify:published-writes` creó una evidencia idempotente en correctivos, preventivos, incidentes y checklist, cada una con auditoría. Cuatro roles no autorizados recibieron `permission-denied`; una segunda ejecución creó cero duplicados y reconoció los ocho documentos existentes.
+- El inicio de sesión unificó correo inválido, cuenta inexistente, cuenta desactivada y contraseña incorrecta bajo el mismo mensaje genérico. La interfaz operativa dejó de mencionar proveedores o nombres internos de base de datos; dos archivos de prueba nuevos fijan esa política.
+- Se implementó el agente local `scripts/sap-stock-sync.mjs`: acepta una sola consulta `SELECT`/`WITH`, bloquea escritura y DDL, normaliza los cuatro campos autorizados, rechaza duplicados y limita cada corrida a 50,000 filas. Su modo de revisión no publica datos y la publicación requiere confirmar exactamente el proyecto cloud.
+- La configuración, consulta real y credenciales SAP permanecen en `.local/`, fuera de Git. Cuatro pruebas nuevas validan consultas permitidas/prohibidas, alias de SAP Business One y calidad del resultado. La suite integral cerró con 195/195 pruebas web, lint limpio y build exitoso.
 
 - Se consolidaron los once accesos de prueba en una sola fuente local, `.local/project-users.json`, y en una guía legible también local. Ambos están ignorados por Git para impedir que las contraseñas entren al repositorio.
 - `german.hernandez@novafiber.com.gt` quedó como Administrador de la aplicación y superusuario. Los otros diez accesos usan el dominio `@novafiber.com.gt` y cubren exactamente los diez roles restantes.
@@ -119,7 +123,7 @@ Al terminar un avance, actualizar esta tabla y registrar: cambio concreto, prueb
 - `/riesgo` dejó de ser una pantalla conceptual: presenta el laboratorio, comparación Regresión logística/Random Forest, avance 2 de 4, datos requeridos y huella reproducible. La advertencia impide confundir la demo sintética con una predicción de planta.
 - Se verificó `/riesgo` en navegador y en viewport 390 × 844; el desbordamiento inicial de la tabla se confinó a su contenedor y la página quedó sin desplazamiento horizontal global.
 - ESLint y sus complementos de React quedaron instalados como dependencias de desarrollo. Se corrigieron dependencias inestables o redundantes sin alterar los recorridos; `npm run lint` termina con 0 errores y 1 advertencia de organización del contexto de autenticación.
-- Cierre vigente: 188/188 pruebas web, 3/3 pruebas predictivas y build de producción exitosos. Las matrices institucionales adicionales completaron 142 verificaciones de cuentas, 132 decisiones de escritura y 231 combinaciones de rol/ruta. `npm run verify` reúne los controles de código en un comando.
+- Cierre vigente: 191/191 pruebas web, 3/3 pruebas predictivas y build de producción exitosos. Las matrices institucionales adicionales completaron 149 verificaciones cloud de cuentas/rutas, cuatro escrituras permitidas, cuatro rechazadas, 132 decisiones locales de escritura y 231 combinaciones de rol/ruta. `npm run verify` reúne los controles de código en un comando.
 - Recorridos reales de interfaz completados con Montacarguista, Operador Airlay, Jefe de Mantenimiento y Gerencia. Se comprobaron menús, acciones visibles, formularios permitidos y denegaciones por URL; no se guardaron operaciones ni se cambiaron contraseñas.
 - El recorrido de Montacargas detectó un resultado vacío causado por el valor demo legado `fit_with_observations`. La interfaz ahora lo presenta de forma compatible y el generador usa los valores oficiales `attention_required`/`fit`; el dataset vigente contiene 274 registros demo y conserva una prueba contra etiquetas vacías.
 - ESLint quedó en 0 errores y 0 advertencias después de estabilizar dependencias de consultas y documentar la excepción de recarga rápida del contexto de autenticación.

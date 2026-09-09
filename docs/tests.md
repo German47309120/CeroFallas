@@ -350,3 +350,50 @@ Casos ejecutados contra `cerofallas-pg2-german-2026`:
 Resultado obtenido: 149 verificaciones aprobadas. La prueba fue de solo lectura, no generó registros y no imprimió contraseñas.
 
 Estado: APROBADA TÉCNICAMENTE. Pendientes recorridos institucionales de escritura y evidencia multidispositivo.
+
+## PRUEBA P-019 — Escrituras controladas en Firebase publicado
+
+Fecha: 2026-09-08
+
+Casos ejecutados:
+
+1. Técnico de Mantenimiento registró un correctivo y una ejecución preventiva no programada.
+2. Digitador reportó un incidente de prioridad baja.
+3. Montacarguista registró un checklist completo y apto.
+4. Cada operación creó su auditoría con el mismo actor.
+5. Gerencia, Digitador, Técnico y Montacarguista intentaron una escritura fuera de su permiso y fueron rechazados.
+6. La segunda ejecución reconoció los ocho documentos existentes y no generó duplicados.
+
+Resultado obtenido: cuatro operaciones y cuatro auditorías creadas, cuatro rechazos correctos, 293 documentos cloud legibles. Los registros se identifican como pruebas técnicas no operativas.
+
+Estado: APROBADA TÉCNICAMENTE.
+
+## PRUEBA P-020 — Privacidad del inicio de sesión y lenguaje de producto
+
+Fecha: 2026-09-08
+
+Casos automatizados:
+
+1. Correo inválido, cuenta inexistente, cuenta desactivada y contraseña incorrecta devuelven exactamente el mismo mensaje al usuario.
+2. Problemas de red y exceso de intentos conservan mensajes operativos útiles sin confirmar la existencia de una cuenta.
+3. Login, cabecera, perfil, dashboard, guía y administración no presentan nombres del proveedor ni de la base de datos.
+
+Resultado obtenido en esta prueba: suite integral aprobada con 191/191 pruebas web dentro del emulador de reglas, lint limpio y build de producción exitoso.
+
+Estado: APROBADA TÉCNICAMENTE.
+
+## PRUEBA P-021 — Contrato seguro de stock SAP / SQL Server
+
+Fecha: 2026-09-08
+
+Casos automatizados:
+
+1. Se aceptan consultas de solo lectura iniciadas por `SELECT` o `WITH`.
+2. Se rechazan instrucciones de escritura, definición, ejecución y `SELECT INTO`.
+3. Se normalizan los cuatro campos autorizados desde alias en español o SAP Business One.
+4. Se rechazan filas incompletas, cantidades inválidas e identificadores duplicados.
+5. El navegador no recibe servidor, usuario, contraseña ni consulta SQL.
+
+Resultado obtenido: 4/4 casos del contrato SAP aprobados. Suite integral vigente: 195/195 pruebas web, lint limpio y build de producción exitoso. No se abrió una conexión real ni se publicaron datos SAP durante esta validación.
+
+Estado: BASE TÉCNICA APROBADA. Pendiente prueba de conectividad y corrida seca con la consulta autorizada.

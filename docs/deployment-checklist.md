@@ -69,7 +69,7 @@ Los comandos concretos del proyecto se definirán después de vincular el alias 
 
 ## 6. Prueba de aceptación publicada
 
-- [ ] Login correcto y mensaje comprensible ante credenciales inválidas o cuenta desactivada.
+- [x] Login correcto y mensaje genérico ante credenciales inválidas, cuenta inexistente o cuenta desactivada.
 - [ ] Navegación distinta para Administrador, Gerencia, rol operativo y reportante.
 - [ ] Alta y actualización administrativa dejan auditoría sin información secreta.
 - [ ] Correctivo, preventivo, checklist e incidente completan su recorrido principal.
@@ -112,3 +112,4 @@ La fase se considerará completa únicamente cuando existan URL HTTPS, proyecto 
 - Las reglas permitieron o rechazaron correctamente lecturas de nueve colecciones según cada perfil.
 - Trece rutas HTTPS respondieron 200 y los cuatro encabezados de seguridad configurados coincidieron con los valores esperados.
 - Resultado reproducible: 149 verificaciones aprobadas mediante `npm run verify:published-roles -- --project=cerofallas-pg2-german-2026`; no se realizaron escrituras ni se mostraron contraseñas.
+- Cuatro operaciones técnicas publicadas generaron sus auditorías y cuatro intentos sin permiso fueron rechazados. Una segunda ejecución confirmó idempotencia: cero duplicados y ocho documentos de evidencia existentes.
