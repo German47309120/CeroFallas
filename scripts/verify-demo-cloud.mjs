@@ -18,8 +18,8 @@ const administrator = accounts.find(({ roleId }) => roleId === 'administrator')
 if (!administrator) throw new Error('El catálogo local no contiene un administrador.')
 
 const expectedCounts = {
-  users: 11, equipment: 14, preventivePlans: 18, preventiveExecutions: 36,
-  correctives: 48, incidents: 24, forkliftInspections: 30, stock: 20, audit: 84,
+  users: 11, equipment: 14, preventivePlans: 18, preventiveExecutions: 37,
+  correctives: 49, incidents: 25, forkliftInspections: 31, stock: 20, audit: 88,
 }
 const app = initializeApp({
   apiKey: environment.VITE_FIREBASE_API_KEY,

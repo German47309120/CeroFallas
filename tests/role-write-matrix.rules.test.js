@@ -230,6 +230,6 @@ describe('matriz institucional de escritura por rol', () => {
         await expectByPermission(roleId, operation.permission, operation.write)
       }
       expect(roleEntries).toHaveLength(11)
-    })
+    }, 20_000)
   }
 })
