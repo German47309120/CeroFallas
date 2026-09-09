@@ -1,21 +1,26 @@
 import { useMemo, useState } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useSearchParams } from 'react-router-dom'
 import { areas, getAreaName } from '../config/catalogs.js'
 import { useAuth } from '../features/auth/AuthContext.jsx'
 import { readCorrectiveHistory } from '../services/firebase/correctiveHistory.js'
 import { usePagedHistory } from '../features/usePagedHistory.js'
-import { formatDuration } from '../utils/duration.js'
+import { durationBetween, formatDuration } from '../utils/duration.js'
 import { validateHistoryFilters } from '../utils/historyFilters.js'
 import EquipmentFilter from '../components/EquipmentFilter.jsx'
 
-const statusNames = { draft: 'Borrador', completed: 'Completado', voided: 'Anulado' }
+const statusNames = { in_progress: 'En curso', draft: 'Borrador', completed: 'Completado', voided: 'Anulado' }
 
 export default function CorrectivesPage() {
+  const [searchParams] = useSearchParams()
+  const requestedStatus = searchParams.get('status')
+  const requestedArea = searchParams.get('areaId')
+  const initialStatus = ['in_progress', 'draft', 'completed', 'voided'].includes(requestedStatus) ? requestedStatus : 'all'
+  const initialArea = areas.some((area) => area.id === requestedArea) ? requestedArea : ''
   const { hasPermission, profileLoading, user } = useAuth()
   const [search, setSearch] = useState('')
-  const [status, setStatus] = useState('all')
-  const [dates, setDates] = useState({ areaId: '', equipmentId: '', fromDate: '', toDate: '' })
-  const [appliedDates, setAppliedDates] = useState({ areaId: '', equipmentId: '', fromDate: '', toDate: '' })
+  const [status, setStatus] = useState(initialStatus)
+  const [dates, setDates] = useState({ areaId: initialArea, equipmentId: '', fromDate: '', toDate: '' })
+  const [appliedDates, setAppliedDates] = useState({ areaId: initialArea, equipmentId: '', fromDate: '', toDate: '' })
   const [filterError, setFilterError] = useState('')
   const canRead = hasPermission('corrective.read')
   const canCreate = hasPermission('corrective.create')
@@ -43,7 +48,11 @@ export default function CorrectivesPage() {
       {filterError && <p className="form-error" role="alert">{filterError}</p>}
       <div className="panel"><p>El estado se consulta en todo el histórico. La búsqueda de texto solo se aplica a los registros cargados; carga más para ampliar las coincidencias.</p><p className="muted-copy">Orden: inicio más reciente. Si otros usuarios editan registros durante la consulta, pulsa Actualizar para renovar la lista.</p></div>
       {error && <p className="form-error" role="alert">{error}</p>}
-      {loading ? <p role="status">Cargando correctivos…</p> : !records.length && !error ? <div className="panel empty-state"><h2>Sin correctivos para este estado</h2><p>Selecciona otro estado o registra un reporte autorizado.</p></div> : filteredRecords.length === 0 && records.length > 0 ? <div className="panel empty-state"><h2>Sin coincidencias en los registros cargados</h2><p>Ajusta la búsqueda o carga más registros si están disponibles.</p></div> : <div className="records-list">{filteredRecords.map((item) => <article className={`panel record-card ${item.status === 'voided' ? 'record-card--voided' : ''}`} key={item.id}><div><p className="eyebrow">{item.equipmentSnapshot?.code}</p><h2>{item.equipmentSnapshot?.name}</h2><p>{item.reportedSymptom}</p></div><dl><div><dt>Fecha</dt><dd>{item.eventDate}</dd></div><div><dt>Área</dt><dd>{getAreaName(item.areaId)}</dd></div><div><dt>Duración</dt><dd>{formatDuration(item.durationMinutes)}</dd></div><div><dt>Estado</dt><dd>{statusNames[item.status] ?? item.status}</dd></div></dl>{canManage ? <Link to={`/correctivos/${item.id}/editar`}>Editar o anular</Link> : null}</article>)}</div>}
+      {loading ? <p role="status">Cargando correctivos…</p> : !records.length && !error ? <div className="panel empty-state"><h2>Sin correctivos para este estado</h2><p>Selecciona otro estado o registra un reporte autorizado.</p></div> : filteredRecords.length === 0 && records.length > 0 ? <div className="panel empty-state"><h2>Sin coincidencias en los registros cargados</h2><p>Ajusta la búsqueda o carga más registros si están disponibles.</p></div> : <div className="records-list">{filteredRecords.map((item) => {
+        const minutes = item.durationMinutes ?? durationBetween(item.startedAt, item.endedAt)
+        const date = item.startedAt?.toDate?.().toLocaleString('es-GT') || item.eventDate || 'Pendiente'
+        return <article className={`panel record-card ${item.status === 'voided' ? 'record-card--voided' : ''}`} key={item.id}><div><p className="eyebrow">{item.equipmentSnapshot?.code}</p><h2>{item.equipmentSnapshot?.name}</h2><p>{item.reportedSymptom}</p></div><dl><div><dt>Fecha</dt><dd>{date}</dd></div><div><dt>Área</dt><dd>{getAreaName(item.areaId)}</dd></div><div><dt>Duración</dt><dd>{formatDuration(minutes)}</dd></div><div><dt>Estado</dt><dd>{statusNames[item.status] ?? item.status}</dd></div></dl>{item.status === 'in_progress' && item.createdBy === user.uid ? <Link className="button button--primary" to={`/correctivos/${item.id}/finalizar`}>Finalizar</Link> : canManage ? <Link to={`/correctivos/${item.id}/editar`}>Editar o anular</Link> : null}</article>
+      })}</div>}
       <div className="panel section-heading-row"><p role="status">{records.length} cargados · {filteredRecords.length} coincidencias{!loading && !error && !hasMore ? ' · Fin de resultados' : ''}</p><div className="heading-actions"><button type="button" className="button button--secondary" onClick={refresh} disabled={loading || loadingMore}>Actualizar</button>{hasMore && <button type="button" className="button button--primary" onClick={loadMore} disabled={loading || loadingMore}>{loadingMore ? 'Cargando…' : 'Cargar más'}</button>}</div></div>
     </section>
   )

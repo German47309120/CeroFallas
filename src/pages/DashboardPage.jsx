@@ -57,11 +57,15 @@ export default function DashboardPage() {
   const trendMessage = !trendEnabled ? 'Tu perfil no tiene acceso a fuentes de actividad.' : loading ? 'Consultando registros…' : current?.trend?.error
   const summary = current?.trend?.data?.summary
   const areaLabel = areaId ? getAreaName(areaId) : 'Todas las áreas'
+  const scoped = (path, parameters = {}) => {
+    const query = new URLSearchParams({ ...parameters, ...(areaId ? { areaId } : {}) })
+    return `${path}?${query.toString()}`
+  }
   const cards = [
-    ['incidents', 'total', 'Incidentes abiertos', 'Reportados, revisados o en atención', 'danger'],
-    ['plans', 'overdueCount', 'Planes con fecha vencida', 'Fecha programada anterior al corte', 'warning'],
-    ['plans', 'upcomingCount', 'Próximos en 7 días', 'Planes activos dentro de la ventana', 'success'],
-    ['correctives', 'total', 'Correctivos completados', `Últimos ${periodDays} días · excluye anulados`, 'brand'],
+    ['incidents', 'total', 'Incidentes abiertos', 'Reportados, revisados o en atención', 'danger', scoped('/incidentes', { status: 'open' })],
+    ['plans', 'overdueCount', 'Planes con fecha vencida', 'Fecha programada anterior al corte', 'warning', scoped('/preventivos', { focus: 'overdue' })],
+    ['plans', 'upcomingCount', 'Próximos en 7 días', 'Planes activos dentro de la ventana', 'success', scoped('/preventivos', { focus: 'upcoming' })],
+    ['correctives', 'total', 'Correctivos completados', `Últimos ${periodDays} días · excluye anulados`, 'brand', scoped('/correctivos', { status: 'completed', periodDays: String(periodDays) })],
   ]
   return <section className="page-stack dashboard-page" aria-busy={loading}>
     <header className="dashboard-hero">
@@ -77,7 +81,7 @@ export default function DashboardPage() {
     </div></div>
     {canRead && <>
       <div className="dashboard-cutoff"><div><strong>Corte: {dashboardDate(request)}</strong><span>Hora de Guatemala · alcance: {areaLabel}</span></div><div className="dashboard-filters"><label>Área<select value={areaId} disabled={loading} onChange={(event) => setAreaId(event.target.value)}><option value="">Todas las áreas</option>{areas.map((area) => <option key={area.id} value={area.id}>{area.name}</option>)}</select></label><label>Período de actividad<select value={periodDays} disabled={loading} onChange={(event) => setPeriodDays(Number(event.target.value))}><option value="7">7 días</option><option value="30">30 días</option><option value="90">90 días</option></select></label><button disabled={loading} className="button button--secondary" onClick={() => setRequest(new Date())}>{loading ? 'Actualizando…' : 'Actualizar datos'}</button></div></div>
-      <div className="stats-grid" aria-live="polite">{cards.map(([key, field, label, note, tone]) => <article key={field + key} className={`stat-card stat-card--${tone}`}><p>{label}</p><strong>{loading && sources.includes(key) ? '…' : metric(key, field)}</strong><span>{message(key) || note}</span></article>)}</div>
+      <div className="stats-grid" aria-live="polite">{cards.map(([key, field, label, note, tone, target]) => sources.includes(key) ? <Link aria-label={`${label}: ver detalles`} key={field + key} className={`stat-card stat-card--${tone} stat-card--link`} to={target}><p>{label}</p><strong>{loading ? '…' : metric(key, field)}</strong><span>{message(key) || note}</span><small>Ver detalles →</small></Link> : <article key={field + key} className={`stat-card stat-card--${tone}`}><p>{label}</p><strong>—</strong><span>{message(key)}</span></article>)}</div>
       <div className="insight-grid" aria-live="polite">
         <article className="panel insight-card"><p>Promedio de atención correctiva</p><strong>{trendMessage || !sources.includes('correctives') ? '—' : formatAverageMinutes(summary?.averageCorrectiveMinutes)}</strong><span>{trendMessage || (sources.includes('correctives') ? `Promedio de ${data('correctives')?.total ?? 0} correctivos completados del período` : 'Tu perfil no tiene acceso a correctivos.')}</span></article>
         <article className="panel insight-card"><p>Preventivos ejecutados a tiempo</p><strong>{trendMessage || !sources.includes('executions') || summary?.onTimePercent == null ? '—' : `${summary.onTimePercent} %`}</strong><span>{trendMessage || (sources.includes('executions') ? `${summary?.onTimePreventives ?? 0} de ${summary?.evaluatedPreventives ?? 0} ejecuciones evaluables` : 'Tu perfil no tiene acceso a preventivos.')}</span></article>

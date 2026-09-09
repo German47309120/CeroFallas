@@ -1,4 +1,4 @@
-import { collection, doc, getDocs, limit, orderBy, query, serverTimestamp, Timestamp, writeBatch } from 'firebase/firestore'
+import { collection, doc, getDocs, limit, orderBy, query, serverTimestamp, writeBatch } from 'firebase/firestore'
 import { forkliftChecklistTemplate } from '../../config/forkliftChecklist.js'
 import { validateInspectionVoidReason } from '../../utils/forklift.js'
 import { getFirebaseFirestore } from './firestore.js'
@@ -19,7 +19,7 @@ export async function createForkliftInspection(values, equipment, result, userId
     equipmentSnapshot: { code: equipment.code, name: equipment.name },
     templateId: forkliftChecklistTemplate.id,
     templateVersion: forkliftChecklistTemplate.version,
-    inspectedAt: Timestamp.fromDate(new Date(`${values.inspectionDate}T${values.inspectionTime}:00`)),
+    inspectedAt: timestamp,
     shiftId: values.shiftId,
     operatorId: userId,
     hourMeter: Number(values.hourMeter),

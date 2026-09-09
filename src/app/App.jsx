@@ -30,6 +30,7 @@ export default function App() {
         <Route path="/correctivos" element={<CorrectivesPage />} />
         <Route path="/correctivos/nuevo" element={<CorrectiveFormPage />} />
         <Route path="/correctivos/:correctiveId/editar" element={<CorrectiveFormPage />} />
+        <Route path="/correctivos/:correctiveId/finalizar" element={<CorrectiveFormPage />} />
         <Route path="/equipos" element={<EquipmentPage />} />
         <Route path="/equipos/nuevo" element={<EquipmentFormPage />} />
         <Route path="/equipos/:equipmentId/editar" element={<EquipmentFormPage />} />
@@ -37,6 +38,7 @@ export default function App() {
         <Route path="/preventivos/nuevo" element={<PreventivePlanFormPage />} />
         <Route path="/preventivos/:planId/editar" element={<PreventivePlanFormPage />} />
         <Route path="/preventivos/ejecutar" element={<PreventiveExecutionFormPage />} />
+        <Route path="/preventivos/ejecuciones/:executionId/finalizar" element={<PreventiveExecutionFormPage />} />
         <Route path="/montacargas" element={<ForkliftInspectionsPage />} />
         <Route path="/montacargas/nuevo" element={<ForkliftInspectionFormPage />} />
         <Route path="/incidentes" element={<IncidentsPage />} />

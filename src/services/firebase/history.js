@@ -3,7 +3,7 @@ import { getFirebaseFirestore } from './firestore.js'
 import { guatemalaDateRange } from '../../utils/historyFilters.js'
 
 const definitions = {
-  incidents: { sort: 'createdAt', states: ['reported', 'acknowledged', 'in_progress', 'resolved', 'voided'] },
+  incidents: { sort: 'createdAt', states: ['open', 'reported', 'acknowledged', 'in_progress', 'resolved', 'voided'], openStates: ['reported', 'acknowledged', 'in_progress'] },
   audit: { sort: 'occurredAt' },
   stock: { sort: 'syncedAt' },
   users: { sort: 'displayName' },
@@ -18,7 +18,7 @@ export async function readHistory(resource, { status = 'all', areaId = '', equip
   if (!definition) throw new Error('Histórico no permitido')
   if (!Number.isInteger(pageSize) || pageSize < 1 || pageSize > 100) throw new Error('Tamaño de página inválido')
   if (status !== 'all' && !definition.states?.includes(status)) throw new Error('Estado inválido')
-  const clauses = status === 'all' ? [] : [where('status', '==', status)]
+  const clauses = status === 'all' ? [] : [definition.openStates && status === 'open' ? where('status', 'in', definition.openStates) : where('status', '==', status)]
   const { from, until } = guatemalaDateRange({ areaId, equipmentId, fromDate, toDate })
   if (areaId) {
     if (resource !== 'incidents') throw new Error('Filtro de área no admitido')

@@ -397,3 +397,20 @@ Casos automatizados:
 Resultado obtenido: 4/4 casos del contrato SAP aprobados. Suite integral vigente: 195/195 pruebas web, lint limpio y build de producción exitoso. No se abrió una conexión real ni se publicaron datos SAP durante esta validación.
 
 Estado: BASE TÉCNICA APROBADA. Pendiente prueba de conectividad y corrida seca con la consulta autorizada.
+
+## PRUEBA P-022 — Tiempo oficial y navegación desde indicadores
+
+Fecha: 2026-09-09
+
+Casos verificados:
+
+1. Correctivos y preventivos se crean en estado en curso con `startedAt` igual al tiempo del servidor.
+2. Solo el mismo técnico puede finalizarlos; `endedAt` vuelve a ser el tiempo del servidor.
+3. Equipo, área, plan, programación, autor y hora inicial permanecen inmutables durante la finalización.
+4. La finalización exige auditoría atómica y rechaza registros completados directamente con fechas digitadas.
+5. El checklist asigna fecha, hora y turno al guardar y las reglas rechazan sustituciones.
+6. Las cuatro tarjetas principales enlazan a incidentes, planes o correctivos con el contexto del indicador y del área.
+
+Resultado obtenido: 196/196 pruebas web aprobadas, incluyendo 33 decisiones focalizadas de reglas; lint limpio y build de producción exitoso.
+
+Estado: APROBADA TÉCNICAMENTE.

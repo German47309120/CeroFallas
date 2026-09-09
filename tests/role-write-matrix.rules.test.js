@@ -100,11 +100,11 @@ const operations = {
   corrective: {
     permission: 'corrective.create',
     write: (database, roleId) => setDoc(doc(database, 'correctives', `corrective-${roleId}`), {
-      eventDate: startedAt, startedAt, endedAt, durationMinutes: 30,
+      eventDate: null, startedAt: serverTimestamp(), endedAt: null, durationMinutes: null, timeSource: 'server',
       areaId: 'linea-1', areaSnapshot: { id: 'linea-1', name: 'Línea 1' },
       equipmentId: 'TEST-01', equipmentSnapshot: { code: 'TEST-01', name: 'Equipo de prueba' },
       technicianIds: [roleId], reportedSymptom: 'Prueba controlada de autorización',
-      workPerformed: 'Registro aislado de aceptación', status: 'completed',
+      workPerformed: '', status: 'in_progress',
       createdAt: serverTimestamp(), createdBy: roleId, updatedAt: serverTimestamp(), updatedBy: roleId,
     }),
   },
@@ -119,16 +119,16 @@ const operations = {
   preventiveExecution: {
     permission: 'preventive.execute',
     write: (database, roleId) => setDoc(doc(database, 'preventiveExecutions', `execution-${roleId}`), {
-      planId: null, equipmentId: 'TEST-01', areaId: 'linea-1', startedAt, endedAt, durationMinutes: 30,
-      technicianIds: [roleId], status: 'completed', complianceStatus: 'unscheduled',
-      rescheduleStatus: 'not_applicable', nextDueAtAfterExecution: null,
+      planId: null, equipmentId: 'TEST-01', areaId: 'linea-1', startedAt: serverTimestamp(), endedAt: null, durationMinutes: null,
+      technicianIds: [roleId], status: 'in_progress', complianceStatus: 'pending', timeSource: 'server',
+      rescheduleStatus: 'pending', nextDueAtAfterExecution: null,
       createdAt: serverTimestamp(), createdBy: roleId, updatedAt: serverTimestamp(), updatedBy: roleId,
     }),
   },
   forkliftInspection: {
     permission: 'forklift.inspect',
     write: (database, roleId) => setDoc(doc(database, 'forkliftInspections', `inspection-${roleId}`), {
-      templateId: 'forklift-daily-v1', templateVersion: 1, shiftId: 'shift-1', hourMeter: 100,
+      templateId: 'forklift-daily-v1', templateVersion: 1, inspectedAt: serverTimestamp(), shiftId: new Date().getUTCHours() >= 12 ? 'shift-1' : 'shift-2', hourMeter: 100,
       answers: Array.from({ length: 25 }, (_, index) => ({ itemId: `item-${index + 1}`, status: 'ok', note: '' })),
       criticalFailures: 0, overallResult: 'fit', status: 'completed', operatorId: roleId,
       equipmentId: 'TEST-01', areaId: 'abastecimiento', createdAt: serverTimestamp(), createdBy: roleId,

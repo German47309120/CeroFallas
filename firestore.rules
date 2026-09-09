@@ -22,6 +22,10 @@ service cloud.firestore {
       return activeUser() && ownProfile().roleId in ['administrator', 'support'];
     }
 
+    function operationalShiftAt(moment) {
+      return moment.hours() >= 12 ? 'shift-1' : 'shift-2';
+    }
+
     function executionAfter(executionId) {
       return getAfter(/databases/$(database)/documents/preventiveExecutions/$(executionId));
     }
@@ -82,27 +86,52 @@ service cloud.firestore {
       allow read: if hasPermission('corrective.read');
       allow create: if hasPermission('corrective.create')
         && request.resource.data.keys().hasAll(['eventDate', 'startedAt', 'endedAt', 'durationMinutes', 'areaId', 'areaSnapshot', 'equipmentId', 'equipmentSnapshot', 'technicianIds', 'reportedSymptom', 'workPerformed', 'status', 'createdAt', 'createdBy', 'updatedAt', 'updatedBy'])
-        && request.resource.data.status in ['draft', 'completed']
-        && request.resource.data.durationMinutes is int
-        && request.resource.data.durationMinutes > 0
-        && request.resource.data.durationMinutes <= 1440
-        && request.resource.data.endedAt > request.resource.data.startedAt
+        && request.resource.data.status == 'in_progress'
+        && request.resource.data.timeSource == 'server'
+        && request.resource.data.eventDate == null
+        && request.resource.data.startedAt == request.time
+        && request.resource.data.endedAt == null
+        && request.resource.data.durationMinutes == null
         && request.resource.data.createdBy == request.auth.uid
         && request.auth.uid in request.resource.data.technicianIds
         && request.resource.data.createdAt == request.time
         && request.resource.data.updatedAt == request.time;
-      allow update: if hasPermission('corrective.manage') && privilegedMaintainer()
-        && request.resource.data.status in ['draft', 'completed', 'voided']
-        && request.resource.data.durationMinutes is int
-        && request.resource.data.durationMinutes > 0
-        && request.resource.data.durationMinutes <= 1440
-        && request.resource.data.endedAt > request.resource.data.startedAt
+      allow update: if (hasPermission('corrective.create')
+        && resource.data.status == 'in_progress'
+        && resource.data.createdBy == request.auth.uid
+        && request.resource.data.status == 'completed'
+        && request.resource.data.timeSource == 'server'
+        && request.resource.data.startedAt == resource.data.startedAt
+        && request.resource.data.endedAt == request.time
+        && request.resource.data.durationMinutes == null
+        && request.resource.data.areaId == resource.data.areaId
+        && request.resource.data.areaSnapshot == resource.data.areaSnapshot
+        && request.resource.data.equipmentId == resource.data.equipmentId
+        && request.resource.data.equipmentSnapshot == resource.data.equipmentSnapshot
+        && request.resource.data.workPerformed is string
+        && request.resource.data.workPerformed.size() > 0
         && request.resource.data.createdAt == resource.data.createdAt
         && request.resource.data.createdBy == resource.data.createdBy
         && request.resource.data.technicianIds == resource.data.technicianIds
+        && request.resource.data.areaId == resource.data.areaId
+        && request.resource.data.equipmentId == resource.data.equipmentId
         && request.resource.data.updatedBy == request.auth.uid
         && request.resource.data.updatedAt == request.time
-        && (request.resource.data.status != 'voided' || (request.resource.data.voidReason is string && request.resource.data.voidReason.size() > 0));
+        && request.resource.data.auditId is string
+        && correctiveCompletionAudit(request.resource.data, correctiveId))
+        || (hasPermission('corrective.manage') && privilegedMaintainer()
+          && resource.data.status in ['draft', 'completed']
+          && request.resource.data.status in ['draft', 'completed', 'voided']
+          && request.resource.data.startedAt == resource.data.startedAt
+          && request.resource.data.endedAt == resource.data.endedAt
+          && request.resource.data.durationMinutes == resource.data.durationMinutes
+          && request.resource.data.eventDate == resource.data.eventDate
+          && request.resource.data.createdAt == resource.data.createdAt
+          && request.resource.data.createdBy == resource.data.createdBy
+          && request.resource.data.technicianIds == resource.data.technicianIds
+          && request.resource.data.updatedBy == request.auth.uid
+          && request.resource.data.updatedAt == request.time
+          && (request.resource.data.status != 'voided' || (request.resource.data.voidReason is string && request.resource.data.voidReason.size() > 0)));
       allow delete: if false;
     }
 
@@ -152,35 +181,65 @@ service cloud.firestore {
         && audit.entityType == 'preventiveExecution' && audit.entityId == executionId;
     }
 
+    function correctiveCompletionAudit(data, correctiveId) {
+      let audit = getAfter(/databases/$(database)/documents/audit/$(data.auditId)).data;
+      return audit.actorId == request.auth.uid && audit.occurredAt == request.time
+        && audit.entityType == 'corrective' && audit.entityId == correctiveId;
+    }
+
     match /preventiveExecutions/{executionId} {
       allow read: if hasPermission('preventive.read');
       allow create: if hasPermission('preventive.execute')
-        && request.resource.data.status == 'completed'
-        && request.resource.data.durationMinutes is int
-        && request.resource.data.durationMinutes > 0
-        && request.resource.data.durationMinutes <= 1440
-        && request.resource.data.endedAt > request.resource.data.startedAt
-        && request.resource.data.complianceStatus in ['on_time', 'late', 'unscheduled']
-        && request.resource.data.rescheduleStatus in ['automatic', 'manual_required', 'not_applicable']
+        && request.resource.data.status == 'in_progress'
+        && request.resource.data.timeSource == 'server'
+        && request.resource.data.startedAt == request.time
+        && request.resource.data.endedAt == null
+        && request.resource.data.durationMinutes == null
+        && request.resource.data.complianceStatus == 'pending'
+        && request.resource.data.rescheduleStatus == 'pending'
+        && request.resource.data.nextDueAtAfterExecution == null
         && request.resource.data.createdBy == request.auth.uid
         && request.auth.uid in request.resource.data.technicianIds
         && request.resource.data.createdAt == request.time
-        && request.resource.data.updatedAt == request.time
-        && ((request.resource.data.planId == null
-            && request.resource.data.rescheduleStatus == 'not_applicable'
-            && request.resource.data.nextDueAtAfterExecution == null)
-          || (request.resource.data.planId is string
-            && planAfter(request.resource.data.planId).data.status == 'active'
-            && planAfter(request.resource.data.planId).data.equipmentId == request.resource.data.equipmentId
-            && ((request.resource.data.rescheduleStatus == 'automatic'
+        && request.resource.data.updatedAt == request.time;
+      allow update: if (hasPermission('preventive.execute')
+          && resource.data.status == 'in_progress'
+          && resource.data.createdBy == request.auth.uid
+          && request.resource.data.status == 'completed'
+          && request.resource.data.timeSource == 'server'
+          && request.resource.data.startedAt == resource.data.startedAt
+          && request.resource.data.endedAt == request.time
+          && request.resource.data.durationMinutes == null
+          && request.resource.data.planId == resource.data.planId
+          && request.resource.data.equipmentId == resource.data.equipmentId
+          && request.resource.data.equipmentSnapshot == resource.data.equipmentSnapshot
+          && request.resource.data.scheduledAt == resource.data.scheduledAt
+          && request.resource.data.activityPerformed is string
+          && request.resource.data.activityPerformed.size() > 0
+          && request.resource.data.complianceStatus in ['on_time', 'late', 'unscheduled']
+          && request.resource.data.rescheduleStatus in ['automatic', 'manual_required', 'not_applicable']
+          && request.resource.data.createdAt == resource.data.createdAt
+          && request.resource.data.createdBy == resource.data.createdBy
+          && request.resource.data.technicianIds == resource.data.technicianIds
+          && request.resource.data.updatedBy == request.auth.uid
+          && request.resource.data.updatedAt == request.time
+          && request.resource.data.auditId is string
+          && preventiveExecutionAudit(request.resource.data, executionId)
+          && ((request.resource.data.planId == null
+              && request.resource.data.rescheduleStatus == 'not_applicable'
+              && request.resource.data.nextDueAtAfterExecution == null)
+            || (request.resource.data.planId is string
+              && planAfter(request.resource.data.planId).data.status == 'active'
+              && planAfter(request.resource.data.planId).data.equipmentId == request.resource.data.equipmentId
+              && ((request.resource.data.rescheduleStatus == 'automatic'
                 && planAfter(request.resource.data.planId).data.frequencyType == 'calendar'
                 && request.resource.data.nextDueAtAfterExecution is timestamp
                 && planAfter(request.resource.data.planId).data.lastExecutionId == executionId
                 && planAfter(request.resource.data.planId).data.nextDueAt == request.resource.data.nextDueAtAfterExecution)
               || (request.resource.data.rescheduleStatus == 'manual_required'
                 && planAfter(request.resource.data.planId).data.frequencyType in ['hours', 'condition']
-                && request.resource.data.nextDueAtAfterExecution == null))));
-      allow update: if hasPermission('preventive.manage') && privilegedMaintainer()
+                && request.resource.data.nextDueAtAfterExecution == null)))))
+        || (hasPermission('preventive.manage') && privilegedMaintainer()
         && resource.data.status == 'completed'
         && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['status', 'voidReason', 'updatedAt', 'updatedBy', 'auditId'])
         && request.resource.data.status == 'voided'
@@ -193,7 +252,7 @@ service cloud.firestore {
         && request.resource.data.updatedBy == request.auth.uid
         && request.resource.data.updatedAt == request.time
         && request.resource.data.auditId is string
-        && preventiveExecutionAudit(request.resource.data, executionId);
+        && preventiveExecutionAudit(request.resource.data, executionId));
       allow delete: if false;
     }
 
@@ -221,6 +280,8 @@ service cloud.firestore {
         && request.resource.data.status == 'completed'
         && request.resource.data.operatorId == request.auth.uid
         && request.resource.data.createdBy == request.auth.uid
+        && request.resource.data.inspectedAt == request.time
+        && request.resource.data.shiftId == operationalShiftAt(request.time)
         && request.resource.data.createdAt == request.time;
       allow update: if hasPermission('forklift.manage') && privilegedMaintainer()
         && resource.data.status == 'completed'

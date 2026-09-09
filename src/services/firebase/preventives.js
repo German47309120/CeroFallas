@@ -31,8 +31,73 @@ export async function getPreventivePlan(planId) {
   return snapshot.exists() ? { id: snapshot.id, ...snapshot.data() } : null
 }
 
+export async function getPreventiveExecution(executionId) {
+  const snapshot = await getDoc(doc(getFirebaseFirestore(), 'preventiveExecutions', executionId))
+  return snapshot.exists() ? { id: snapshot.id, ...snapshot.data() } : null
+}
+
+export async function startPreventiveExecution(values, equipment, plan, userId) {
+  const database = getFirebaseFirestore()
+  const executionRef = doc(collection(database, 'preventiveExecutions'))
+  const auditRef = doc(collection(database, 'audit'))
+  const timestamp = serverTimestamp()
+  const execution = {
+    planId: plan?.id ?? null, equipmentId: equipment.id,
+    areaId: equipment.areaId, equipmentSnapshot: { code: equipment.code, name: equipment.name },
+    scheduledAt: plan?.nextDueAt ?? null, startedAt: timestamp, endedAt: null, durationMinutes: null,
+    technicianIds: [userId], activityPerformed: '', spareParts: [], observations: null,
+    complianceStatus: 'pending', rescheduleStatus: 'pending', nextDueAtAfterExecution: null,
+    status: 'in_progress', timeSource: 'server', createdAt: timestamp, createdBy: userId, updatedAt: timestamp, updatedBy: userId,
+  }
+  const batch = writeBatch(database)
+  batch.set(executionRef, execution)
+  batch.set(auditRef, { occurredAt: timestamp, actorId: userId, action: 'start', entityType: 'preventiveExecution', entityId: executionRef.id, after: execution })
+  await batch.commit()
+  return executionRef.id
+}
+
+export async function completePreventiveExecution(executionId, values, userId) {
+  const database = getFirebaseFirestore()
+  const executionRef = doc(database, 'preventiveExecutions', executionId)
+  await runTransaction(database, async (transaction) => {
+    const current = await transaction.get(executionRef)
+    if (!current.exists() || current.data().status !== 'in_progress') throw new Error('preventive-execution/not-in-progress')
+    if (current.data().createdBy !== userId) throw new Error('permission-denied')
+    const planRef = current.data().planId ? doc(database, 'preventivePlans', current.data().planId) : null
+    const plan = planRef ? await transaction.get(planRef) : null
+    const planData = plan?.data() ?? null
+    if (planData && planData.status !== 'active') throw new Error('preventive-plan/not-available')
+    const startedDate = current.data().startedAt.toDate()
+    const eventDate = startedDate.toLocaleDateString('en-CA', { timeZone: 'America/Guatemala' })
+    const automatic = planData?.frequencyType === 'calendar'
+    const nextDate = automatic ? nextCalendarDueDate(eventDate, planData.frequencyValue, planData.frequencyUnit) : null
+    const nextDueAt = nextDate ? Timestamp.fromDate(new Date(`${nextDate}T12:00:00`)) : null
+    const compliance = current.data().scheduledAt
+      ? (startedDate <= new Date(`${current.data().scheduledAt.toDate().toLocaleDateString('en-CA', { timeZone: 'America/Guatemala' })}T23:59:59`) ? 'on_time' : 'late')
+      : 'unscheduled'
+    const rescheduleStatus = !planData ? 'not_applicable' : automatic ? 'automatic' : 'manual_required'
+    const timestamp = serverTimestamp()
+    const auditRef = doc(collection(database, 'audit'))
+    const updates = {
+      endedAt: timestamp, durationMinutes: null, activityPerformed: values.activityPerformed.trim(),
+      spareParts: cleanParts(values.spareParts), observations: values.observations.trim() || null,
+      complianceStatus: compliance, rescheduleStatus, nextDueAtAfterExecution: nextDueAt,
+      status: 'completed', timeSource: 'server', updatedAt: timestamp, updatedBy: userId, auditId: auditRef.id,
+    }
+    transaction.update(executionRef, updates)
+    transaction.set(auditRef, { occurredAt: timestamp, actorId: userId, action: 'complete', entityType: 'preventiveExecution', entityId: executionId, before: current.data(), after: updates })
+    if (automatic) {
+      const planUpdates = { nextDueAt, lastExecutedAt: current.data().startedAt, lastExecutionId: executionId, updatedAt: timestamp, updatedBy: userId }
+      transaction.update(planRef, planUpdates)
+      const planAuditRef = doc(collection(database, 'audit'))
+      transaction.set(planAuditRef, { occurredAt: timestamp, actorId: userId, action: 'reschedule', entityType: 'preventivePlan', entityId: planRef.id, reason: 'Reprogramación automática por ejecución completada', before: planData, after: planUpdates })
+    }
+  })
+}
+
 const planFields = (values, equipment) => ({
   equipmentId: equipment.id,
+  areaId: equipment.areaId,
   equipmentSnapshot: { code: equipment.code, name: equipment.name },
   activityName: values.activityName.trim(),
   activityDescription: values.activityDescription.trim() || null,

@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useSearchParams } from 'react-router-dom'
 import { useAuth } from '../features/auth/AuthContext.jsx'
 import { updateIncident } from '../services/firebase/incidents.js'
 import { readIncidentHistory } from '../services/firebase/history.js'
@@ -11,12 +11,17 @@ import { validateHistoryFilters } from '../utils/historyFilters.js'
 import EquipmentFilter from '../components/EquipmentFilter.jsx'
 
 export default function IncidentsPage() {
+  const [searchParams] = useSearchParams()
+  const requestedStatus = searchParams.get('status')
+  const requestedArea = searchParams.get('areaId')
+  const initialStatus = ['open', ...Object.keys(incidentStates)].includes(requestedStatus) ? requestedStatus : 'all'
+  const initialArea = areas.some((area) => area.id === requestedArea) ? requestedArea : ''
   const { user, hasPermission } = useAuth()
   const [error, setError] = useState('')
-  const [filter, setFilter] = useState('all')
+  const [filter, setFilter] = useState(initialStatus)
   const [search, setSearch] = useState('')
-  const [dates, setDates] = useState({ areaId: '', equipmentId: '', fromDate: '', toDate: '' })
-  const [appliedDates, setAppliedDates] = useState({ areaId: '', equipmentId: '', fromDate: '', toDate: '' })
+  const [dates, setDates] = useState({ areaId: initialArea, equipmentId: '', fromDate: '', toDate: '' })
+  const [appliedDates, setAppliedDates] = useState({ areaId: initialArea, equipmentId: '', fromDate: '', toDate: '' })
   const [filterError, setFilterError] = useState('')
   const [editing, setEditing] = useState(null)
   const [changes, setChanges] = useState({ status: 'reported', followUp: '', linkedCorrectiveId: '' })
@@ -33,7 +38,7 @@ export default function IncidentsPage() {
   if (!canRead) return <section className="panel"><h1>Incidentes</h1><p>Tu perfil no permite consultar reportes.</p>{hasPermission('incident.create') && <Link to="/incidentes/nuevo">Reportar incidente</Link>}</section>
   const filtered = records.map((r) => ({ ...r, areaName: getAreaName(r.areaId) })).filter((r) => `${r.description} ${r.areaName} ${r.equipmentSnapshot?.name || ''} ${r.equipmentSnapshot?.code || ''}`.toLowerCase().includes(search.trim().toLowerCase()))
   return <section className="page-stack"><div className="page-heading"><div><p className="eyebrow">Reporte gerencial</p><h1>Incidentes</h1><p>Histórico paginado, más recientes primero. El estado se filtra en todo el histórico; el texto solo busca en registros cargados.</p></div>{hasPermission('incident.create') && <Link className="button button--primary" to="/incidentes/nuevo">Reportar incidente</Link>}</div>
-    <div className="filter-bar filter-bar--history"><label>Buscar en registros cargados<input value={search} onChange={(e) => setSearch(e.target.value)} /></label><label>Estado<select disabled={saving} value={filter} onChange={(e) => { setFilter(e.target.value); setEditing(null); setError('') }}><option value="all">Todos</option>{Object.entries(incidentStates).map(([value, label]) => <option key={value} value={value}>{label}</option>)}</select></label><label>Área<select value={dates.areaId} onChange={(e) => setDates({ ...dates, areaId: e.target.value, equipmentId: '' })}><option value="">Todas</option>{areas.map((area) => <option value={area.id} key={area.id}>{area.name}</option>)}</select></label><EquipmentFilter allowed={hasPermission('equipment.read')} value={dates.equipmentId} onChange={(equipmentId) => setDates({ ...dates, equipmentId, areaId: '' })} /><label>Desde<input type="date" value={dates.fromDate} onChange={(e) => setDates({ ...dates, fromDate: e.target.value })} /></label><label>Hasta<input type="date" value={dates.toDate} onChange={(e) => setDates({ ...dates, toDate: e.target.value })} /></label><div className="heading-actions"><button type="button" className="button button--primary" onClick={() => { const nextError = validateHistoryFilters(dates); setFilterError(nextError); if (!nextError) { setAppliedDates(dates); setEditing(null) } }}>Aplicar filtros</button><button type="button" className="button button--secondary" onClick={() => { const empty = { areaId: '', equipmentId: '', fromDate: '', toDate: '' }; setSearch(''); setFilter('all'); setDates(empty); setAppliedDates(empty); setFilterError(''); setEditing(null) }}>Limpiar</button></div></div>
+    <div className="filter-bar filter-bar--history"><label>Buscar en registros cargados<input value={search} onChange={(e) => setSearch(e.target.value)} /></label><label>Estado<select disabled={saving} value={filter} onChange={(e) => { setFilter(e.target.value); setEditing(null); setError('') }}><option value="all">Todos</option><option value="open">Abiertos</option>{Object.entries(incidentStates).map(([value, label]) => <option key={value} value={value}>{label}</option>)}</select></label><label>Área<select value={dates.areaId} onChange={(e) => setDates({ ...dates, areaId: e.target.value, equipmentId: '' })}><option value="">Todas</option>{areas.map((area) => <option value={area.id} key={area.id}>{area.name}</option>)}</select></label><EquipmentFilter allowed={hasPermission('equipment.read')} value={dates.equipmentId} onChange={(equipmentId) => setDates({ ...dates, equipmentId, areaId: '' })} /><label>Desde<input type="date" value={dates.fromDate} onChange={(e) => setDates({ ...dates, fromDate: e.target.value })} /></label><label>Hasta<input type="date" value={dates.toDate} onChange={(e) => setDates({ ...dates, toDate: e.target.value })} /></label><div className="heading-actions"><button type="button" className="button button--primary" onClick={() => { const nextError = validateHistoryFilters(dates); setFilterError(nextError); if (!nextError) { setAppliedDates(dates); setEditing(null) } }}>Aplicar filtros</button><button type="button" className="button button--secondary" onClick={() => { const empty = { areaId: '', equipmentId: '', fromDate: '', toDate: '' }; setSearch(''); setFilter('all'); setDates(empty); setAppliedDates(empty); setFilterError(''); setEditing(null) }}>Limpiar</button></div></div>
     {filterError && <p role="alert" className="form-error">{filterError}</p>}
     {history.error && <p role="alert" className="form-error">{history.error}</p>}
     {error && <p role="alert" className="form-error">{error}</p>}

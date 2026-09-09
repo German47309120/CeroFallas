@@ -13,8 +13,17 @@ export function buildMaintenanceTimes(eventDate, startTime, endTime, endsNextDay
 }
 
 export function formatDuration(minutes) {
+  if (!Number.isFinite(minutes)) return 'En curso'
   const hours = Math.floor(minutes / 60)
   const remainingMinutes = minutes % 60
   if (!hours) return `${remainingMinutes} min`
   return `${hours} h ${remainingMinutes ? `${remainingMinutes} min` : ''}`.trim()
+}
+
+export function durationBetween(startedAt, endedAt) {
+  const start = startedAt?.toDate ? startedAt.toDate() : startedAt instanceof Date ? startedAt : null
+  const end = endedAt?.toDate ? endedAt.toDate() : endedAt instanceof Date ? endedAt : null
+  if (!start || !end) return null
+  const minutes = Math.max(1, Math.round((end.getTime() - start.getTime()) / 60000))
+  return Number.isFinite(minutes) ? minutes : null
 }

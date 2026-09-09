@@ -37,3 +37,11 @@ it('mantiene visible el dashboard cuando la tendencia falla por un índice', () 
   expect(html).toContain('role="status"')
   expect(html).not.toContain('trend-chart')
 })
+it('convierte los indicadores autorizados en accesos al detalle filtrado', () => {
+  permissions = ['dashboard.read', 'incident.read', 'corrective.read', 'preventive.read']
+  const html = render()
+  expect(html).toContain('href="/incidentes?status=open"')
+  expect(html).toContain('href="/preventivos?focus=overdue"')
+  expect(html).toContain('href="/preventivos?focus=upcoming"')
+  expect(html).toContain('href="/correctivos?status=completed&amp;periodDays=30"')
+})

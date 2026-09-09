@@ -1,18 +1,23 @@
 import { useState } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useSearchParams } from 'react-router-dom'
 import { useAuth } from '../features/auth/AuthContext.jsx'
 import { resourceReaders } from '../services/firebase/history.js'
 import { usePagedHistory } from '../features/usePagedHistory.js'
 import HistoryControls from '../components/HistoryControls.jsx'
-import { formatDuration } from '../utils/duration.js'
+import { durationBetween, formatDuration } from '../utils/duration.js'
 import { frequencyLabel } from '../utils/preventive.js'
 import { voidPreventiveExecution } from '../services/firebase/preventives.js'
 
 const planStatus = { active: 'Activo', paused: 'Pausado', completed: 'Completado', voided: 'Anulado' }
-const complianceNames = { on_time: 'A tiempo', late: 'Tardío', unscheduled: 'No programado' }
+const complianceNames = { pending: 'En curso', on_time: 'A tiempo', late: 'Tardío', unscheduled: 'No programado' }
 const rescheduleNames = { automatic: 'Plan reprogramado', manual_required: 'Reprogramación manual pendiente', not_applicable: 'Sin plan asociado' }
 
 export default function PreventivesPage() {
+  const [searchParams] = useSearchParams()
+  const focus = ['overdue', 'upcoming'].includes(searchParams.get('focus')) ? searchParams.get('focus') : ''
+  const requestedArea = searchParams.get('areaId')
+  const now = new Date()
+  const windowEnd = new Date(now.getTime() + 7 * 24 * 60 * 60 * 1000)
   const { hasPermission, profileLoading, user } = useAuth()
   const canRead = hasPermission('preventive.read')
   const canManage = hasPermission('preventive.manage')
@@ -24,6 +29,12 @@ export default function PreventivesPage() {
   const planHistory = usePagedHistory({ enabled: canRead && !profileLoading, scope: user?.uid, status: 'all', readPage: resourceReaders.preventivePlans })
   const executionHistory = usePagedHistory({ enabled: canRead && !profileLoading, scope: user?.uid, status: 'all', readPage: resourceReaders.preventiveExecutions })
   const plans = planHistory.records
+  const focusedPlans = plans.filter((plan) => {
+    if (requestedArea && plan.areaId !== requestedArea) return false
+    if (!focus) return true
+    const due = plan.nextDueAt?.toDate?.()
+    return focus === 'overdue' ? due < now : due >= now && due < windowEnd
+  })
   const executions = executionHistory.records
   const loading = planHistory.loading || executionHistory.loading
   const error = planHistory.error || executionHistory.error
@@ -51,8 +62,8 @@ export default function PreventivesPage() {
     <div className="page-heading"><div><p className="eyebrow">Mantenimiento planificado</p><h1 id="preventives-title">Preventivos</h1><p>Programa actividades y registra su ejecución sin ocultar que las frecuencias iniciales son estimadas.</p></div><div className="heading-actions">{hasPermission('preventive.execute') ? <Link className="button button--secondary" to="/preventivos/ejecutar">Registrar ejecución</Link> : null}{hasPermission('preventive.plan') ? <Link className="button button--primary" to="/preventivos/nuevo">Nuevo plan</Link> : null}</div></div>
     {error ? <p className="form-error" role="alert">{error}</p> : null}
     {actionError ? <p className="form-error" role="alert">{actionError}</p> : null}
-    <div className="panel"><div className="panel__heading"><div><p className="eyebrow">Programación</p><h2>Planes preventivos</h2></div></div>{plans.length === 0 && !planHistory.error ? <div className="empty-state empty-state--compact"><p>No hay planes registrados.</p></div> : <div className="records-list records-list--inside">{plans.map((plan) => <article className="record-row" key={plan.id}><div><strong>{plan.activityName}</strong><span>{plan.equipmentSnapshot.code} — {plan.equipmentSnapshot.name}</span></div><div><span>{frequencyLabel(plan.frequencyType, plan.frequencyValue, plan.frequencyUnit)}</span><small>Próximo: {plan.nextDueAt.toDate().toLocaleDateString('es-GT')}</small></div><span className="status-badge">{planStatus[plan.status]}</span>{hasPermission('preventive.manage') ? <Link to={`/preventivos/${plan.id}/editar`}>Editar</Link> : null}</article>)}</div>}<HistoryControls history={planHistory} label="Planes preventivos" /></div>
-    <div className="panel"><div className="panel__heading"><div><p className="eyebrow">Historial</p><h2>Ejecuciones</h2></div></div>{executions.length === 0 && !executionHistory.error ? <div className="empty-state empty-state--compact"><p>No hay ejecuciones registradas.</p></div> : <div className="records-list records-list--inside">{executions.map((execution) => <article className={`record-row ${execution.status === 'voided' ? 'record-card--voided' : ''}`} key={execution.id}><div><strong>{execution.equipmentSnapshot.name}</strong><span>{execution.activityPerformed}</span><small>{rescheduleNames[execution.rescheduleStatus] || 'Registro anterior sin estado de reprogramación'}</small>{execution.voidReason && <small><strong>Motivo de anulación:</strong> {execution.voidReason}</small>}</div><div><span>{formatDuration(execution.durationMinutes)}</span><small>{execution.startedAt.toDate().toLocaleDateString('es-GT')}</small></div><span className="status-badge">{execution.status === 'voided' ? 'Anulado' : complianceNames[execution.complianceStatus]}</span>{canManage && execution.status !== 'voided' ? <button className="button button--secondary" type="button" onClick={() => { setVoiding(execution); setVoidReason(''); setActionError('') }}>Anular ejecución</button> : null}</article>)}</div>}<HistoryControls history={executionHistory} label="Ejecuciones preventivas" /></div>
+    <div className="panel"><div className="panel__heading"><div><p className="eyebrow">Programación</p><h2>{focus === 'overdue' ? 'Planes con fecha vencida' : focus === 'upcoming' ? 'Próximos en 7 días' : 'Planes preventivos'}</h2></div>{focus ? <Link to="/preventivos">Ver todos</Link> : null}</div>{focusedPlans.length === 0 && !planHistory.error ? <div className="empty-state empty-state--compact"><p>No hay planes que coincidan con este detalle.</p></div> : <div className="records-list records-list--inside">{focusedPlans.map((plan) => <article className="record-row" key={plan.id}><div><strong>{plan.activityName}</strong><span>{plan.equipmentSnapshot.code} — {plan.equipmentSnapshot.name}</span></div><div><span>{frequencyLabel(plan.frequencyType, plan.frequencyValue, plan.frequencyUnit)}</span><small>Próximo: {plan.nextDueAt.toDate().toLocaleDateString('es-GT')}</small></div><span className="status-badge">{planStatus[plan.status]}</span>{hasPermission('preventive.manage') ? <Link to={`/preventivos/${plan.id}/editar`}>Editar</Link> : null}</article>)}</div>}<HistoryControls history={planHistory} label="Planes preventivos" visibleCount={focusedPlans.length} /></div>
+    <div className="panel"><div className="panel__heading"><div><p className="eyebrow">Historial</p><h2>Ejecuciones</h2></div></div>{executions.length === 0 && !executionHistory.error ? <div className="empty-state empty-state--compact"><p>No hay ejecuciones registradas.</p></div> : <div className="records-list records-list--inside">{executions.map((execution) => <article className={`record-row ${execution.status === 'voided' ? 'record-card--voided' : ''}`} key={execution.id}><div><strong>{execution.equipmentSnapshot.name}</strong><span>{execution.activityPerformed || 'Trabajo en curso'}</span><small>{rescheduleNames[execution.rescheduleStatus] || (execution.status === 'in_progress' ? 'Tiempo controlado por el sistema' : 'Registro anterior sin estado de reprogramación')}</small>{execution.voidReason && <small><strong>Motivo de anulación:</strong> {execution.voidReason}</small>}</div><div><span>{formatDuration(execution.durationMinutes ?? durationBetween(execution.startedAt, execution.endedAt))}</span><small>{execution.startedAt.toDate().toLocaleString('es-GT')}</small></div><span className="status-badge">{execution.status === 'voided' ? 'Anulado' : complianceNames[execution.complianceStatus]}</span>{execution.status === 'in_progress' && execution.createdBy === user.uid ? <Link className="button button--primary" to={`/preventivos/ejecuciones/${execution.id}/finalizar`}>Finalizar</Link> : canManage && execution.status !== 'voided' ? <button className="button button--secondary" type="button" onClick={() => { setVoiding(execution); setVoidReason(''); setActionError('') }}>Anular ejecución</button> : null}</article>)}</div>}<HistoryControls history={executionHistory} label="Ejecuciones preventivas" /></div>
     {voiding && <form className="panel data-form" onSubmit={confirmVoid}><div><p className="eyebrow">CONTROL DEL REGISTRO</p><h2>Anular ejecución preventiva</h2><p>El trabajo original seguirá en el histórico. Si era la última ejecución de un plan calendario, la fecha programada anterior se restaurará para revisión.</p></div><label>Motivo de anulación *<textarea required minLength="10" maxLength="500" rows="4" value={voidReason} onChange={(event) => setVoidReason(event.target.value)} /></label><div className="form-actions"><button className="button button--secondary" type="button" disabled={saving} onClick={() => { setVoiding(null); setVoidReason(''); setActionError('') }}>Cancelar</button><button className="button button--primary" disabled={saving}>{saving ? 'Anulando…' : 'Confirmar anulación'}</button></div></form>}
   </section>
 }

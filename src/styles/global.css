@@ -459,6 +459,27 @@ h2 {
   font-size: 0.8rem;
 }
 
+.stat-card--link {
+  color: inherit;
+  text-decoration: none;
+  transition: transform 160ms ease, box-shadow 160ms ease, border-color 160ms ease;
+}
+
+.stat-card--link small {
+  display: block;
+  margin-top: 0.8rem;
+  color: var(--color-brand-dark);
+  font-size: 0.78rem;
+  font-weight: 750;
+}
+
+.stat-card--link:hover,
+.stat-card--link:focus-visible {
+  transform: translateY(-2px);
+  border-color: var(--color-brand);
+  box-shadow: var(--shadow-md);
+}
+
 .dashboard-grid {
   display: grid;
   gap: 1rem;

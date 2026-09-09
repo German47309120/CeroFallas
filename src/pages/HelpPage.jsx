@@ -15,8 +15,8 @@ const actions = [
 ]
 
 const workflows = [
-  { permissions: ['corrective.read', 'corrective.create'], title: 'Mantenimiento correctivo', steps: ['Identificar área y equipo.', 'Registrar inicio, finalización y trabajo realizado.', 'El sistema calcula duración y conserva auditoría.'] },
-  { permissions: ['preventive.read', 'preventive.execute', 'preventive.plan'], title: 'Mantenimiento preventivo', steps: ['Consultar o seleccionar el plan.', 'Documentar fecha, tiempos y actividad ejecutada.', 'Revisar cumplimiento y próxima programación.'] },
+  { permissions: ['corrective.read', 'corrective.create'], title: 'Mantenimiento correctivo', steps: ['Identificar área, equipo y síntoma.', 'Iniciar la atención para guardar la hora oficial.', 'Finalizar, documentar el trabajo y conservar auditoría.'] },
+  { permissions: ['preventive.read', 'preventive.execute', 'preventive.plan'], title: 'Mantenimiento preventivo', steps: ['Seleccionar el plan o equipo.', 'Iniciar y finalizar usando las marcas oficiales del sistema.', 'Revisar cumplimiento y próxima programación.'] },
   { permissions: ['forklift.read', 'forklift.inspect'], title: 'Checklist de montacargas', steps: ['Confirmar equipo, turno y horómetro.', 'Responder los 25 puntos y justificar anomalías.', 'No operar si existe una falla crítica.'] },
   { permissions: ['incident.read', 'incident.create'], title: 'Incidentes operativos', steps: ['Indicar área, equipo si se conoce y prioridad.', 'Describir el evento sin sustituir el protocolo de emergencia.', 'Jefaturas autorizadas registran el seguimiento.'] },
 ]

@@ -61,7 +61,12 @@ export function buildAreaBreakdown(records) {
 
 export function buildOperationalSummary(recordsBySource = {}) {
   const durations = (recordsBySource.correctives ?? [])
-    .map((record) => Number(record.durationMinutes))
+    .map((record) => {
+      if (Number.isFinite(record.durationMinutes)) return Number(record.durationMinutes)
+      const started = record.startedAt?.toDate?.()
+      const ended = record.endedAt?.toDate?.()
+      return started && ended ? Math.max(1, Math.round((ended - started) / 60000)) : null
+    })
     .filter((duration) => Number.isFinite(duration) && duration > 0)
   const executions = (recordsBySource.executions ?? [])
     .filter((record) => ['on_time', 'late'].includes(record.complianceStatus))

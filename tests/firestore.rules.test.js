@@ -39,10 +39,7 @@ const equipmentData = (userId) => ({
 
 const correctiveData = (userId, overrides = {}) => ({
   workOrder: null,
-  eventDate: '2026-09-03',
-  startedAt: Timestamp.fromDate(new Date('2026-09-03T08:00:00')),
-  endedAt: Timestamp.fromDate(new Date('2026-09-03T09:30:00')),
-  durationMinutes: 90,
+  eventDate: null, startedAt: serverTimestamp(), endedAt: null, durationMinutes: null, timeSource: 'server',
   areaId: 'linea-1',
   areaSnapshot: { id: 'linea-1', name: 'Línea 1' },
   equipmentId: 'TEST-EQ-001',
@@ -52,9 +49,9 @@ const correctiveData = (userId, overrides = {}) => ({
   failureType: null,
   affectedComponent: null,
   identifiedCause: null,
-  workPerformed: 'Trabajo de prueba',
+  workPerformed: '',
   observations: null,
-  status: 'completed',
+  status: 'in_progress',
   voidReason: null,
   createdAt: serverTimestamp(),
   createdBy: userId,
@@ -73,16 +70,15 @@ const preventivePlanData = (userId, overrides = {}) => ({
 
 const preventiveExecutionData = (userId, overrides = {}) => ({
   planId: null, equipmentId: 'TEST-EQ-001', equipmentSnapshot: { code: 'TEST-EQ-001', name: 'Equipo de prueba' }, scheduledAt: null,
-  startedAt: Timestamp.fromDate(new Date('2026-09-03T08:00:00')), endedAt: Timestamp.fromDate(new Date('2026-09-03T09:00:00')),
-  durationMinutes: 60, technicianIds: [userId], activityPerformed: 'Inspección preventiva de prueba', spareParts: [], observations: null,
-  complianceStatus: 'unscheduled', status: 'completed', createdAt: serverTimestamp(), createdBy: userId, updatedAt: serverTimestamp(), updatedBy: userId, ...overrides,
-  rescheduleStatus: overrides.rescheduleStatus ?? 'not_applicable', nextDueAtAfterExecution: overrides.nextDueAtAfterExecution ?? null,
+  startedAt: serverTimestamp(), endedAt: null, durationMinutes: null, technicianIds: [userId], activityPerformed: '', spareParts: [], observations: null,
+  complianceStatus: 'pending', status: 'in_progress', timeSource: 'server', createdAt: serverTimestamp(), createdBy: userId, updatedAt: serverTimestamp(), updatedBy: userId, ...overrides,
+  rescheduleStatus: overrides.rescheduleStatus ?? 'pending', nextDueAtAfterExecution: overrides.nextDueAtAfterExecution ?? null,
 })
 
 const forkliftInspectionData = (userId, overrides = {}) => ({
   equipmentId: 'FORKLIFT-001', equipmentSnapshot: { code: 'FORKLIFT-001', name: 'Montacargas de prueba' },
-  templateId: 'forklift-daily-v1', templateVersion: 1, inspectedAt: Timestamp.fromDate(new Date('2026-09-03T06:15:00')),
-  shiftId: 'shift-1', operatorId: userId, hourMeter: 1250.5,
+  templateId: 'forklift-daily-v1', templateVersion: 1, inspectedAt: serverTimestamp(),
+  shiftId: new Date().getUTCHours() >= 12 ? 'shift-1' : 'shift-2', operatorId: userId, hourMeter: 1250.5,
   answers: Array.from({ length: 25 }, (_, index) => ({ itemId: `item-${index}`, label: `Punto ${index}`, critical: false, status: 'good', observation: null })),
   criticalFailures: 0, overallResult: 'fit', generalObservations: null, evidenceUrls: [], status: 'completed',
   createdAt: serverTimestamp(), createdBy: userId, ...overrides,
@@ -180,6 +176,12 @@ describe('reglas de correctivos', () => {
     batch.set(correctiveRef, correctiveData('technician'))
     batch.set(auditRef, { occurredAt: serverTimestamp(), actorId: 'technician', action: 'create', entityType: 'corrective', entityId: correctiveRef.id })
     await assertSucceeds(batch.commit())
+    const started = (await getDoc(correctiveRef)).data()
+    const completionAudit = doc(collection(database, 'audit'))
+    const completion = writeBatch(database)
+    completion.update(correctiveRef, { eventDate: '2026-09-09', startedAt: started.startedAt, endedAt: serverTimestamp(), durationMinutes: null, timeSource: 'server', workPerformed: 'Trabajo terminado', status: 'completed', updatedAt: serverTimestamp(), updatedBy: 'technician', auditId: completionAudit.id })
+    completion.set(completionAudit, { occurredAt: serverTimestamp(), actorId: 'technician', action: 'complete', entityType: 'corrective', entityId: correctiveRef.id })
+    await assertSucceeds(completion.commit())
   })
 
   it('rechaza crear correctivos a un perfil de solo lectura', async () => {
@@ -231,9 +233,15 @@ describe('reglas de preventivos', () => {
     batch.set(executionRef, preventiveExecutionData('executor'))
     batch.set(auditRef, { occurredAt: serverTimestamp(), actorId: 'executor', action: 'create', entityType: 'preventiveExecution', entityId: executionRef.id })
     await assertSucceeds(batch.commit())
+    const started = (await getDoc(executionRef)).data()
+    const completionAudit = doc(collection(database, 'audit'))
+    const completion = writeBatch(database)
+    completion.update(executionRef, { startedAt: started.startedAt, endedAt: serverTimestamp(), durationMinutes: null, timeSource: 'server', activityPerformed: 'Inspección terminada', complianceStatus: 'unscheduled', rescheduleStatus: 'not_applicable', nextDueAtAfterExecution: null, status: 'completed', updatedAt: serverTimestamp(), updatedBy: 'executor', auditId: completionAudit.id })
+    completion.set(completionAudit, { occurredAt: serverTimestamp(), actorId: 'executor', action: 'complete', entityType: 'preventiveExecution', entityId: executionRef.id })
+    await assertSucceeds(completion.commit())
   })
 
-  it('permite reprogramar un plan calendario solo junto con su ejecución', async () => {
+  it('rechaza crear como completada una ejecución con horas digitadas', async () => {
     await createProfile('executor', ['preventive.read', 'preventive.execute', 'audit.write'])
     await testEnvironment.withSecurityRulesDisabled(async (context) => {
       await setDoc(doc(context.firestore(), 'preventivePlans', 'calendar-plan'), preventivePlanData('planner'))
@@ -254,8 +262,7 @@ describe('reglas de preventivos', () => {
       const auditRef = doc(collection(database, 'audit'))
       batch.set(auditRef, { occurredAt: serverTimestamp(), actorId: 'executor', action: entityType === 'preventivePlan' ? 'reschedule' : 'create', entityType, entityId: entityType === 'preventivePlan' ? planRef.id : executionRef.id })
     }
-    await assertSucceeds(batch.commit())
-    expect((await getDoc(planRef)).data().lastExecutionId).toBe(executionRef.id)
+    await assertFails(batch.commit())
   })
 
   it('rechaza que un ejecutor cambie la fecha del plan sin ejecución vinculada', async () => {

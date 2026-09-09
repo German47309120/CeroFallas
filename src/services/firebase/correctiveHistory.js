@@ -3,7 +3,7 @@ import { getFirebaseFirestore } from './firestore.js'
 import { guatemalaDateRange } from '../../utils/historyFilters.js'
 
 export async function readCorrectiveHistory({ status = 'all', areaId = '', equipmentId = '', fromDate = '', toDate = '', cursor = null, pageSize = 25 } = {}) {
-  if (!['all', 'draft', 'completed', 'voided'].includes(status)) throw new Error('Estado inválido')
+  if (!['all', 'in_progress', 'draft', 'completed', 'voided'].includes(status)) throw new Error('Estado inválido')
   if (!Number.isInteger(pageSize) || pageSize < 1 || pageSize > 100) throw new Error('Tamaño de página inválido')
   const clauses = []
   if (status !== 'all') clauses.push(where('status', '==', status))
