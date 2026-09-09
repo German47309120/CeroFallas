@@ -46,7 +46,7 @@ export default function DashboardPage() {
     const requestedSources = [...sourceKey.split(','), ...(trendEnabled ? ['trend'] : [])]
     Promise.all(requestedSources.map(async (key) => {
       try { return [key, { data: await loadDashboardSource(key, request, { periodDays, areaId, activitySources: sourceKey.split(',') }) }] }
-      catch { return [key, { error: 'No disponible. Revisa conexión, permisos o índices de Firestore y vuelve a actualizar.' }] }
+      catch { return [key, { error: 'No disponible. Revisa tu conexión o permisos y vuelve a actualizar.' }] }
     })).then((values) => { if (alive) setResult({ identity, request, values: Object.fromEntries(values) }) })
     return () => { alive = false }
   }, [identity, sourceKey, request, trendEnabled, periodDays, areaId])

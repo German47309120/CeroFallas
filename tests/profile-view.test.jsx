@@ -25,7 +25,7 @@ describe('perfil comprensible para el usuario', () => {
     const html = renderToStaticMarkup(<ProfilePage />)
     expect(html).toContain('German Hernandez')
     expect(html).toContain('Administrador de la aplicación')
-    expect(html).toContain('Emuladores locales · no producción')
+    expect(html).toContain('Pruebas locales · no producción')
     expect(html).toContain('Activo')
   })
 

@@ -30,7 +30,7 @@ export const adminFunctionsEnabled = useFirebaseEmulators || import.meta.env.VIT
 
 export function getFirebaseApp() {
   if (!isFirebaseConfigured) {
-    throw new Error('Firebase no está configurado. Completa las variables VITE_FIREBASE_* requeridas.')
+    throw new Error('El servicio central no está configurado. Completa las variables de ambiente requeridas.')
   }
 
   return getApps()[0] ?? initializeApp(firebaseConfig)

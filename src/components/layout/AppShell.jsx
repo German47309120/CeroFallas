@@ -48,8 +48,8 @@ function Sidebar({ environment, open, onClose }) {
         <div className="sidebar__footer">
           <span className="status-dot" aria-hidden="true" />
           <div>
-            <strong>{environment === 'emulator' ? 'Entorno local' : 'Firebase activo'}</strong>
-            <small>{environment === 'emulator' ? 'Firebase Emulator Suite' : 'Servicios cloud'}</small>
+            <strong>{environment === 'emulator' ? 'Entorno local' : 'Sistema en línea'}</strong>
+            <small>{environment === 'emulator' ? 'Servicios de prueba' : 'Datos sincronizados'}</small>
           </div>
         </div>
       </aside>
@@ -98,7 +98,7 @@ export default function AppShell() {
           </button>
           <div className="topbar__context">
             <span className="environment-pill">
-              {environment === 'emulator' ? 'Emulador local' : 'Firebase cloud'}
+              {environment === 'emulator' ? 'Entorno de pruebas' : 'Operación en línea'}
             </span>
             <span title={currentShift.schedule}>{currentShift.label}</span>
           </div>
@@ -116,7 +116,7 @@ export default function AppShell() {
 
         <main className="main-content">
           <div className="demo-banner" role="status">
-            {profileError || `Sesión autenticada como ${user?.email}. Persistencia conectada a ${environment === 'emulator' ? 'Firestore local' : 'Firestore cloud'}.`}
+            {profileError || `Sesión autenticada como ${user?.email}. ${environment === 'emulator' ? 'Datos aislados en el entorno de pruebas.' : 'Datos sincronizados con el sistema central.'}`}
           </div>
           <RouteAccess><Outlet /></RouteAccess>
         </main>

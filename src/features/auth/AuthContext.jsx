@@ -55,7 +55,7 @@ export function AuthProvider({ children }) {
     user,
     loading,
     configured: isFirebaseConfigured,
-    configurationError: isFirebaseConfigured ? '' : 'Firebase no está configurado para este build.',
+    configurationError: isFirebaseConfigured ? '' : 'El servicio de acceso no está configurado para este ambiente.',
     environment: useFirebaseEmulators ? 'emulator' : 'cloud',
     profile: profile ? {
       ...profile,

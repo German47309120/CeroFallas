@@ -13,7 +13,7 @@ export default function ProfilePage() {
       <dl>
         <div><dt>Rol</dt><dd>{roleName}</dd></div>
         <div><dt>Estado</dt><dd>{profile?.status === 'active' ? 'Activo' : 'Inactivo'}</dd></div>
-        <div><dt>Entorno</dt><dd>{environment === 'emulator' ? 'Emuladores locales · no producción' : 'Firebase cloud'}</dd></div>
+        <div><dt>Entorno</dt><dd>{environment === 'emulator' ? 'Pruebas locales · no producción' : 'Sistema publicado'}</dd></div>
       </dl>
     </section>
     <section className="panel">

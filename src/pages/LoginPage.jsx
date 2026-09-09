@@ -25,7 +25,7 @@ export default function LoginPage() {
     setError('')
 
     if (configured === false) {
-      setError(configurationError || 'Firebase no está configurado para este ambiente.')
+      setError(configurationError || 'El servicio de acceso no está configurado para este ambiente.')
       return
     }
 
@@ -63,8 +63,8 @@ export default function LoginPage() {
         </div>
         <small>
           {environment === 'emulator'
-            ? 'Authentication Emulator · Utiliza solo cuentas de prueba'
-            : 'Acceso conectado a Firebase'}
+            ? 'Entorno de pruebas · Utiliza solo cuentas de prueba'
+            : 'Acceso seguro para personal autorizado'}
         </small>
       </section>
 
@@ -105,7 +105,7 @@ export default function LoginPage() {
 
             {configured === false ? (
               <div className="form-error" role="alert">
-                Este build todavía no tiene un proyecto Firebase configurado. Define las variables del ambiente antes de publicarlo.
+                El servicio de acceso todavía no está configurado para este ambiente. Contacta al administrador de la aplicación.
               </div>
             ) : null}
             {error ? <div className="form-error" role="alert">{error}</div> : null}

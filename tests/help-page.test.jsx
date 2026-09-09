@@ -40,8 +40,8 @@ it('mantiene a gerencia en recorridos de consulta', () => {
 
 it('explica arquitectura, defensa y límites de la demostración', () => {
   const html = render()
-  expect(html).toContain('React responsive')
-  expect(html).toContain('Firestore y reglas')
+  expect(html).toContain('Interfaz responsive')
+  expect(html).toContain('Base central protegida')
   expect(html).toContain('Ruta sugerida para la defensa')
   expect(html).toContain('los registros actuales son demostrativos')
 })

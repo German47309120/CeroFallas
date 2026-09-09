@@ -33,16 +33,13 @@ export function logout() {
   return signOut(getFirebaseAuth())
 }
 
+const genericCredentialError = 'No fue posible iniciar sesión. Verifica tus credenciales e inténtalo nuevamente.'
+
 const authErrorMessages = {
-  'auth/invalid-credential': 'El correo o la contraseña no son correctos.',
-  'auth/invalid-login-credentials': 'El correo o la contraseña no son correctos.',
-  'auth/invalid-email': 'Ingresa un correo electrónico válido.',
-  'auth/missing-password': 'Ingresa tu contraseña.',
   'auth/too-many-requests': 'Se realizaron demasiados intentos. Espera antes de probar nuevamente.',
   'auth/network-request-failed': 'No fue posible conectar con el servicio de autenticación.',
-  'auth/user-disabled': 'Esta cuenta está desactivada.',
 }
 
 export function getAuthErrorMessage(error) {
-  return authErrorMessages[error?.code] ?? 'El correo o la contraseña no son correctos.'
+  return authErrorMessages[error?.code] ?? genericCredentialError
 }
