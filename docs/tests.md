@@ -445,4 +445,4 @@ Casos verificados:
 
 Resultado obtenido: 17/17 pruebas focalizadas de incidentes/stock y presentación; suite integral 198/198, lint y build aprobados.
 
-Estado: APROBADA TÉCNICAMENTE. Pendiente comprobar la tarjeta con el primer estado real publicado desde la red autorizada.
+Estado: APROBADA Y PUBLICADA TÉCNICAMENTE. La ruta `/repuestos` respondió HTTP 200 con encabezados de seguridad; falta comprobar la tarjeta con el primer estado real publicado desde la red autorizada.
