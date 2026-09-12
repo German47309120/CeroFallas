@@ -15,6 +15,7 @@ export const navigationGroups = [
       { to: '/equipos', label: 'Equipos', shortLabel: 'Equipos' },
       { to: '/repuestos', label: 'Repuestos', shortLabel: 'Stock' },
       { to: '/riesgo', label: 'Riesgo predictivo', shortLabel: 'Riesgo' },
+      { to: '/analitica', label: 'Reporte gerencial', shortLabel: 'Análisis' },
     ],
   },
   {

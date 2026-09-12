@@ -1,0 +1,11 @@
+import { Link } from 'react-router-dom'
+import { powerBiReportConfiguration } from '../utils/powerBi.js'
+
+export default function PowerBiPage({ reportUrl = import.meta.env.VITE_POWER_BI_REPORT_URL }) {
+  const report = powerBiReportConfiguration(reportUrl)
+  return <section className="page-stack">
+    <div className="page-heading"><div><p className="eyebrow">Análisis gerencial</p><h1>Reporte consolidado</h1><p>Acceso controlado al reporte externo. CeroFallas continúa funcionando aunque el servicio analítico no esté disponible.</p></div></div>
+    {report.state === 'ready' ? <section className="panel"><div className="panel__heading"><div><p className="eyebrow">Integración preparada</p><h2>Reporte disponible</h2></div></div><p>{report.accessMode === 'authenticated' ? 'El vínculo requiere la identidad y los permisos definidos por la organización.' : 'El vínculo está configurado como publicación pública. Confirma que no contenga información institucional restringida.'}</p><div className="form-actions"><a className="button button--primary" href={report.url} target="_blank" rel="noopener noreferrer">Abrir reporte en una pestaña nueva</a><Link className="button button--secondary" to="/">Volver al dashboard</Link></div></section> : <section className="panel empty-state"><p className="eyebrow">Integración pendiente</p><h2>{report.state === 'invalid' ? 'El enlace configurado no es válido' : 'Aún no se ha configurado el reporte'}</h2><p>{report.state === 'invalid' ? 'Por seguridad solo se aceptan enlaces HTTPS oficiales de Power BI. Corrige la configuración del despliegue.' : 'Cuando se confirme la modalidad de acceso, agrega el enlace autorizado al ambiente de publicación.'}</p><Link className="button button--secondary" to="/">Continuar con el dashboard operativo</Link></section>}
+    <aside className="panel" role="note"><p className="eyebrow">Separación de responsabilidades</p><strong>La aplicación registra la operación; el reporte consolida el análisis.</strong><p className="muted-copy">Las credenciales de SAP y del reporte no se guardan en el navegador. Una falla del servicio analítico no bloquea correctivos, preventivos, incidentes o checklist.</p></aside>
+  </section>
+}

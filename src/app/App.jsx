@@ -20,6 +20,7 @@ const ResourceReadPage = lazy(() => import('../pages/ResourceReadPage.jsx'))
 const ProfilePage = lazy(() => import('../pages/ProfilePage.jsx'))
 const PredictionPage = lazy(() => import('../pages/PredictionPage.jsx'))
 const HelpPage = lazy(() => import('../pages/HelpPage.jsx'))
+const PowerBiPage = lazy(() => import('../pages/PowerBiPage.jsx'))
 
 export default function App() {
   return (
@@ -47,6 +48,7 @@ export default function App() {
         <Route path="/admin/auditoria" element={<ResourceReadPage resource="audit" />} />
         <Route path="/repuestos" element={<ResourceReadPage resource="stock" />} />
         <Route path="/riesgo" element={<PredictionPage />} />
+        <Route path="/analitica" element={<PowerBiPage />} />
         <Route path="/perfil" element={<ProfilePage />} />
         <Route path="/ayuda" element={<HelpPage />} />
       </Route>

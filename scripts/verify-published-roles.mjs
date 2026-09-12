@@ -21,7 +21,7 @@ const checks = [
   ['preventiveExecutions', 'preventive.read'], ['forkliftInspections', 'forklift.read'],
   ['incidents', 'incident.read'], ['stock', 'stock.read'],
 ]
-const routes = ['/', '/login', '/correctivos', '/preventivos', '/montacargas', '/incidentes', '/equipos', '/repuestos', '/riesgo', '/admin/usuarios', '/admin/auditoria', '/perfil', '/ayuda']
+const routes = ['/', '/login', '/correctivos', '/preventivos', '/montacargas', '/incidentes', '/equipos', '/repuestos', '/riesgo', '/analitica', '/admin/usuarios', '/admin/auditoria', '/perfil', '/ayuda']
 const baseUrl = 'https://cerofallas-pg2-german-2026.web.app'
 
 const app = initializeApp({

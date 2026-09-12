@@ -2,6 +2,7 @@ export const navigationPermissions = {
   '/correctivos': 'corrective.read', '/preventivos': 'preventive.read', '/montacargas': 'forklift.read',
   '/incidentes': 'incident.read', '/equipos': 'equipment.read', '/repuestos': 'stock.read',
   '/riesgo': 'prediction.read', '/admin/usuarios': 'users.read', '/admin/auditoria': 'audit.read',
+  '/analitica': 'dashboard.read',
 }
 
 const routeAccessRules = [
@@ -26,6 +27,7 @@ const routeAccessRules = [
   { match: /^\/equipos$/, permissions: ['equipment.read'] },
   { match: /^\/repuestos$/, permissions: ['stock.read'] },
   { match: /^\/riesgo$/, permissions: ['prediction.read'] },
+  { match: /^\/analitica$/, permissions: ['dashboard.read'] },
   { match: /^\/admin\/usuarios$/, permissions: ['users.read'] },
   { match: /^\/admin\/auditoria$/, permissions: ['audit.read'] },
 ]
