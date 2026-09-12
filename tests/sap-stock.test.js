@@ -1,7 +1,14 @@
 import { describe, expect, it } from 'vitest'
-import { normalizeStockRow, normalizeStockRows, validateReadOnlyStockQuery } from '../src/utils/sapStock.js'
+import { normalizeStockRow, normalizeStockRows, parseSqlServerTarget, validateReadOnlyStockQuery } from '../src/utils/sapStock.js'
 
 describe('contrato de stock SAP', () => {
+  it('interpreta servidores SQL con puerto o instancia nombrada', () => {
+    expect(parseSqlServerTarget('sql-planta')).toEqual({ host: 'sql-planta', instance: '' })
+    expect(parseSqlServerTarget('sql-planta\\SAP')).toEqual({ host: 'sql-planta', instance: 'SAP' })
+    expect(() => parseSqlServerTarget('sql-planta\\')).toThrow('Instancia SQL inválida')
+    expect(() => parseSqlServerTarget('')).toThrow('Servidor SQL requerido')
+  })
+
   it('acepta SELECT o CTE de lectura y bloquea mutaciones', () => {
     expect(validateReadOnlyStockQuery('SELECT Codigo AS codigo FROM Stock;')).toBe(true)
     expect(validateReadOnlyStockQuery('WITH x AS (SELECT 1 AS n) SELECT n FROM x')).toBe(true)

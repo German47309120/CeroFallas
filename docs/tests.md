@@ -394,9 +394,9 @@ Casos automatizados:
 4. Se rechazan filas incompletas, cantidades inválidas e identificadores duplicados.
 5. El navegador no recibe servidor, usuario, contraseña ni consulta SQL.
 
-Resultado obtenido: 4/4 casos del contrato SAP aprobados. Suite integral vigente: 195/195 pruebas web, lint limpio y build de producción exitoso. No se abrió una conexión real ni se publicaron datos SAP durante esta validación.
+Resultado obtenido: 5/5 casos del contrato SAP aprobados, incluyendo servidor simple e instancia nombrada. Suite integral vigente: 197/197 pruebas web, lint limpio y build de producción exitoso.
 
-Estado: BASE TÉCNICA APROBADA. Pendiente prueba de conectividad y corrida seca con la consulta autorizada.
+Estado: BASE TÉCNICA APROBADA. La prueba de conectividad se documenta en P-023.
 
 ## PRUEBA P-022 — Tiempo oficial y navegación desde indicadores
 
@@ -414,3 +414,19 @@ Casos verificados:
 Resultado obtenido: 196/196 pruebas web aprobadas, incluyendo 33 decisiones focalizadas de reglas; lint limpio y build de producción exitoso.
 
 Estado: APROBADA TÉCNICAMENTE.
+
+## PRUEBA P-023 — Diagnóstico seguro de conectividad SAP
+
+Fecha: 2026-09-11
+
+Casos verificados:
+
+1. La configuración y consulta local pasan validación sin abrir conexión ni imprimir secretos.
+2. El conector separa de forma válida un host y una instancia SQL Server nombrada.
+3. La corrida seca se detiene sin publicar cuando la red no permite alcanzar SQL Server.
+4. El error presentado contiene únicamente el código técnico seguro `ETIMEOUT`, sin servidor, base, usuario, contraseña, consulta o inventario.
+5. El verificador cloud queda alineado al flujo de inicio/finalización con tiempo oficial para una futura instalación nueva.
+
+Resultado obtenido: configuración aprobada; 5/5 pruebas unitarias SAP, suite integral 197/197 con Firestore Emulator, lint y build aprobados. La corrida seca terminó antes de autenticación/consulta porque desde la red actual no fue alcanzable el host ni TCP 1433. No se leyeron ni publicaron datos.
+
+Estado: BLOQUEADA POR CONECTIVIDAD EXTERNA. Repetir desde planta/VPN o con el puerto TCP fijo autorizado; no corresponde cambiar credenciales hasta superar esta capa.

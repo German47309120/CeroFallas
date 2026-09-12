@@ -1,6 +1,6 @@
 # Integración controlada de stock SAP / SQL Server
 
-Estado: agente preparado; conexión y primera publicación pendientes de datos locales del usuario.
+Estado: configuración local validada; conectividad con la red de SQL Server y primera publicación pendientes.
 
 ## Arquitectura
 
@@ -36,3 +36,14 @@ La consulta y credenciales se guardan en `.local/`, ignorado por Git. El agente 
 - Consulta existente guardada localmente con alias compatibles.
 - Confirmar que la computadora ejecutora tiene acceso de red al servidor.
 - Elegir credencial administrativa local para publicar sin almacenarla en el repositorio.
+
+El conector acepta `servidor\\instancia`; en ese caso usa SQL Browser para resolver el puerto dinámico. Si la red bloquea SQL Browser, debe configurarse en SAP un puerto TCP fijo y usar solo el servidor/IP junto con ese puerto.
+
+## Diagnóstico vigente — 2026-09-11
+
+- `npm run sap:stock:check` aprobó los campos locales y la consulta de solo lectura sin abrir conexión.
+- La primera corrida seca terminó con `ETIMEOUT` antes de autenticarse o ejecutar la consulta.
+- Las comprobaciones seguras confirmaron que el equipo actual no alcanza el host SQL ni el puerto TCP 1433 desde la red presente.
+- No se consultaron filas, no se publicó stock y no se imprimieron servidor, base, usuario, contraseña o texto SQL.
+
+Siguiente acción: ejecutar la corrida desde la red de planta o VPN autorizada. Si la instancia nombrada no puede resolverse mediante SQL Browser, solicitar el puerto TCP fijo de esa instancia y configurarlo usando el host sin `\\instancia`.

@@ -13,6 +13,19 @@ const cleanSql = (text) => text
   .replace(/N?'(?:''|[^'])*'/gi, "''")
   .trim()
 
+export function parseSqlServerTarget(value) {
+  const normalized = String(value ?? '').trim()
+  const separator = normalized.indexOf('\\')
+  if (separator < 0) {
+    if (!normalized) throw new Error('Servidor SQL requerido.')
+    return { host: normalized, instance: '' }
+  }
+  const host = normalized.slice(0, separator).trim()
+  const instance = normalized.slice(separator + 1).trim()
+  if (!host || !instance || instance.includes('\\')) throw new Error('Instancia SQL inválida.')
+  return { host, instance }
+}
+
 export function validateReadOnlyStockQuery(queryText) {
   const query = cleanSql(queryText)
   if (!query) throw new Error('La consulta de stock está vacía.')

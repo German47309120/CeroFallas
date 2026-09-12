@@ -1,6 +1,6 @@
 # CEROFALLAS — ESTADO ACTUAL
 
-## Control maestro de fases — actualizado 2026-09-08
+## Control maestro de fases — actualizado 2026-09-11
 
 Este es el único documento de seguimiento de fases. Se conserva la numeración del apartado 33 de `../Prompt_Maestro_CeroFallas_V2.md`. Los registros históricos siguientes son evidencia de avances, no una segunda hoja de ruta. La entrega universitaria editable continúa en su archivo maestro independiente.
 
@@ -13,7 +13,7 @@ Estados: **Base lista** = definición o implementación local con evidencia; no 
 | 1 | Preparación del entorno | Base lista | React/Vite, Git y emuladores operativos; entorno documentado. |
 | 2 | Requerimientos | Base lista | Requisitos, casos de uso y aceptación documentados; validar datos reales pendientes. |
 | 3 | Modelo de datos | Base lista | Modelo lógico y colecciones operativas; reconciliar diferencias de implementación e integraciones. |
-| 4 | Arquitectura | Base lista avanzada | React + servicio cloud; SAP, BI y predictivo desacoplados. El agente local de stock SQL Server ya está implementado y probado sin credenciales; falta conectividad real. |
+| 4 | Arquitectura | Base lista avanzada | React + servicio cloud; SAP, BI y predictivo desacoplados. El agente local de stock SQL Server está implementado, valida instancias nombradas y protege secretos; falta conectividad real. |
 | 5 | Diseño de interfaz | Parcial avanzado | UI responsive y 15 mockups; turno vigente visible según rol y hora Guatemala. Falta aceptación visual institucional y adaptar lo aún conceptual. |
 | 6 | Configuración de Firebase | Base cloud funcional | Proyecto personal enlazado; Firestore Standard en `us-central1`, configuración web, reglas e índices publicados. App Check y revisión final de costos permanecen pendientes. |
 | 7 | Autenticación | Base cloud funcional verificada | Correo/contraseña y once cuentas/perfiles operativos; inicio de sesión cloud comprobado y 231 decisiones de acceso por URL verificadas. Functions administrativas esperan decisión sobre Blaze. |
@@ -24,14 +24,14 @@ Estados: **Base lista** = definición o implementación local con evidencia; no 
 | 12 | Históricos y filtros | Base funcional local avanzada | Paginación transversal, filtros estructurados y auditoría con acciones, entidades y actores legibles sin perder UID. Búsqueda textual limitada de forma explícita a páginas cargadas; faltan planta/cloud. |
 | 13 | Dashboard | Base funcional local avanzada | Indicadores navegables hacia su detalle filtrado, agenda, prioridades, períodos, siete áreas, tendencia, promedio de atención, preventivos a tiempo e incidentes por estado; falta aceptación gerencial real. |
 | 14 | Seguridad y roles | Base cloud verificada | Once perfiles institucionales estables, 149 verificaciones publicadas de autenticación/perfil/lectura/Hosting, cuatro escrituras cloud permitidas con auditoría y cuatro prohibidas rechazadas, 132 decisiones locales de escritura y 231 combinaciones de rol/ruta. Faltan firma de aceptación institucional y backend administrativo cloud. |
-| 15 | Power BI y datos SAP | Preparación avanzada | Agente local de stock SQL Server implementado con consulta de solo lectura, validación, corrida seca y publicación protegida. Falta configurar acceso local, ejecutar contra SAP y definir acceso de lectores al reporte Power BI. |
+| 15 | Power BI y datos SAP | Preparación avanzada | Configuración y consulta local validadas; la primera corrida seca se detuvo por `ETIMEOUT` de red antes de autenticación o consulta. Falta ejecutar desde planta/VPN, publicar el stock validado y definir acceso de lectores al reporte Power BI. |
 | 16 | Publicación en Internet | Base HTTPS publicada | Hosting Spark disponible en `https://cerofallas-pg2-german-2026.web.app`; 13 rutas directas y cuatro encabezados de seguridad respondieron correctamente. Faltan aceptación móvil/roles, dominio personalizado, App Check y Functions si se aprueba Blaze. |
 | 17 | Dataset predictivo | Contrato y demo | Esquema, origen, etiqueta y generador sintético reproducible listos. Histórico real, definición oficial y calidad siguen pendientes. |
 | 18 | Ingeniería de variables | Base demostrativa | Once variables con corte temporal, validación y pruebas; falta confirmar disponibilidad y construirlas con fuentes reales. |
 | 19 | Entrenamiento y comparación | Laboratorio demo | Regresión logística y Random Forest comparados con división temporal y métricas reproducibles; no existen métricas reales ni modelo productivo. |
 | 20 | Integración de predicciones | Interfaz demostrativa segura | Pantalla responsive con comparación, trazabilidad, estado de preparación y advertencia de no uso operativo. Faltan servicio y resultados con histórico real validado. |
 | 21 | Automatización cada 24 horas | Pendiente | Depende de fuentes, modelo, infraestructura y costos autorizados. |
-| 22 | Pruebas generales | En curso avanzado | Suite vigente: 196/196 web y 3/3 predictivas; 11 cuentas, 13 rutas y 149 verificaciones publicadas aprobadas. Cuatro escrituras cloud con auditoría fueron aceptadas y cuatro intentos sin permiso rechazados; el verificador idempotente confirmó 293 documentos. Falta aceptación institucional multidispositivo. |
+| 22 | Pruebas generales | En curso avanzado | Suite vigente: 197/197 web y 3/3 predictivas; 11 cuentas, 13 rutas y 149 verificaciones publicadas aprobadas. Cuatro escrituras cloud con auditoría fueron aceptadas y cuatro intentos sin permiso rechazados; el verificador idempotente confirmó 293 documentos. Falta aceptación institucional multidispositivo. |
 | 23 | Documentación | Base local avanzada | Entrega 2 Word/PDF, documentación técnica y guía de uso integrada y personalizada por permisos. Falta actualizar al cierre definitivo y completar datos académicos. |
 | 24 | Presentación final | Parcial | Guía de defensa incluida en entrega 2; falta ensayo final y evidencia del sistema terminado. |
 
@@ -57,7 +57,7 @@ Solo se acredita como cumplimiento aquello implementado o documentado con eviden
 1. Fase 14: validar recorridos de escritura con responsables institucionales en la URL HTTPS publicada y documentar su aceptación.
 2. Fase 10: validar en planta frecuencias y datos de horómetro/condición. No inventar reprogramaciones automáticas para esos dos métodos.
 3. Fase 16: completar aceptación móvil/roles, App Check y decisión de dominio personalizado; Hosting y Firestore ya están publicados.
-4. Integraciones: completar localmente servidor, base, autenticación y consulta SQL; ejecutar primero validación y corrida seca, y solo después publicar stock. Nunca almacenar credenciales en frontend o Git.
+4. Integraciones: repetir la corrida seca desde la red de planta/VPN o con el puerto TCP fijo de la instancia. Solo después de validar filas y almacenes se podrá autorizar la publicación de stock. Nunca almacenar credenciales en frontend o Git.
 
 Incidentes se conserva como **módulo adicional transversal**, relacionado con históricos (12), dashboard (13) y seguridad (14). Los encabezados anteriores «Fase 12: incidentes» fueron una desviación de nomenclatura, no el cierre de la fase original de históricos.
 
@@ -65,7 +65,7 @@ Incidentes se conserva como **módulo adicional transversal**, relacionado con h
 
 Al terminar un avance, actualizar esta tabla y registrar: cambio concreto, pruebas realmente ejecutadas, pendientes, dependencias y siguiente paso. No marcar una fase completa solo por tener pantalla o build exitoso. No atribuir porcentajes globales sin criterios de aceptación medibles. La evidencia de pruebas anterior conserva su fecha: no implica una nueva ejecución hoy.
 
-## Avance vigente — 2026-09-08
+## Avance vigente — 2026-09-11
 
 ### Catálogo institucional estable de usuarios
 
@@ -79,7 +79,10 @@ Al terminar un avance, actualizar esta tabla y registrar: cambio concreto, prueb
 - `npm run verify:published-writes` creó una evidencia idempotente en correctivos, preventivos, incidentes y checklist, cada una con auditoría. Cuatro roles no autorizados recibieron `permission-denied`; una segunda ejecución creó cero duplicados y reconoció los ocho documentos existentes.
 - El inicio de sesión unificó correo inválido, cuenta inexistente, cuenta desactivada y contraseña incorrecta bajo el mismo mensaje genérico. La interfaz operativa dejó de mencionar proveedores o nombres internos de base de datos; dos archivos de prueba nuevos fijan esa política.
 - Se implementó el agente local `scripts/sap-stock-sync.mjs`: acepta una sola consulta `SELECT`/`WITH`, bloquea escritura y DDL, normaliza los cuatro campos autorizados, rechaza duplicados y limita cada corrida a 50,000 filas. Su modo de revisión no publica datos y la publicación requiere confirmar exactamente el proyecto cloud.
-- La configuración, consulta real y credenciales SAP permanecen en `.local/`, fuera de Git. Cuatro pruebas nuevas validan consultas permitidas/prohibidas, alias de SAP Business One y calidad del resultado. La suite integral cerró con 195/195 pruebas web, lint limpio y build exitoso.
+- La configuración, consulta real y credenciales SAP permanecen en `.local/`, fuera de Git. Cinco pruebas validan consultas permitidas/prohibidas, alias de SAP Business One, calidad del resultado y separación segura de servidor/instancia.
+- `npm run sap:stock:check` aprobó configuración y consulta sin conectarse. La corrida seca terminó con `ETIMEOUT` antes de autenticación o consulta; el equipo actual no alcanzó el host ni TCP 1433. No se leyeron filas ni se publicó stock. El error visible quedó sanitizado y no expone datos de conexión.
+- El verificador de escrituras publicadas fue actualizado para instalaciones nuevas: correctivos y preventivos ahora se inician y finalizan en pasos separados con tiempo oficial del servidor, y el checklist usa hora y turno oficiales. La evidencia histórica existente no se modificó ni se volvió a ejecutar en cloud.
+- La suite vigente cerró 197/197 pruebas web con Firestore Emulator; la prueba focal SAP cerró 5/5, lint limpio y build exitoso.
 
 - Se consolidaron los once accesos de prueba en una sola fuente local, `.local/project-users.json`, y en una guía legible también local. Ambos están ignorados por Git para impedir que las contraseñas entren al repositorio.
 - `german.hernandez@novafiber.com.gt` quedó como Administrador de la aplicación y superusuario. Los otros diez accesos usan el dominio `@novafiber.com.gt` y cubren exactamente los diez roles restantes.

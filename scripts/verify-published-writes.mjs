@@ -1,8 +1,9 @@
 import { readFile } from 'node:fs/promises'
 import { initializeApp, deleteApp } from 'firebase/app'
 import { getAuth, signInWithEmailAndPassword, signOut } from 'firebase/auth'
-import { doc, getDoc, getFirestore, serverTimestamp, setDoc, Timestamp, writeBatch } from 'firebase/firestore'
+import { doc, getDoc, getFirestore, serverTimestamp, setDoc, writeBatch } from 'firebase/firestore'
 import { forkliftChecklistTemplate } from '../src/config/forkliftChecklist.js'
+import { getOperationalShiftId } from '../src/utils/shifts.js'
 
 const projectId = 'cerofallas-pg2-german-2026'
 const requestedProjectId = process.argv.find((value) => value.startsWith('--project='))?.split('=')[1]
@@ -29,8 +30,8 @@ const app = initializeApp({
 const auth = getAuth(app)
 const database = getFirestore(app)
 const ids = {
-  corrective: 'acceptance-cloud-corrective-v1', correctiveAudit: 'acceptance-cloud-audit-corrective-v1',
-  preventive: 'acceptance-cloud-preventive-v1', preventiveAudit: 'acceptance-cloud-audit-preventive-v1',
+  corrective: 'acceptance-cloud-corrective-v1', correctiveStartAudit: 'acceptance-cloud-audit-corrective-start-v1', correctiveAudit: 'acceptance-cloud-audit-corrective-v1',
+  preventive: 'acceptance-cloud-preventive-v1', preventiveStartAudit: 'acceptance-cloud-audit-preventive-start-v1', preventiveAudit: 'acceptance-cloud-audit-preventive-v1',
   incident: 'acceptance-cloud-incident-v1', incidentAudit: 'acceptance-cloud-audit-incident-v1',
   inspection: 'acceptance-cloud-inspection-v1', inspectionAudit: 'acceptance-cloud-audit-inspection-v1',
 }
@@ -56,6 +57,18 @@ async function commitWithAudit(collectionName, entityId, auditId, actorId, data,
   })
   await batch.commit()
 }
+async function startWithOfficialTime(collectionName, entityId, auditId, actorId, data, entityType) {
+  const timestamp = serverTimestamp()
+  const batch = writeBatch(database)
+  batch.set(doc(database, collectionName, entityId), data(timestamp))
+  batch.set(doc(database, 'audit', auditId), {
+    occurredAt: timestamp, actorId, action: 'start', entityType, entityId,
+    reason: 'Prueba técnica cloud autorizada; inicio demostrativo y no operativo.',
+  })
+  await batch.commit()
+}
+
+const guatemalaDate = (date) => date.toLocaleDateString('en-CA', { timeZone: 'America/Guatemala' })
 
 let created = 0
 let skipped = 0
@@ -67,35 +80,58 @@ try {
 
   if (!existing.has(`correctives/${ids.corrective}`)) {
     const user = await login('maintenance_technician')
-    const startedAt = new Date(Date.now() - 90 * 60_000)
-    const endedAt = new Date(startedAt.getTime() + 45 * 60_000)
-    await commitWithAudit('correctives', ids.corrective, ids.correctiveAudit, user.uid, (timestamp) => ({
-      workOrder: 'ACEPTACION-CLOUD-001', eventDate: startedAt.toISOString().slice(0, 10),
-      startedAt: Timestamp.fromDate(startedAt), endedAt: Timestamp.fromDate(endedAt), durationMinutes: 45,
+    await startWithOfficialTime('correctives', ids.corrective, ids.correctiveStartAudit, user.uid, (timestamp) => ({
+      workOrder: 'ACEPTACION-CLOUD-001', eventDate: null,
+      startedAt: timestamp, endedAt: null, durationMinutes: null, timeSource: 'server',
       areaId: 'linea-1', areaSnapshot: { id: 'linea-1', name: 'Línea 1' },
       equipmentId: 'AIRLAY-01', equipmentSnapshot: { code: 'AIRLAY-01', name: 'Airlay 1' },
       reportedSymptom: 'Prueba controlada de aceptación publicada del módulo correctivo.',
-      failureType: 'limpieza_general', affectedComponent: 'Sensores', identifiedCause: 'Registro demostrativo',
-      workPerformed: 'Verificación técnica de permisos y persistencia en Firebase Cloud.',
-      spareParts: [], observations: 'No corresponde a una intervención real de planta.', status: 'completed', voidReason: null,
+      failureType: 'limpieza_general', affectedComponent: 'Sensores', identifiedCause: null,
+      workPerformed: '', spareParts: [], observations: null, status: 'in_progress', voidReason: null,
       technicianIds: [user.uid], createdAt: timestamp, createdBy: user.uid, updatedAt: timestamp, updatedBy: user.uid,
     }), 'corrective')
-    created += 2
+    const current = (await getDoc(doc(database, 'correctives', ids.corrective))).data()
+    const timestamp = serverTimestamp()
+    const completion = writeBatch(database)
+    completion.update(doc(database, 'correctives', ids.corrective), {
+      eventDate: guatemalaDate(current.startedAt.toDate()), endedAt: timestamp, durationMinutes: null, timeSource: 'server',
+      identifiedCause: 'Registro demostrativo', workPerformed: 'Verificación técnica de permisos y persistencia cloud.',
+      observations: 'No corresponde a una intervención real de planta.', status: 'completed',
+      updatedAt: timestamp, updatedBy: user.uid, auditId: ids.correctiveAudit,
+    })
+    completion.set(doc(database, 'audit', ids.correctiveAudit), {
+      occurredAt: timestamp, actorId: user.uid, action: 'complete', entityType: 'corrective', entityId: ids.corrective,
+      reason: 'Prueba técnica cloud autorizada; finalización demostrativa y no operativa.',
+    })
+    await completion.commit()
+    created += 3
   } else skipped += 2
 
   if (!existing.has(`preventiveExecutions/${ids.preventive}`)) {
     const user = await login('maintenance_technician')
-    const startedAt = new Date(Date.now() - 60 * 60_000)
-    const endedAt = new Date(startedAt.getTime() + 30 * 60_000)
-    await commitWithAudit('preventiveExecutions', ids.preventive, ids.preventiveAudit, user.uid, (timestamp) => ({
+    await startWithOfficialTime('preventiveExecutions', ids.preventive, ids.preventiveStartAudit, user.uid, (timestamp) => ({
       planId: null, equipmentId: 'AIRLAY-01', equipmentSnapshot: { code: 'AIRLAY-01', name: 'Airlay 1' },
-      scheduledAt: null, startedAt: Timestamp.fromDate(startedAt), endedAt: Timestamp.fromDate(endedAt), durationMinutes: 30,
-      technicianIds: [user.uid], activityPerformed: 'Prueba controlada de aceptación del registro preventivo.',
-      spareParts: [], observations: 'Ejecución demostrativa no asociada a mantenimiento real.',
-      complianceStatus: 'unscheduled', rescheduleStatus: 'not_applicable', nextDueAtAfterExecution: null,
-      status: 'completed', createdAt: timestamp, createdBy: user.uid, updatedAt: timestamp, updatedBy: user.uid,
+      areaId: 'linea-1', scheduledAt: null, startedAt: timestamp, endedAt: null, durationMinutes: null,
+      technicianIds: [user.uid], activityPerformed: '', spareParts: [], observations: null,
+      complianceStatus: 'pending', rescheduleStatus: 'pending', nextDueAtAfterExecution: null,
+      status: 'in_progress', timeSource: 'server', createdAt: timestamp, createdBy: user.uid, updatedAt: timestamp, updatedBy: user.uid,
     }), 'preventiveExecution')
-    created += 2
+    const current = (await getDoc(doc(database, 'preventiveExecutions', ids.preventive))).data()
+    const timestamp = serverTimestamp()
+    const completion = writeBatch(database)
+    completion.update(doc(database, 'preventiveExecutions', ids.preventive), {
+      startedAt: current.startedAt, endedAt: timestamp, durationMinutes: null, timeSource: 'server',
+      activityPerformed: 'Prueba controlada de aceptación del registro preventivo.', spareParts: [],
+      observations: 'Ejecución demostrativa no asociada a mantenimiento real.', complianceStatus: 'unscheduled',
+      rescheduleStatus: 'not_applicable', nextDueAtAfterExecution: null, status: 'completed',
+      updatedAt: timestamp, updatedBy: user.uid, auditId: ids.preventiveAudit,
+    })
+    completion.set(doc(database, 'audit', ids.preventiveAudit), {
+      occurredAt: timestamp, actorId: user.uid, action: 'complete', entityType: 'preventiveExecution', entityId: ids.preventive,
+      reason: 'Prueba técnica cloud autorizada; finalización demostrativa y no operativa.',
+    })
+    await completion.commit()
+    created += 3
   } else skipped += 2
 
   if (!existing.has(`incidents/${ids.incident}`)) {
@@ -117,7 +153,7 @@ try {
     await commitWithAudit('forkliftInspections', ids.inspection, ids.inspectionAudit, user.uid, (timestamp) => ({
       equipmentId: 'MONT-01', equipmentSnapshot: { code: 'MONT-01', name: 'Montacargas 1' },
       templateId: forkliftChecklistTemplate.id, templateVersion: forkliftChecklistTemplate.version,
-      inspectedAt: Timestamp.fromDate(new Date()), shiftId: 'shift-1', operatorId: user.uid, hourMeter: 0,
+      inspectedAt: timestamp, shiftId: getOperationalShiftId(new Date()), operatorId: user.uid, hourMeter: 0,
       answers, criticalFailures: 0, overallResult: 'fit',
       generalObservations: 'Prueba técnica de aceptación cloud; no representa una inspección operativa.',
       evidenceUrls: [], status: 'completed', createdAt: timestamp, createdBy: user.uid,
