@@ -30,6 +30,7 @@ it('mantiene filas de stock visibles tras error en página adicional', () => {
   expect(html).toContain('PIEZA-PRUEBA')
   expect(html).toContain('Estas cantidades no provienen de SAP')
   expect(html).toContain('Demostración local · no proviene de SAP')
+  expect(html).toContain('Consultando última sincronización')
   expect(html).toContain('Error de consulta')
   expect(html).not.toContain('Sin coincidencias en lo cargado')
 })

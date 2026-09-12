@@ -1,7 +1,7 @@
 import { readFileSync } from 'node:fs'
 import { beforeAll, beforeEach, afterAll, it, expect } from 'vitest'
 import { initializeTestEnvironment, assertSucceeds, assertFails } from '@firebase/rules-unit-testing'
-import { collection, doc, setDoc, getDocs, updateDoc, deleteDoc, serverTimestamp, writeBatch, getCountFromServer, query, where } from 'firebase/firestore'
+import { collection, doc, setDoc, getDoc, getDocs, updateDoc, deleteDoc, serverTimestamp, writeBatch, getCountFromServer, query, where } from 'firebase/firestore'
 
 let env
 beforeAll(async () => {
@@ -76,4 +76,12 @@ it('stock es solo lectura y usuarios no permiten escalar privilegios', async () 
   await assertFails(updateDoc(doc(db, 'users', 'admin'), { permissions: ['everything'] }))
   await assertFails(getDocs(collection(env.authenticatedContext('reader').firestore(), 'users')))
   await assertFails(getDocs(collection(env.unauthenticatedContext().firestore(), 'incidents')))
+})
+it('estado de sincronización SAP es visible solo para lectores de stock', async () => {
+  await env.withSecurityRulesDisabled((ctx) => setDoc(doc(ctx.firestore(), 'integrationStatus', 'sap-stock'), { status: 'success', rows: 10 }))
+  const reader = env.authenticatedContext('reader').firestore()
+  await assertSucceeds(getDoc(doc(reader, 'integrationStatus', 'sap-stock')))
+  await assertFails(getDoc(doc(env.authenticatedContext('reporter').firestore(), 'integrationStatus', 'sap-stock')))
+  await assertFails(getDoc(doc(reader, 'integrationStatus', 'otra-integracion')))
+  await assertFails(setDoc(doc(reader, 'integrationStatus', 'sap-stock'), { status: 'forged' }))
 })

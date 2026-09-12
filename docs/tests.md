@@ -394,7 +394,7 @@ Casos automatizados:
 4. Se rechazan filas incompletas, cantidades inválidas e identificadores duplicados.
 5. El navegador no recibe servidor, usuario, contraseña ni consulta SQL.
 
-Resultado obtenido: 5/5 casos del contrato SAP aprobados, incluyendo servidor simple e instancia nombrada. Suite integral vigente: 197/197 pruebas web, lint limpio y build de producción exitoso.
+Resultado obtenido: 5/5 casos del contrato SAP aprobados, incluyendo servidor simple e instancia nombrada. Suite integral vigente: 198/198 pruebas web, lint limpio y build de producción exitoso.
 
 Estado: BASE TÉCNICA APROBADA. La prueba de conectividad se documenta en P-023.
 
@@ -427,6 +427,22 @@ Casos verificados:
 4. El error presentado contiene únicamente el código técnico seguro `ETIMEOUT`, sin servidor, base, usuario, contraseña, consulta o inventario.
 5. El verificador cloud queda alineado al flujo de inicio/finalización con tiempo oficial para una futura instalación nueva.
 
-Resultado obtenido: configuración aprobada; 5/5 pruebas unitarias SAP, suite integral 197/197 con Firestore Emulator, lint y build aprobados. La corrida seca terminó antes de autenticación/consulta porque desde la red actual no fue alcanzable el host ni TCP 1433. No se leyeron ni publicaron datos.
+Resultado obtenido: configuración aprobada; 5/5 pruebas unitarias SAP, suite integral vigente 198/198 con Firestore Emulator, lint y build aprobados. La corrida seca terminó antes de autenticación/consulta porque desde la red actual no fue alcanzable el host ni TCP 1433. No se leyeron ni publicaron datos.
 
 Estado: BLOQUEADA POR CONECTIVIDAD EXTERNA. Repetir desde planta/VPN o con el puerto TCP fijo autorizado; no corresponde cambiar credenciales hasta superar esta capa.
+
+## PRUEBA P-024 — Estado visible y protegido de sincronización de stock
+
+Fecha: 2026-09-11
+
+Casos verificados:
+
+1. El lector de stock puede consultar únicamente `integrationStatus/sap-stock`.
+2. Un perfil sin `stock.read` no puede leer el estado de integración.
+3. Ningún navegador puede crear o alterar el estado; solo el agente administrativo local lo publica.
+4. La pantalla anuncia cuando aún no existe sincronización real y mantiene separados los datos demostrativos.
+5. Una sincronización exitosa podrá mostrar fecha oficial, total de registros y almacenes sin revelar datos de conexión.
+
+Resultado obtenido: 17/17 pruebas focalizadas de incidentes/stock y presentación; suite integral 198/198, lint y build aprobados.
+
+Estado: APROBADA TÉCNICAMENTE. Pendiente comprobar la tarjeta con el primer estado real publicado desde la red autorizada.

@@ -343,6 +343,11 @@ service cloud.firestore {
       allow write: if false;
     }
 
+    match /integrationStatus/{integrationId} {
+      allow read: if integrationId == 'sap-stock' && hasPermission('stock.read');
+      allow write: if false;
+    }
+
     match /{document=**} {
       allow read, write: if false;
     }

@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useAuth } from '../features/auth/AuthContext.jsx'
 import { resourceReaders } from '../services/firebase/history.js'
 import { usePagedHistory } from '../features/usePagedHistory.js'
@@ -7,6 +7,7 @@ import { dashboardDate } from '../utils/dashboard.js'
 import { permissionCatalog, roleDefinitions } from '../config/roles.js'
 import UserAdministration from '../components/UserAdministration.jsx'
 import { auditActionLabel, auditActorLabel, auditEntityLabel } from '../utils/audit.js'
+import { getStockIntegrationStatus } from '../services/firebase/integrations.js'
 
 const resources = {
   users: { title: 'Usuarios', permission: 'users.read', description: 'Perfiles de aplicación. El rol Administrador puede crear cuentas y administrar rol o estado mediante el backend privilegiado.', fields: [['displayName', 'Nombre'], ['email', 'Correo'], ['roleName', 'Rol'], ['status', 'Estado']] },
@@ -33,15 +34,27 @@ function ResourceHistory({ resource }) {
   const { user, hasPermission } = useAuth()
   const allowed = hasPermission(config.permission)
   const [search, setSearch] = useState('')
+  const [integration, setIntegration] = useState({ loading: resource === 'stock' && allowed, status: null, error: '' })
   const history = usePagedHistory({ enabled: allowed, scope: `${user?.uid}:${resource}`, status: 'all', readPage: resourceReaders[resource] })
   const actorHistory = usePagedHistory({ enabled: allowed && resource === 'audit', scope: `${user?.uid}:audit-actors`, status: 'all', options: { pageSize: 100 }, readPage: resourceReaders.users })
   const actors = new Map(actorHistory.records.map((actor) => [actor.id, actor]))
+  useEffect(() => {
+    if (resource !== 'stock' || !allowed) return
+    let active = true
+    getStockIntegrationStatus().then((status) => {
+      if (active) setIntegration({ loading: false, status, error: '' })
+    }).catch(() => {
+      if (active) setIntegration({ loading: false, status: null, error: 'No fue posible consultar el estado de sincronización.' })
+    })
+    return () => { active = false }
+  }, [allowed, resource])
   if (!allowed) return <div className="panel"><h1>{config.title}</h1><p>Tu perfil no tiene permiso para esta consulta.</p></div>
   const filtered = history.records.filter((row) => config.fields.some(([key]) => resourceValue(resource, key, row, actors).toLowerCase().includes(search.trim().toLowerCase())))
   return <section className="page-stack">
     <div className="page-heading"><div><h1>{config.title}</h1><p>{config.description}</p></div></div>
     {resource === 'users' && <UserAdministration records={history.records} onSaved={history.refresh} />}
     {resource === 'users' && <section className="panel"><div className="panel__heading"><div><p className="eyebrow">Referencia de acceso</p><h2>Roles institucionales propuestos</h2></div></div><p className="muted-copy">Esta matriz no modifica cuentas. Los permisos técnicos de lectura de equipos y auditoría acompañan los registros que los necesitan.</p><div className="role-catalog">{Object.entries(roleDefinitions).map(([id, role]) => <details key={id}><summary>{role.name} <span>{role.permissions.length} permisos</span></summary><ul>{role.permissions.map((permission) => <li key={permission}><code>{permission}</code><span>{permissionCatalog[permission]}</span></li>)}</ul></details>)}</div></section>}
+    {resource === 'stock' && <aside className="panel" aria-live="polite"><p className="eyebrow">Estado de integración</p>{integration.loading ? <p>Consultando última sincronización…</p> : integration.error ? <p className="form-error" role="alert">{integration.error}</p> : integration.status?.status === 'success' ? <><strong>Última sincronización SAP completada</strong><p className="muted-copy">{dashboardDate(integration.status.completedAt)} · {integration.status.rows ?? 0} registros · {integration.status.warehouses ?? 0} almacén(es)</p></> : <><strong>Aún no hay una sincronización SAP publicada.</strong><p className="muted-copy">Las existencias identificadas como demostración no deben utilizarse para decisiones operativas.</p></>}</aside>}
     {resource === 'stock' && history.records.some((row) => row.source === 'demo-local') && <aside className="panel" role="note"><p className="eyebrow">Datos de demostración</p><strong>Estas cantidades no provienen de SAP.</strong><p className="muted-copy">Sirven únicamente para revisar filtros, permisos y presentación mientras se integra la consulta SQL Server autorizada.</p></aside>}
     <div className="filter-bar"><label>Buscar en registros cargados<input type="search" value={search} onChange={(e) => setSearch(e.target.value)} /></label></div>
     <p className="muted-copy">La búsqueda solo revisa lo cargado. Actualizar reinicia el histórico; úsalo si los datos cambiaron durante la consulta.</p>
