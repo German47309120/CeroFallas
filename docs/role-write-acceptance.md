@@ -48,6 +48,6 @@ La evidencia automatizada demuestra la aplicación de la matriz acordada. Antes 
 
 Comando: `npm test -- --run tests/route-access.test.js tests/route-access-view.test.jsx`
 
-Se evaluaron 21 rutas protegidas contra los once perfiles: **231 decisiones de acceso por URL**. Incluye consultas, formularios nuevos, ediciones con identificador, stock, riesgo, ayuda y administración. La prueba de presentación confirma tres estados: contenido autorizado, explicación de acceso restringido y espera mientras se carga el perfil.
+Se evaluaron 22 rutas protegidas contra los once perfiles: **242 decisiones de acceso por URL**. Incluye consultas, formularios nuevos, ediciones con identificador, stock, riesgo, reporte gerencial, ayuda y administración. La prueba de presentación confirma tres estados: contenido autorizado, explicación de acceso restringido y espera mientras se carga el perfil.
 
 Este control no sustituye las reglas de Firestore. Su función es impedir que una URL escrita manualmente muestre una operación ajena al rol; Firestore vuelve a comprobar el permiso cuando existe una lectura o escritura.

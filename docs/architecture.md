@@ -163,6 +163,7 @@ La selección depende de red, firewall, disponibilidad de un servidor institucio
 - Power BI conservará su conexión autorizada a SAP para los datos empresariales existentes.
 - Los datos de CeroFallas se expondrán mediante un dataset o exportación controlada.
 - La URL del reporte no se insertará como pública hasta confirmar su modalidad de acceso.
+- La ruta `/analitica` valida que la URL sea HTTPS y pertenezca a `app.powerbi.com`; no muestra un reporte ficticio cuando falta configuración.
 - El dashboard web cubrirá operación diaria; Power BI cubrirá análisis y presentación consolidada.
 - Una falla de actualización de Power BI no afectará escrituras operativas.
 

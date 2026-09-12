@@ -113,3 +113,10 @@ La fase se considerará completa únicamente cuando existan URL HTTPS, proyecto 
 - Trece rutas HTTPS respondieron 200 y los cuatro encabezados de seguridad configurados coincidieron con los valores esperados.
 - Resultado reproducible: 149 verificaciones aprobadas mediante `npm run verify:published-roles -- --project=cerofallas-pg2-german-2026`; no se realizaron escrituras ni se mostraron contraseñas.
 - Cuatro operaciones técnicas publicadas generaron sus auditorías y cuatro intentos sin permiso fueron rechazados. Una segunda ejecución confirmó idempotencia: cero duplicados y ocho documentos de evidencia existentes.
+
+## Evidencia publicada adicional — 2026-09-11
+
+- Se publicó la ruta protegida `/analitica`, preparada para un enlace HTTPS autorizado de Power BI.
+- Catorce rutas HTTPS respondieron 200; once cuentas conservaron perfil, rol y permisos correctos.
+- Resultado reproducible: 150 verificaciones de solo lectura aprobadas. No se configuró un enlace ficticio, no se realizaron escrituras y no se mostraron contraseñas.
+- Falta definir la audiencia del reporte y completar `VITE_POWER_BI_REPORT_URL` antes de considerarlo integrado.

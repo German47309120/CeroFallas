@@ -394,7 +394,7 @@ Casos automatizados:
 4. Se rechazan filas incompletas, cantidades inválidas e identificadores duplicados.
 5. El navegador no recibe servidor, usuario, contraseña ni consulta SQL.
 
-Resultado obtenido: 5/5 casos del contrato SAP aprobados, incluyendo servidor simple e instancia nombrada. Suite integral vigente: 198/198 pruebas web, lint limpio y build de producción exitoso.
+Resultado obtenido: 5/5 casos del contrato SAP aprobados, incluyendo servidor simple e instancia nombrada. Suite integral vigente: 202/202 pruebas web, lint limpio y build de producción exitoso.
 
 Estado: BASE TÉCNICA APROBADA. La prueba de conectividad se documenta en P-023.
 
@@ -427,7 +427,7 @@ Casos verificados:
 4. El error presentado contiene únicamente el código técnico seguro `ETIMEOUT`, sin servidor, base, usuario, contraseña, consulta o inventario.
 5. El verificador cloud queda alineado al flujo de inicio/finalización con tiempo oficial para una futura instalación nueva.
 
-Resultado obtenido: configuración aprobada; 5/5 pruebas unitarias SAP, suite integral vigente 198/198 con Firestore Emulator, lint y build aprobados. La corrida seca terminó antes de autenticación/consulta porque desde la red actual no fue alcanzable el host ni TCP 1433. No se leyeron ni publicaron datos.
+Resultado obtenido: configuración aprobada; 5/5 pruebas unitarias SAP, suite integral vigente 202/202 con Firestore Emulator, lint y build aprobados. La corrida seca terminó antes de autenticación/consulta porque desde la red actual no fue alcanzable el host ni TCP 1433. No se leyeron ni publicaron datos.
 
 Estado: BLOQUEADA POR CONECTIVIDAD EXTERNA. Repetir desde planta/VPN o con el puerto TCP fijo autorizado; no corresponde cambiar credenciales hasta superar esta capa.
 
@@ -446,3 +446,19 @@ Casos verificados:
 Resultado obtenido: 17/17 pruebas focalizadas de incidentes/stock y presentación; suite integral 198/198, lint y build aprobados.
 
 Estado: APROBADA Y PUBLICADA TÉCNICAMENTE. La ruta `/repuestos` respondió HTTP 200 con encabezados de seguridad; falta comprobar la tarjeta con el primer estado real publicado desde la red autorizada.
+
+## PRUEBA P-025 — Acceso seguro al reporte gerencial
+
+Fecha: 2026-09-11
+
+Casos verificados:
+
+1. La aplicación acepta enlaces HTTPS oficiales de Power BI para vista autenticada o publicación aprobada.
+2. Rechaza HTTP, dominios distintos y rutas no reconocidas sin mostrar el valor inseguro.
+3. Una publicación pública presenta una advertencia explícita sobre información institucional.
+4. Sin enlace configurado, la pantalla no inventa un reporte y permite volver al dashboard operativo.
+5. `/analitica` requiere `dashboard.read`; la matriz cubre 242 decisiones de acceso entre 22 rutas y 11 roles.
+
+Resultado obtenido: 202/202 pruebas web, lint y build aprobados. En Firebase publicado se validaron 11 cuentas, 14 rutas HTTPS y 150 comprobaciones de autenticación, perfil, permisos y Hosting, sin escrituras ni exposición de contraseñas.
+
+Estado: BASE TÉCNICA PUBLICADA. Pendiente recibir el enlace real y confirmar si el acceso será autenticado o público antes de configurarlo.
