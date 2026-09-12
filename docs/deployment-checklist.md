@@ -39,6 +39,7 @@ El diagnóstico también revisa los recursos generados en `dist/assets`: ningún
 - [ ] Revisar dominios autorizados de Authentication.
 - [ ] Mantener los encabezados base de Hosting y definir Content-Security-Policy después de conocer los dominios Firebase/Power BI autorizados.
 - [ ] Configurar App Check primero en modo de observación; activar cumplimiento solo después de verificar clientes legítimos.
+  - El SDK ya está preparado. Falta registrar el dominio, configurar `VITE_RECAPTCHA_ENTERPRISE_SITE_KEY`, publicar, observar métricas y ejecutar aceptación con los once perfiles.
 - [x] Confirmar que Cloud Storage permanece deshabilitado mientras adjuntos no formen parte del alcance aprobado.
 
 ## 4. Revisión de seguridad previa

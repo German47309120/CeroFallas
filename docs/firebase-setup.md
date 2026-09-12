@@ -122,6 +122,17 @@ Las pruebas usan un proyecto `demo-` aislado y limpian Firestore entre casos.
 
 `npm audit --omit=dev` del frontend reporta cero vulnerabilidades de producción.
 
+## App Check preparado
+
+El frontend inicializa App Check con reCAPTCHA Enterprise antes de Authentication y Firestore únicamente cuando existe `VITE_RECAPTCHA_ENTERPRISE_SITE_KEY`. En emuladores o sin clave permanece apagado para evitar bloquear el desarrollo.
+
+Pasos pendientes en consola:
+
+1. Registrar la app web publicada en App Check y crear/seleccionar una clave reCAPTCHA Enterprise para sus dominios autorizados.
+2. Guardar la clave pública en `.env.local`; no corresponde a una contraseña ni a una cuenta de servicio.
+3. Publicar Hosting y observar métricas de solicitudes válidas/no verificadas.
+4. Activar enforcement por producto solo después de validar las once cuentas y los dispositivos institucionales. No se debe activar a ciegas porque podría bloquear la operación completa.
+
 En `functions/`, `npm audit --omit=dev` reporta siete vulnerabilidades moderadas en dependencias transitivas de Firebase Admin/Functions relacionadas con Storage, HTTP y UUID. La propuesta automática completa degrada Firebase Admin a una versión mayor incompatible, por lo que no se aplicó `npm audit fix --force`. Debe reevaluarse con nuevas versiones oficiales antes del despliegue.
 
 Firebase CLI 15.29.0 conserva ocho vulnerabilidades moderadas en dependencias transitivas de desarrollo. La corrección forzada propone degradar a Firebase CLI 14.23.0 y no se aplicará. El CLI se utilizará solo como herramienta local, se mantendrá actualizado y no formará parte del bundle publicado.

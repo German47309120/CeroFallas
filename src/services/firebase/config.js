@@ -1,4 +1,5 @@
 import { getApps, initializeApp } from 'firebase/app'
+import { initializeAppCheck, ReCaptchaEnterpriseProvider } from 'firebase/app-check'
 
 const environmentConfig = {
   apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
@@ -27,6 +28,11 @@ const firebaseConfig = useFirebaseEmulators ? emulatorConfig : environmentConfig
 export const isFirebaseConfigured = useFirebaseEmulators || hasCloudConfig
 export const isDemoMode = import.meta.env.VITE_DEMO_MODE !== 'false' && !useFirebaseEmulators
 export const adminFunctionsEnabled = useFirebaseEmulators || import.meta.env.VITE_ADMIN_FUNCTIONS_ENABLED === 'true'
+const appCheckSiteKey = import.meta.env.VITE_RECAPTCHA_ENTERPRISE_SITE_KEY?.trim() || ''
+
+export function shouldActivateAppCheck(siteKey = appCheckSiteKey, emulators = useFirebaseEmulators) {
+  return !emulators && Boolean(String(siteKey ?? '').trim())
+}
 
 export function getFirebaseApp() {
   if (!isFirebaseConfigured) {
@@ -34,4 +40,13 @@ export function getFirebaseApp() {
   }
 
   return getApps()[0] ?? initializeApp(firebaseConfig)
+}
+
+export function initializeFirebaseAppCheck() {
+  if (!shouldActivateAppCheck()) return false
+  initializeAppCheck(getFirebaseApp(), {
+    provider: new ReCaptchaEnterpriseProvider(appCheckSiteKey),
+    isTokenAutoRefreshEnabled: true,
+  })
+  return true
 }

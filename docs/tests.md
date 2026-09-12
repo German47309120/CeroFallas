@@ -462,3 +462,18 @@ Casos verificados:
 Resultado obtenido: 202/202 pruebas web, lint y build aprobados. En Firebase publicado se validaron 11 cuentas, 14 rutas HTTPS y 150 comprobaciones de autenticación, perfil, permisos y Hosting, sin escrituras ni exposición de contraseñas.
 
 Estado: BASE TÉCNICA PUBLICADA. Pendiente recibir el enlace real y confirmar si el acceso será autenticado o público antes de configurarlo.
+
+## PRUEBA P-026 — Preparación controlada de App Check
+
+Fecha: 2026-09-11
+
+Casos verificados:
+
+1. Sin clave pública, App Check permanece apagado y no interrumpe la aplicación existente.
+2. En emuladores permanece apagado aunque se proporcione una clave.
+3. En cloud se activa únicamente cuando existe `VITE_RECAPTCHA_ENTERPRISE_SITE_KEY`.
+4. La inicialización ocurre antes de Authentication y Firestore y solicita renovación automática del token.
+
+Resultado obtenido: 3/3 pruebas focalizadas y suite integral 205/205 aprobadas; lint y build de producción limpios.
+
+Estado: CÓDIGO PREPARADO. Pendiente registrar la app/dominio en App Check, configurar la clave pública, observar métricas y solo entonces decidir enforcement.
