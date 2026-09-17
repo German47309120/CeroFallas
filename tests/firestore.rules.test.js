@@ -71,7 +71,8 @@ const preventivePlanData = (userId, overrides = {}) => ({
 const preventiveExecutionData = (userId, overrides = {}) => ({
   planId: null, equipmentId: 'TEST-EQ-001', equipmentSnapshot: { code: 'TEST-EQ-001', name: 'Equipo de prueba' }, scheduledAt: null,
   startedAt: serverTimestamp(), endedAt: null, durationMinutes: null, technicianIds: [userId], activityPerformed: '', spareParts: [], observations: null,
-  complianceStatus: 'pending', status: 'in_progress', timeSource: 'server', createdAt: serverTimestamp(), createdBy: userId, updatedAt: serverTimestamp(), updatedBy: userId, ...overrides,
+  complianceStatus: 'pending', status: 'in_progress', timeSource: 'server', meterReading: null, conditionResult: null,
+  createdAt: serverTimestamp(), createdBy: userId, updatedAt: serverTimestamp(), updatedBy: userId, ...overrides,
   rescheduleStatus: overrides.rescheduleStatus ?? 'pending', nextDueAtAfterExecution: overrides.nextDueAtAfterExecution ?? null,
 })
 
@@ -239,6 +240,36 @@ describe('reglas de preventivos', () => {
     completion.update(executionRef, { startedAt: started.startedAt, endedAt: serverTimestamp(), durationMinutes: null, timeSource: 'server', activityPerformed: 'Inspección terminada', complianceStatus: 'unscheduled', rescheduleStatus: 'not_applicable', nextDueAtAfterExecution: null, status: 'completed', updatedAt: serverTimestamp(), updatedBy: 'executor', auditId: completionAudit.id })
     completion.set(completionAudit, { occurredAt: serverTimestamp(), actorId: 'executor', action: 'complete', entityType: 'preventiveExecution', entityId: executionRef.id })
     await assertSucceeds(completion.commit())
+  })
+
+  it('exige horómetro al completar un plan por horas', async () => {
+    await createProfile('hour-executor', ['preventive.read', 'preventive.execute', 'audit.write'])
+    await testEnvironment.withSecurityRulesDisabled(async (context) => {
+      await setDoc(doc(context.firestore(), 'preventivePlans', 'hours-plan'), preventivePlanData('planner', {
+        frequencyType: 'hours', frequencyValue: 250, frequencyUnit: 'hour',
+      }))
+    })
+    const database = testEnvironment.authenticatedContext('hour-executor').firestore()
+    const executionRef = doc(database, 'preventiveExecutions', 'hours-execution')
+    await assertSucceeds(setDoc(executionRef, preventiveExecutionData('hour-executor', { planId: 'hours-plan' })))
+    const started = (await getDoc(executionRef)).data()
+    const completionData = (auditId, meterReading) => ({
+      startedAt: started.startedAt, endedAt: serverTimestamp(), durationMinutes: null, timeSource: 'server',
+      activityPerformed: 'Lubricación por horómetro', complianceStatus: 'unscheduled',
+      rescheduleStatus: 'manual_required', nextDueAtAfterExecution: null, meterReading,
+      conditionResult: null, status: 'completed', updatedAt: serverTimestamp(), updatedBy: 'hour-executor', auditId,
+    })
+    const invalidAudit = doc(collection(database, 'audit'))
+    const invalid = writeBatch(database)
+    invalid.update(executionRef, completionData(invalidAudit.id, null))
+    invalid.set(invalidAudit, { occurredAt: serverTimestamp(), actorId: 'hour-executor', action: 'complete', entityType: 'preventiveExecution', entityId: executionRef.id })
+    await assertFails(invalid.commit())
+
+    const validAudit = doc(collection(database, 'audit'))
+    const valid = writeBatch(database)
+    valid.update(executionRef, completionData(validAudit.id, 1250.5))
+    valid.set(validAudit, { occurredAt: serverTimestamp(), actorId: 'hour-executor', action: 'complete', entityType: 'preventiveExecution', entityId: executionRef.id })
+    await assertSucceeds(valid.commit())
   })
 
   it('rechaza crear como completada una ejecución con horas digitadas', async () => {

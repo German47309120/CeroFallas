@@ -198,6 +198,8 @@ service cloud.firestore {
         && request.resource.data.complianceStatus == 'pending'
         && request.resource.data.rescheduleStatus == 'pending'
         && request.resource.data.nextDueAtAfterExecution == null
+        && request.resource.data.meterReading == null
+        && request.resource.data.conditionResult == null
         && request.resource.data.createdBy == request.auth.uid
         && request.auth.uid in request.resource.data.technicianIds
         && request.resource.data.createdAt == request.time
@@ -225,6 +227,20 @@ service cloud.firestore {
           && request.resource.data.updatedAt == request.time
           && request.resource.data.auditId is string
           && preventiveExecutionAudit(request.resource.data, executionId)
+          && ((request.resource.data.planId == null
+              && request.resource.data.meterReading == null
+              && request.resource.data.conditionResult == null)
+            || (request.resource.data.planId is string
+              && ((planAfter(request.resource.data.planId).data.frequencyType == 'calendar'
+                  && request.resource.data.meterReading == null
+                  && request.resource.data.conditionResult == null)
+                || (planAfter(request.resource.data.planId).data.frequencyType == 'hours'
+                  && request.resource.data.meterReading is number
+                  && request.resource.data.meterReading >= 0
+                  && request.resource.data.conditionResult == null)
+                || (planAfter(request.resource.data.planId).data.frequencyType == 'condition'
+                  && request.resource.data.meterReading == null
+                  && request.resource.data.conditionResult in ['normal', 'monitor', 'maintenance_required']))))
           && ((request.resource.data.planId == null
               && request.resource.data.rescheduleStatus == 'not_applicable'
               && request.resource.data.nextDueAtAfterExecution == null)

@@ -1,6 +1,6 @@
 import { collection, doc, documentId, getDoc, getDocs, limit, orderBy, query, runTransaction, serverTimestamp, startAfter, Timestamp, writeBatch } from 'firebase/firestore'
 import { getFirebaseFirestore } from './firestore.js'
-import { nextCalendarDueDate, validatePreventiveVoidReason } from '../../utils/preventive.js'
+import { nextCalendarDueDate, normalizePreventiveOperationalReading, validatePreventiveVoidReason } from '../../utils/preventive.js'
 
 const cleanParts = (parts) => parts.filter((part) => part.code.trim() || part.description.trim()).map((part) => ({ code: part.code.trim().toUpperCase(), description: part.description.trim(), quantity: Number(part.quantity) }))
 
@@ -46,6 +46,7 @@ export async function startPreventiveExecution(values, equipment, plan, userId) 
     areaId: equipment.areaId, equipmentSnapshot: { code: equipment.code, name: equipment.name },
     scheduledAt: plan?.nextDueAt ?? null, startedAt: timestamp, endedAt: null, durationMinutes: null,
     technicianIds: [userId], activityPerformed: '', spareParts: [], observations: null,
+    meterReading: null, conditionResult: null,
     complianceStatus: 'pending', rescheduleStatus: 'pending', nextDueAtAfterExecution: null,
     status: 'in_progress', timeSource: 'server', createdAt: timestamp, createdBy: userId, updatedAt: timestamp, updatedBy: userId,
   }
@@ -76,11 +77,13 @@ export async function completePreventiveExecution(executionId, values, userId) {
       ? (startedDate <= new Date(`${current.data().scheduledAt.toDate().toLocaleDateString('en-CA', { timeZone: 'America/Guatemala' })}T23:59:59`) ? 'on_time' : 'late')
       : 'unscheduled'
     const rescheduleStatus = !planData ? 'not_applicable' : automatic ? 'automatic' : 'manual_required'
+    const operationalReading = normalizePreventiveOperationalReading(planData?.frequencyType, values.meterReading, values.conditionResult)
     const timestamp = serverTimestamp()
     const auditRef = doc(collection(database, 'audit'))
     const updates = {
       endedAt: timestamp, durationMinutes: null, activityPerformed: values.activityPerformed.trim(),
       spareParts: cleanParts(values.spareParts), observations: values.observations.trim() || null,
+      ...operationalReading,
       complianceStatus: compliance, rescheduleStatus, nextDueAtAfterExecution: nextDueAt,
       status: 'completed', timeSource: 'server', updatedAt: timestamp, updatedBy: userId, auditId: auditRef.id,
     }

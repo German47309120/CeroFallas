@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { complianceStatus, frequencyLabel, nextCalendarDueDate, validatePreventiveVoidReason } from '../src/utils/preventive.js'
+import { complianceStatus, frequencyLabel, nextCalendarDueDate, normalizePreventiveOperationalReading, validatePreventiveVoidReason } from '../src/utils/preventive.js'
 
 describe('reglas funcionales preventivas', () => {
   it('describe frecuencias estimadas', () => {
@@ -36,5 +36,13 @@ describe('reglas funcionales preventivas', () => {
     expect(validatePreventiveVoidReason('  Registro preventivo duplicado  ')).toBe('Registro preventivo duplicado')
     expect(() => validatePreventiveVoidReason('breve')).toThrow('al menos 10 caracteres')
     expect(() => validatePreventiveVoidReason('x'.repeat(501))).toThrow('500 caracteres')
+  })
+
+  it('normaliza evidencia para planes por horas y por condición', () => {
+    expect(normalizePreventiveOperationalReading('hours', '1250.5', '')).toEqual({ meterReading: 1250.5, conditionResult: null })
+    expect(normalizePreventiveOperationalReading('condition', '', 'monitor')).toEqual({ meterReading: null, conditionResult: 'monitor' })
+    expect(normalizePreventiveOperationalReading('calendar', '', '')).toEqual({ meterReading: null, conditionResult: null })
+    expect(() => normalizePreventiveOperationalReading('hours', '', '')).toThrow('meter-reading-invalid')
+    expect(() => normalizePreventiveOperationalReading('condition', '', 'libre')).toThrow('condition-result-invalid')
   })
 })

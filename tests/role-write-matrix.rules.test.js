@@ -121,7 +121,7 @@ const operations = {
     write: (database, roleId) => setDoc(doc(database, 'preventiveExecutions', `execution-${roleId}`), {
       planId: null, equipmentId: 'TEST-01', areaId: 'linea-1', startedAt: serverTimestamp(), endedAt: null, durationMinutes: null,
       technicianIds: [roleId], status: 'in_progress', complianceStatus: 'pending', timeSource: 'server',
-      rescheduleStatus: 'pending', nextDueAtAfterExecution: null,
+      rescheduleStatus: 'pending', nextDueAtAfterExecution: null, meterReading: null, conditionResult: null,
       createdAt: serverTimestamp(), createdBy: roleId, updatedAt: serverTimestamp(), updatedBy: roleId,
     }),
   },

@@ -19,6 +19,26 @@ export function validatePreventiveVoidReason(reason) {
   return normalized
 }
 
+export const preventiveConditionResults = [
+  { value: 'normal', label: 'Condición normal' },
+  { value: 'monitor', label: 'Requiere seguimiento' },
+  { value: 'maintenance_required', label: 'Requiere mantenimiento' },
+]
+
+export function normalizePreventiveOperationalReading(frequencyType, meterReading, conditionResult) {
+  if (frequencyType === 'hours') {
+    const reading = Number(meterReading)
+    if (meterReading === '' || !Number.isFinite(reading) || reading < 0) throw new Error('preventive/meter-reading-invalid')
+    return { meterReading: reading, conditionResult: null }
+  }
+  if (frequencyType === 'condition') {
+    const allowed = preventiveConditionResults.map((item) => item.value)
+    if (!allowed.includes(conditionResult)) throw new Error('preventive/condition-result-invalid')
+    return { meterReading: null, conditionResult }
+  }
+  return { meterReading: null, conditionResult: null }
+}
+
 const dateParts = (dateValue) => {
   const match = /^(\d{4})-(\d{2})-(\d{2})$/.exec(dateValue)
   if (!match) throw new Error('preventive/date-invalid')
