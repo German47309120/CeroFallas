@@ -1,5 +1,26 @@
 # CeroFallas — Registro de pruebas
 
+## Ejecución reproducible
+
+- `npm test` inicia automáticamente Firestore Emulator, ejecuta las pruebas web y de reglas, y detiene el emulador al finalizar.
+- `npm run test:unit` ejecuta únicamente Vitest y requiere que Firestore Emulator ya esté disponible en `127.0.0.1:8080` para incluir las pruebas de reglas.
+- `npm run verify` reúne lint, las 206 pruebas web y de reglas, las pruebas predictivas y el build de producción.
+
+Esta separación evita que una verificación parezca fallar por no haber iniciado manualmente el emulador.
+
+## PRUEBA P-027 — Verificación autónoma y limpieza del build (2026-09-16)
+
+Casos verificados:
+
+1. `npm test` inicia y detiene Firestore Emulator sin exigir preparación manual.
+2. Los archivos temporales de generación documental quedan fuera del análisis de código de la aplicación.
+3. El preflight bloquea scripts de captura de Figma y referencias a `localhost` o `127.0.0.1` dentro del HTML compilado.
+4. El build de producción no carga herramientas externas utilizadas únicamente para preparar mockups.
+
+Resultado obtenido: **206/206 pruebas web y de reglas**, **3/3 pruebas predictivas**, lint limpio y build de producción exitoso.
+
+Estado: APROBADA TÉCNICAMENTE. La comprobación puede repetirse completa con una sola orden: `npm run verify`.
+
 ## PRUEBA P-015 — Incidentes, permisos y consultas (2026-09-03)
 
 Suite completa: **43/43 aprobadas** en Firestore Emulator. Build de producción aprobado.

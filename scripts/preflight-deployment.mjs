@@ -50,6 +50,17 @@ export function inspectBuildChunks(assetDirectory, limitBytes = 500 * 1024) {
     : { level: 'BLOCK', message: `El paquete JavaScript ${largest.name} pesa ${sizeKb} kB y supera el límite de 500 kB.` }
 }
 
+export function inspectBuildHtml(html = '') {
+  const forbiddenDevelopmentResources = [
+    { pattern: /mcp\.figma\.com|html-to-design\/capture\.js/i, label: 'captura de Figma' },
+    { pattern: /localhost|127\.0\.0\.1/i, label: 'referencia local' },
+  ]
+  const detected = forbiddenDevelopmentResources.find(({ pattern }) => pattern.test(html))
+  return detected
+    ? { level: 'BLOCK', message: `El build incluye una ${detected.label} que no corresponde a producción.` }
+    : { level: 'PASS', message: 'El HTML de producción no incluye herramientas de captura ni referencias locales.' }
+}
+
 function checkFile(results, path, label) {
   results.push(existsSync(join(root, path))
     ? { level: 'PASS', message: `${label}: ${path}` }
@@ -66,6 +77,8 @@ export function runPreflight() {
   ]) checkFile(results, path, label)
 
   results.push(inspectBuildChunks(join(root, 'dist', 'assets')))
+  const buildHtmlPath = join(root, 'dist', 'index.html')
+  results.push(inspectBuildHtml(existsSync(buildHtmlPath) ? readFileSync(buildHtmlPath, 'utf8') : ''))
 
   const nodeMajor = Number(process.versions.node.split('.')[0])
   results.push(nodeMajor >= 22
@@ -98,7 +111,10 @@ export function runPreflight() {
 
   try {
     const tracked = execFileSync('git', ['ls-files'], { cwd: root, encoding: 'utf8' }).split(/\r?\n/).filter(Boolean)
-    const risky = tracked.filter((path) => /(^|\/)(\.local|emulator-data)(\/|$)|(^|\/)\.env(\.|$)|service-account|\.(pem|key)$/i.test(path) && path !== '.env.example')
+    const risky = tracked.filter((path) => {
+      const isEnvironmentTemplate = /(^|\/)\.env(?:\.[^/]+)*\.example$/i.test(path) || path === '.env.example'
+      return !isEnvironmentTemplate && /(^|\/)(\.local|emulator-data)(\/|$)|(^|\/)\.env(\.|$)|service-account|\.(pem|key)$/i.test(path)
+    })
     results.push(risky.length
       ? { level: 'BLOCK', message: `Git rastrea ${risky.length} ruta(s) sensible(s) o locales.` }
       : { level: 'PASS', message: 'Git no rastrea ambientes, emuladores, claves ni cuentas de servicio.' })

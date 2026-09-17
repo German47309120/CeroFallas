@@ -1,6 +1,6 @@
 # CEROFALLAS — ESTADO ACTUAL
 
-## Control maestro de fases — actualizado 2026-09-11
+## Control maestro de fases — actualizado 2026-09-16
 
 Este es el único documento de seguimiento de fases. Se conserva la numeración del apartado 33 de `../Prompt_Maestro_CeroFallas_V2.md`. Los registros históricos siguientes son evidencia de avances, no una segunda hoja de ruta. La entrega universitaria editable continúa en su archivo maestro independiente.
 
@@ -31,7 +31,7 @@ Estados: **Base lista** = definición o implementación local con evidencia; no 
 | 19 | Entrenamiento y comparación | Laboratorio demo | Regresión logística y Random Forest comparados con división temporal y métricas reproducibles; no existen métricas reales ni modelo productivo. |
 | 20 | Integración de predicciones | Interfaz demostrativa segura | Pantalla responsive con comparación, trazabilidad, estado de preparación y advertencia de no uso operativo. Faltan servicio y resultados con histórico real validado. |
 | 21 | Automatización cada 24 horas | Pendiente | Depende de fuentes, modelo, infraestructura y costos autorizados. |
-| 22 | Pruebas generales | En curso avanzado | Suite vigente: 205/205 web y 3/3 predictivas; 11 cuentas, 14 rutas y 150 verificaciones publicadas aprobadas. Cuatro escrituras cloud con auditoría fueron aceptadas y cuatro intentos sin permiso rechazados; el verificador idempotente confirmó 293 documentos. Falta aceptación institucional multidispositivo. |
+| 22 | Pruebas generales | En curso avanzado | Suite vigente: 206/206 web y 3/3 predictivas; `npm test` administra Firestore Emulator automáticamente. Once cuentas, 14 rutas y 150 verificaciones publicadas aprobadas. Cuatro escrituras cloud con auditoría fueron aceptadas y cuatro intentos sin permiso rechazados; falta aceptación institucional multidispositivo. |
 | 23 | Documentación | Base local avanzada | Entrega 2 Word/PDF, documentación técnica y guía de uso integrada y personalizada por permisos. Falta actualizar al cierre definitivo y completar datos académicos. |
 | 24 | Presentación final | Parcial | Guía de defensa incluida en entrega 2; falta ensayo final y evidencia del sistema terminado. |
 
@@ -65,7 +65,14 @@ Incidentes se conserva como **módulo adicional transversal**, relacionado con h
 
 Al terminar un avance, actualizar esta tabla y registrar: cambio concreto, pruebas realmente ejecutadas, pendientes, dependencias y siguiente paso. No marcar una fase completa solo por tener pantalla o build exitoso. No atribuir porcentajes globales sin criterios de aceptación medibles. La evidencia de pruebas anterior conserva su fecha: no implica una nueva ejecución hoy.
 
-## Avance vigente — 2026-09-11
+## Avance vigente — 2026-09-16
+
+### Verificación autónoma y limpieza de producción
+
+- `npm test` ahora inicia Firestore Emulator, ejecuta las pruebas y lo detiene automáticamente; `npm run verify` vuelve a ser reproducible desde una terminal limpia.
+- ESLint excluye `tmp/`, que contiene artefactos generados para documentación y no código entregable de la aplicación.
+- El script temporal de captura hacia Figma fue retirado del HTML de producción. El preflight bloquea futuras capturas de diseño o referencias locales dentro del build.
+- Cierre vigente: 206/206 pruebas web y reglas, 3/3 pruebas predictivas, lint limpio y build exitoso.
 
 ### Catálogo institucional estable de usuarios
 

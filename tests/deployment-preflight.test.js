@@ -2,7 +2,7 @@ import { mkdtempSync, writeFileSync } from 'node:fs'
 import { tmpdir } from 'node:os'
 import { join } from 'node:path'
 import { describe, expect, it } from 'vitest'
-import { inspectBuildChunks, inspectCloudEnvironment, parseEnvironment, runPreflight } from '../scripts/preflight-deployment.mjs'
+import { inspectBuildChunks, inspectBuildHtml, inspectCloudEnvironment, parseEnvironment, runPreflight } from '../scripts/preflight-deployment.mjs'
 
 describe('preflight de publicación', () => {
   it('interpreta variables sin exponer sus valores en los resultados', () => {
@@ -38,11 +38,19 @@ describe('preflight de publicación', () => {
     expect(inspectBuildChunks(assets).level).toBe('BLOCK')
   })
 
+  it('impide publicar herramientas temporales de diseño o referencias locales', () => {
+    expect(inspectBuildHtml('<script src="https://mcp.figma.com/mcp/html-to-design/capture.js"></script>').level).toBe('BLOCK')
+    expect(inspectBuildHtml('<a href="http://127.0.0.1:5173">Local</a>').level).toBe('BLOCK')
+    expect(inspectBuildHtml('<div id="root"></div><script src="/assets/app.js"></script>').level).toBe('PASS')
+  })
+
   it('reporta el repositorio local sin ejecutar un despliegue', () => {
     const results = runPreflight()
     expect(results.some((item) => item.message.includes('navegación SPA') && item.level === 'PASS')).toBe(true)
     expect(results.some((item) => item.message.includes('cuatro encabezados') && item.level === 'PASS')).toBe(true)
     expect(results.some((item) => item.message.includes('paquete JavaScript mayor') && item.level === 'PASS')).toBe(true)
+    expect(results.some((item) => item.message.includes('HTML de producción') && item.level === 'PASS')).toBe(true)
+    expect(results.some((item) => item.message.includes('Git no rastrea') && item.level === 'PASS')).toBe(true)
     expect(results.some((item) => item.message.includes('alias Firebase') && item.level === 'PASS')).toBe(true)
   })
 })
