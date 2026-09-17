@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { normalizeStockRow, normalizeStockRows, parseSqlServerTarget, validateReadOnlyStockQuery } from '../src/utils/sapStock.js'
+import { normalizeStockRow, normalizeStockRows, parseSqlServerTarget, resolveSqlNetworkTarget, validateReadOnlyStockQuery } from '../src/utils/sapStock.js'
 
 describe('contrato de stock SAP', () => {
   it('interpreta servidores SQL con puerto o instancia nombrada', () => {
@@ -7,6 +7,13 @@ describe('contrato de stock SAP', () => {
     expect(parseSqlServerTarget('sql-planta\\SAP')).toEqual({ host: 'sql-planta', instance: 'SAP' })
     expect(() => parseSqlServerTarget('sql-planta\\')).toThrow('Instancia SQL inválida')
     expect(() => parseSqlServerTarget('')).toThrow('Servidor SQL requerido')
+  })
+
+  it('permite un puerto TCP fijo para una instancia cuando SQL Browser está bloqueado', () => {
+    expect(resolveSqlNetworkTarget('sql-planta', '1544')).toEqual({ host: 'sql-planta', instance: '', port: 1544 })
+    expect(resolveSqlNetworkTarget('sql-planta\\SAP')).toEqual({ host: 'sql-planta', instance: 'SAP' })
+    expect(resolveSqlNetworkTarget('sql-planta\\SAP', 1433, '51433')).toEqual({ host: 'sql-planta', instance: '', port: 51433 })
+    expect(() => resolveSqlNetworkTarget('sql-planta\\SAP', 1433, '70000')).toThrow('Puerto fijo')
   })
 
   it('acepta SELECT o CTE de lectura y bloquea mutaciones', () => {

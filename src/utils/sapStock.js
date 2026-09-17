@@ -26,6 +26,21 @@ export function parseSqlServerTarget(value) {
   return { host, instance }
 }
 
+const sqlPort = (value, label) => {
+  const port = Number(value)
+  if (!Number.isInteger(port) || port < 1 || port > 65535) throw new Error(`${label} es inválido.`)
+  return port
+}
+
+export function resolveSqlNetworkTarget(serverValue, portValue = 1433, instancePortValue = '') {
+  const parsed = parseSqlServerTarget(serverValue)
+  if (parsed.instance && String(instancePortValue ?? '').trim()) {
+    return { host: parsed.host, instance: '', port: sqlPort(instancePortValue, 'Puerto fijo de instancia SQL') }
+  }
+  if (parsed.instance) return parsed
+  return { ...parsed, port: sqlPort(portValue, 'Puerto SQL') }
+}
+
 export function validateReadOnlyStockQuery(queryText) {
   const query = cleanSql(queryText)
   if (!query) throw new Error('La consulta de stock está vacía.')

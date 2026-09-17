@@ -3,7 +3,7 @@ import { resolve } from 'node:path'
 import sql from 'mssql'
 import { applicationDefault, cert, deleteApp, initializeApp } from 'firebase-admin/app'
 import { FieldValue, getFirestore } from 'firebase-admin/firestore'
-import { normalizeStockRows, parseSqlServerTarget, validateReadOnlyStockQuery } from '../src/utils/sapStock.js'
+import { normalizeStockRows, resolveSqlNetworkTarget, validateReadOnlyStockQuery } from '../src/utils/sapStock.js'
 
 const projectId = 'cerofallas-pg2-german-2026'
 const environmentPath = process.argv.find((value) => value.startsWith('--env='))?.split('=')[1] || '.local/sap-stock.env'
@@ -23,9 +23,13 @@ let queryText
 try { queryText = await readFile(queryPath, 'utf8') } catch { throw new Error(`No existe ${queryPath}. Copia integrations/sap-stock-query.example.sql y adapta tu consulta autorizada.`) }
 validateReadOnlyStockQuery(queryText)
 
-const parsedServer = parseSqlServerTarget(required(environment, 'SAP_SQL_SERVER'))
+const networkTarget = resolveSqlNetworkTarget(
+  required(environment, 'SAP_SQL_SERVER'),
+  environment.SAP_SQL_PORT || 1433,
+  environment.SAP_SQL_INSTANCE_PORT,
+)
 const connection = {
-  server: parsedServer.host,
+  server: networkTarget.host,
   database: required(environment, 'SAP_SQL_DATABASE'),
   user: required(environment, 'SAP_SQL_USER'),
   password: required(environment, 'SAP_SQL_PASSWORD'),
@@ -38,9 +42,8 @@ const connection = {
   },
   pool: { min: 0, max: 2, idleTimeoutMillis: 10_000 },
 }
-if (parsedServer.instance) connection.options.instanceName = parsedServer.instance
-else connection.port = Number(environment.SAP_SQL_PORT || 1433)
-if (!parsedServer.instance && (!Number.isInteger(connection.port) || connection.port < 1 || connection.port > 65535)) throw new Error('SAP_SQL_PORT es inválido.')
+if (networkTarget.instance) connection.options.instanceName = networkTarget.instance
+else connection.port = networkTarget.port
 if (process.argv.includes('--check-config')) {
   console.log('Configuración SAP preparada: consulta de solo lectura válida y campos de conexión presentes.')
   console.log('No se abrió conexión ni se imprimieron servidor, base, usuario, contraseña o consulta.')
@@ -55,7 +58,10 @@ try {
   stock = normalizeStockRows(result.recordset)
 } catch (error) {
   const safeCode = typeof error?.code === 'string' && /^[A-Z0-9_-]{2,30}$/.test(error.code) ? error.code : 'CONNECTION_FAILED'
-  const safeError = new Error(`No fue posible completar la consulta SAP (${safeCode}). Revisa red/VPN, instancia, puerto, autenticación y permisos de lectura. No se imprimieron datos de conexión.`)
+  const networkHint = networkTarget.instance
+    ? 'La instancia nombrada requiere acceso a SQL Browser por UDP 1434; si está bloqueado, configura SAP_SQL_INSTANCE_PORT con su puerto TCP fijo.'
+    : 'Revisa red/VPN, puerto TCP, autenticación y permisos de lectura.'
+  const safeError = new Error(`No fue posible completar la consulta SAP (${safeCode}). ${networkHint} No se imprimieron datos de conexión.`)
   safeError.stack = safeError.message
   throw safeError
 } finally {
