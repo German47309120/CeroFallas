@@ -11,7 +11,7 @@
     "verify": "npm run lint && npm test && npm run predictive:test && npm run build",
     "preflight": "node scripts/preflight-deployment.mjs",
     "preflight:cloud": "node scripts/preflight-deployment.mjs --require-cloud",
-    "test": "firebase emulators:exec --project demo-cerofallas-rules-test --only firestore \"vitest run\"",
+    "test": "firebase emulators:exec --project demo-cerofallas-rules-test --only firestore \"vitest run --maxWorkers=8\"",
     "test:unit": "vitest run",
     "seed:emulator": "node scripts/seed-emulator.mjs",
     "seed:demo": "node scripts/seed-demo-data.mjs",

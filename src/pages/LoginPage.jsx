@@ -8,7 +8,7 @@ export default function LoginPage() {
   const [password, setPassword] = useState('')
   const [error, setError] = useState('')
   const [submitting, setSubmitting] = useState(false)
-  const { configured, configurationError, environment, loading, user } = useAuth()
+  const { configured, configurationError, environment, loading, sessionError, user } = useAuth()
   const location = useLocation()
   const navigate = useNavigate()
 
@@ -108,6 +108,7 @@ export default function LoginPage() {
                 El servicio de acceso todavía no está configurado para este ambiente. Contacta al administrador de la aplicación.
               </div>
             ) : null}
+            {sessionError && !error ? <div className="form-error" role="alert">{sessionError}</div> : null}
             {error ? <div className="form-error" role="alert">{error}</div> : null}
 
             <button className="button button--primary button--full" type="submit" disabled={configured === false || submitting || loading}>

@@ -39,6 +39,36 @@ service cloud.firestore {
       allow write: if false;
     }
 
+    match /activeSessions/{userId} {
+      allow read: if signedIn() && (request.auth.uid == userId || privilegedMaintainer());
+      allow create: if signedIn()
+        && request.auth.uid == userId
+        && request.resource.data.keys().hasAll(['userId', 'deviceId', 'acquiredAt', 'lastSeenAt', 'expiresAt'])
+        && request.resource.data.keys().hasOnly(['userId', 'deviceId', 'acquiredAt', 'lastSeenAt', 'expiresAt'])
+        && request.resource.data.userId == request.auth.uid
+        && request.resource.data.deviceId is string
+        && request.resource.data.deviceId.size() >= 16
+        && request.resource.data.deviceId.size() <= 80
+        && request.resource.data.acquiredAt == request.time
+        && request.resource.data.lastSeenAt == request.time
+        && request.resource.data.expiresAt > request.time
+        && request.resource.data.expiresAt <= request.time + duration.value(11, 'm');
+      allow update: if signedIn()
+        && request.auth.uid == userId
+        && request.resource.data.keys().hasAll(['userId', 'deviceId', 'acquiredAt', 'lastSeenAt', 'expiresAt'])
+        && request.resource.data.keys().hasOnly(['userId', 'deviceId', 'acquiredAt', 'lastSeenAt', 'expiresAt'])
+        && request.resource.data.userId == request.auth.uid
+        && request.resource.data.deviceId is string
+        && request.resource.data.deviceId.size() >= 16
+        && request.resource.data.deviceId.size() <= 80
+        && (request.resource.data.deviceId == resource.data.deviceId || resource.data.expiresAt <= request.time)
+        && request.resource.data.acquiredAt == (resource.data.expiresAt <= request.time ? request.time : resource.data.acquiredAt)
+        && request.resource.data.lastSeenAt == request.time
+        && request.resource.data.expiresAt > request.time
+        && request.resource.data.expiresAt <= request.time + duration.value(11, 'm');
+      allow delete: if signedIn() && (request.auth.uid == userId || privilegedMaintainer());
+    }
+
     match /equipment/{equipmentId} {
       allow read: if hasPermission('equipment.read');
       allow create: if hasPermission('equipment.manage')

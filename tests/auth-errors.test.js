@@ -15,6 +15,6 @@ describe('mensajes seguros de autenticación', () => {
   it('conserva mensajes operativos para red y exceso de intentos', () => {
     expect(getAuthErrorMessage({ code: 'auth/network-request-failed' })).toContain('servicio de autenticación')
     expect(getAuthErrorMessage({ code: 'auth/too-many-requests' })).toContain('demasiados intentos')
+    expect(getAuthErrorMessage({ code: 'auth/session-in-use' })).toContain('otro dispositivo')
   })
 })
-

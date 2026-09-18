@@ -1,8 +1,9 @@
 import { createContext, useContext, useEffect, useMemo, useState } from 'react'
-import { onAuthStateChanged } from 'firebase/auth'
+import { onAuthStateChanged, signOut } from 'firebase/auth'
 import { getFirebaseAuth, logout as firebaseLogout } from '../../services/firebase/auth.js'
 import { isFirebaseConfigured, useFirebaseEmulators } from '../../services/firebase/config.js'
 import { subscribeToProfile } from '../../services/firebase/profiles.js'
+import { acquireExclusiveSession, monitorExclusiveSession, SessionInUseError } from '../../services/firebase/sessions.js'
 
 const AuthContext = createContext(null)
 
@@ -12,6 +13,7 @@ export function AuthProvider({ children }) {
   const [profile, setProfile] = useState(null)
   const [profileLoading, setProfileLoading] = useState(true)
   const [profileError, setProfileError] = useState('')
+  const [sessionError, setSessionError] = useState('')
 
   useEffect(() => {
     if (!isFirebaseConfigured) {
@@ -20,17 +22,43 @@ export function AuthProvider({ children }) {
       return undefined
     }
 
-    const unsubscribe = onAuthStateChanged(getFirebaseAuth(), (nextUser) => {
-      setUser(nextUser)
-      setLoading(false)
+    let revision = 0
+    const unsubscribe = onAuthStateChanged(getFirebaseAuth(), async (nextUser) => {
+      const currentRevision = ++revision
       if (!nextUser) {
+        setUser(null)
         setProfile(null)
         setProfileLoading(false)
+        setLoading(false)
+        return
+      }
+      try {
+        await acquireExclusiveSession(nextUser.uid)
+        if (currentRevision !== revision) return
+        setSessionError('')
+        setUser(nextUser)
+      } catch (error) {
+        if (currentRevision !== revision) return
+        setSessionError(error instanceof SessionInUseError ? error.message : 'No fue posible validar la sesión exclusiva.')
+        await signOut(getFirebaseAuth())
+      } finally {
+        if (currentRevision === revision) setLoading(false)
       }
     })
 
     return unsubscribe
   }, [])
+
+  useEffect(() => {
+    if (!user) return undefined
+    let closing = false
+    return monitorExclusiveSession(user.uid, async () => {
+      if (closing) return
+      closing = true
+      setSessionError('La sesión fue cerrada porque la cuenta se liberó o se abrió en otro dispositivo.')
+      await signOut(getFirebaseAuth())
+    })
+  }, [user])
 
   useEffect(() => {
     if (!user) return undefined
@@ -64,9 +92,10 @@ export function AuthProvider({ children }) {
     } : null,
     profileLoading,
     profileError,
+    sessionError,
     hasPermission: (permission) => profile?.status === 'active' && profile?.permissions?.includes(permission),
     logout: firebaseLogout,
-  }), [loading, profile, profileError, profileLoading, user])
+  }), [loading, profile, profileError, profileLoading, sessionError, user])
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>
 }
