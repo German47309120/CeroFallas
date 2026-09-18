@@ -7,7 +7,7 @@ vi.mock('../src/services/firebase/firestore.js', () => ({ getFirebaseFirestore: 
 import { readHistory } from '../src/services/firebase/history.js'
 import { listEquipment } from '../src/services/firebase/equipment.js'
 import { listPreventivePlans } from '../src/services/firebase/preventives.js'
-const sources = { incidents: 'createdAt', audit: 'occurredAt', stock: 'syncedAt', users: 'displayName', forkliftInspections: 'inspectedAt', preventivePlans: 'nextDueAt', preventiveExecutions: 'startedAt', equipment: 'code' }
+const sources = { incidents: 'createdAt', audit: 'occurredAt', stock: 'code', users: 'displayName', forkliftInspections: 'inspectedAt', preventivePlans: 'nextDueAt', preventiveExecutions: 'startedAt', equipment: 'code' }
 let env
 beforeAll(async () => {
   env = await initializeTestEnvironment({ projectId: 'demo-cerofallas-multi-history-test', firestore: { host: '127.0.0.1', port: 8080, rules: readFileSync('firestore.rules', 'utf8') } })
@@ -18,7 +18,7 @@ beforeEach(async () => {
     const store = ctx.firestore()
     await setDoc(doc(store, 'users', 'reader'), { status: 'active', permissions: ['incident.read', 'audit.read', 'stock.read', 'users.read', 'forklift.read', 'preventive.read', 'equipment.read'] })
     await setDoc(doc(store, 'users', 'blocked'), { status: 'active', permissions: [] })
-    await Promise.all(Object.entries(sources).flatMap(([name, field]) => Array.from({ length: 7 }, (_, n) => setDoc(doc(store, name, `row-${n}`), { [field]: ['displayName', 'code'].includes(field) ? 'Igual' : Timestamp.fromMillis(1000000), equipmentId: n % 2 ? 'EQ-B' : 'EQ-A', areaId: n % 2 ? 'linea-2' : 'linea-1', status: name === 'equipment' ? (n < 4 ? 'active' : 'inactive') : (n < 4 ? 'reported' : 'resolved') }))))
+    await Promise.all(Object.entries(sources).flatMap(([name, field]) => Array.from({ length: 7 }, (_, n) => setDoc(doc(store, name, `row-${n}`), { [field]: ['displayName', 'code'].includes(field) ? 'Igual' : Timestamp.fromMillis(1000000), ...(name === 'stock' ? { source: 'sap-sqlserver', active: true } : {}), equipmentId: n % 2 ? 'EQ-B' : 'EQ-A', areaId: n % 2 ? 'linea-2' : 'linea-1', status: name === 'equipment' ? (n < 4 ? 'active' : 'inactive') : (n < 4 ? 'reported' : 'resolved') }))))
   })
   db = env.authenticatedContext('reader').firestore()
 })
@@ -34,7 +34,7 @@ it.each(Object.keys(sources))('recorre %s con fechas/nombres iguales sin duplica
   } while (page.hasMore)
   expect(ids).toHaveLength(7)
   expect(new Set(ids).size).toBe(7)
-  expect(ids).toEqual(['preventivePlans', 'equipment'].includes(resource) ? ['row-0', 'row-1', 'row-2', 'row-3', 'row-4', 'row-5', 'row-6'] : ['row-6', 'row-5', 'row-4', 'row-3', 'row-2', 'row-1', 'row-0'])
+  expect(ids).toEqual(['preventivePlans', 'equipment', 'stock'].includes(resource) ? ['row-0', 'row-1', 'row-2', 'row-3', 'row-4', 'row-5', 'row-6'] : ['row-6', 'row-5', 'row-4', 'row-3', 'row-2', 'row-1', 'row-0'])
 })
 it('filtra estado de equipos antes de paginar', async () => {
   const result = await readHistory('equipment', { status: 'active', pageSize: 2 })

@@ -29,7 +29,6 @@ it('mantiene filas de stock visibles tras error en página adicional', () => {
   const html = render(<ResourceReadPage resource="stock" />)
   expect(html).toContain('PIEZA-PRUEBA')
   expect(html).toContain('Estas cantidades no provienen de SAP')
-  expect(html).toContain('Demostración local · no proviene de SAP')
   expect(html).toContain('Consultando última sincronización')
   expect(html).toContain('Error de consulta')
   expect(html).not.toContain('Sin coincidencias en lo cargado')
@@ -37,8 +36,9 @@ it('mantiene filas de stock visibles tras error en página adicional', () => {
 it('identifica stock real de SAP y ofrece filtros de consulta', () => {
   state.records = [{ id: 'sap-part', code: 'SAP-01', description: 'Repuesto sincronizado', quantity: 1250.5, warehouse: '01', source: 'sap-sqlserver' }]
   const html = render(<ResourceReadPage resource="stock" />)
-  expect(html).toContain('SAP SQL Server')
   expect(html).toContain('1,250.5')
+  expect(html).toContain('Buscar por prefijo de código')
+  expect(html).toContain('<table class="stock-table">')
   expect(html).toContain('Todos los almacenes cargados')
   expect(html).toContain('Limpiar filtros')
   expect(html).not.toContain('La integración real con SAP permanece pendiente')

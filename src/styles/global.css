@@ -605,8 +605,7 @@ h2 {
   background: rgb(255 255 255 / 78%);
 }
 
-.integration-metrics dt,
-.stock-card dt {
+.integration-metrics dt {
   color: var(--color-muted);
   font-size: 0.72rem;
   font-weight: 800;
@@ -621,29 +620,99 @@ h2 {
   font-weight: 850;
 }
 
-.stock-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(min(100%, 25rem), 1fr));
-  gap: 1rem;
-}
-
 .contents {
   display: contents;
 }
 
-.stock-card {
-  border-top: 0.22rem solid var(--color-brand);
+.stock-lookup {
+  display: grid;
+  gap: 1rem;
 }
 
-.stock-card dd {
-  margin-top: 0.25rem;
-  font-weight: 700;
+.stock-lookup label {
+  display: grid;
+  gap: 0.35rem;
+  color: var(--color-muted);
+  font-size: 0.8rem;
+  font-weight: 750;
+}
+
+.stock-lookup input {
+  width: 100%;
+  min-height: 2.8rem;
+  padding: 0.7rem 0.8rem;
+  border: 1px solid var(--color-border);
+  border-radius: 0.65rem;
+  color: var(--color-text);
+  background: #fff;
+}
+
+.stock-table-wrap {
+  max-height: 65vh;
+  overflow: auto;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  background: var(--color-surface);
+}
+
+.stock-lookup .stock-table-wrap {
+  max-height: 24rem;
+}
+
+.stock-table {
+  width: 100%;
+  min-width: 46rem;
+  border-collapse: separate;
+  border-spacing: 0;
+  font-size: 0.88rem;
+}
+
+.stock-table caption {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+}
+
+.stock-table th {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  padding: 0.8rem 0.9rem;
+  border-bottom: 2px solid var(--color-brand);
+  color: #fff;
+  background: var(--color-brand-dark);
+  text-align: left;
+  font-size: 0.75rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.stock-table td {
+  padding: 0.72rem 0.9rem;
+  border-bottom: 1px solid var(--color-border);
+  vertical-align: middle;
+}
+
+.stock-table tbody tr:nth-child(even) {
+  background: #f6f9fa;
+}
+
+.stock-table tbody tr:hover {
+  background: #eaf5f4;
+}
+
+.stock-table__quantity {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
 }
 
 @media (max-width: 640px) {
   .integration-metrics {
     grid-template-columns: 1fr;
   }
+
 }
 
 .filter-bar input,
