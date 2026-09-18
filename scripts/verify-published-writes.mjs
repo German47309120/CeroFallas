@@ -114,6 +114,7 @@ try {
       areaId: 'linea-1', scheduledAt: null, startedAt: timestamp, endedAt: null, durationMinutes: null,
       technicianIds: [user.uid], activityPerformed: '', spareParts: [], observations: null,
       complianceStatus: 'pending', rescheduleStatus: 'pending', nextDueAtAfterExecution: null,
+      meterReading: null, conditionResult: null,
       status: 'in_progress', timeSource: 'server', createdAt: timestamp, createdBy: user.uid, updatedAt: timestamp, updatedBy: user.uid,
     }), 'preventiveExecution')
     const current = (await getDoc(doc(database, 'preventiveExecutions', ids.preventive))).data()
@@ -123,7 +124,7 @@ try {
       startedAt: current.startedAt, endedAt: timestamp, durationMinutes: null, timeSource: 'server',
       activityPerformed: 'Prueba controlada de aceptación del registro preventivo.', spareParts: [],
       observations: 'Ejecución demostrativa no asociada a mantenimiento real.', complianceStatus: 'unscheduled',
-      rescheduleStatus: 'not_applicable', nextDueAtAfterExecution: null, status: 'completed',
+      rescheduleStatus: 'not_applicable', nextDueAtAfterExecution: null, meterReading: null, conditionResult: null, status: 'completed',
       updatedAt: timestamp, updatedBy: user.uid, auditId: ids.preventiveAudit,
     })
     completion.set(doc(database, 'audit', ids.preventiveAudit), {

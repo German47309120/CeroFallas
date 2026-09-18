@@ -138,7 +138,8 @@ for (let index = 0; index < 36; index++) {
     scheduledAt: stamp(addDays(executionDay - (late ? 2 : 0), 6)), startedAt: stamp(startedAt), endedAt: stamp(plusMinutes(startedAt, durationMinutes)), durationMinutes,
     technicianIds: [actorId], activityPerformed: `Inspección preventiva demostrativa de ${item.name}`,
     spareParts: [], observations: 'Ejecución de demostración.', complianceStatus: late ? 'late' : 'on_time',
-    rescheduleStatus: activePlanByEquipment.has(code) ? 'automatic' : 'not_applicable', nextDueAtAfterExecution: stamp(addDays(executionDay + 30, 12)), status: 'completed',
+    rescheduleStatus: activePlanByEquipment.has(code) ? 'automatic' : 'not_applicable', nextDueAtAfterExecution: stamp(addDays(executionDay + 30, 12)),
+    meterReading: null, conditionResult: null, status: 'completed',
     createdAt: stamp(startedAt), createdBy: actorId, updatedAt: stamp(plusMinutes(startedAt, durationMinutes)), updatedBy: actorId,
   })
 }
