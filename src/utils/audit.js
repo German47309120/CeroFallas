@@ -8,6 +8,7 @@ export const auditActionLabels = {
   password_reset_requested: 'Solicitó restablecer la contraseña',
   password_reset: 'Restableció la contraseña',
   password_reset_failed: 'Falló el restablecimiento de contraseña',
+  release_session: 'Liberó la sesión de otro dispositivo',
 }
 
 export const auditEntityLabels = {
@@ -18,6 +19,7 @@ export const auditEntityLabels = {
   preventiveExecution: 'Ejecución preventiva',
   forkliftInspection: 'Inspección de montacargas',
   incident: 'Incidente',
+  activeSession: 'Sesión de usuario',
 }
 
 export function auditActionLabel(action) {

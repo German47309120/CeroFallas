@@ -5,7 +5,9 @@ describe('presentación comprensible de auditoría', () => {
   it('traduce acciones y entidades operativas', () => {
     expect(auditActionLabel('void')).toBe('Anuló el registro')
     expect(auditActionLabel('reschedule_reverted')).toBe('Revirtió la reprogramación del plan')
+    expect(auditActionLabel('release_session')).toBe('Liberó la sesión de otro dispositivo')
     expect(auditEntityLabel('forkliftInspection')).toBe('Inspección de montacargas')
+    expect(auditEntityLabel('activeSession')).toBe('Sesión de usuario')
   })
 
   it('muestra el nombre sin ocultar el UID trazable', () => {
