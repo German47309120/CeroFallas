@@ -15,8 +15,10 @@ const resources = {
   stock: { title: 'Stock de repuestos', permission: 'stock.read', description: 'Existencias sincronizadas, solo lectura. Carga más registros para ampliar la consulta; esta búsqueda no consulta directamente SAP.', fields: [['code', 'Código'], ['description', 'Descripción'], ['quantity', 'Cantidad'], ['warehouse', 'Almacén'], ['source', 'Fuente'], ['syncedAt', 'Sincronizado']] },
 }
 const display = (value) => value?.toDate ? dashboardDate(value) : value == null ? '—' : String(value)
+const stockSourceLabel = (source) => source === 'sap-sqlserver' ? 'SAP SQL Server' : source === 'demo-local' ? 'Demostración local · no proviene de SAP' : display(source)
 const resourceValue = (resource, key, row, actors) => {
-  if (resource === 'stock' && key === 'source') return row.source === 'demo-local' ? 'Demostración local · no proviene de SAP' : display(row.source)
+  if (resource === 'stock' && key === 'source') return stockSourceLabel(row.source)
+  if (resource === 'stock' && key === 'quantity') return Number(row.quantity).toLocaleString('es-GT', { maximumFractionDigits: 3 })
   if (resource !== 'audit') return display(row[key])
   if (key === 'actorId') return auditActorLabel(row.actorId, actors)
   if (key === 'action') return auditActionLabel(row.action)
@@ -34,6 +36,8 @@ function ResourceHistory({ resource }) {
   const { user, hasPermission } = useAuth()
   const allowed = hasPermission(config.permission)
   const [search, setSearch] = useState('')
+  const [stockSource, setStockSource] = useState('all')
+  const [warehouse, setWarehouse] = useState('all')
   const [integration, setIntegration] = useState({ loading: resource === 'stock' && allowed, status: null, error: '' })
   const history = usePagedHistory({ enabled: allowed, scope: `${user?.uid}:${resource}`, status: 'all', readPage: resourceReaders[resource] })
   const actorHistory = usePagedHistory({ enabled: allowed && resource === 'audit', scope: `${user?.uid}:audit-actors`, status: 'all', options: { pageSize: 100 }, readPage: resourceReaders.users })
@@ -49,18 +53,24 @@ function ResourceHistory({ resource }) {
     return () => { active = false }
   }, [allowed, resource])
   if (!allowed) return <div className="panel"><h1>{config.title}</h1><p>Tu perfil no tiene permiso para esta consulta.</p></div>
-  const filtered = history.records.filter((row) => config.fields.some(([key]) => resourceValue(resource, key, row, actors).toLowerCase().includes(search.trim().toLowerCase())))
+  const stockSources = resource === 'stock' ? [...new Set(history.records.map((row) => row.source).filter(Boolean))].sort() : []
+  const warehouses = resource === 'stock' ? [...new Set(history.records.map((row) => row.warehouse).filter(Boolean))].sort((a, b) => a.localeCompare(b, 'es')) : []
+  const filtered = history.records.filter((row) => {
+    if (resource === 'stock' && stockSource !== 'all' && row.source !== stockSource) return false
+    if (resource === 'stock' && warehouse !== 'all' && row.warehouse !== warehouse) return false
+    return config.fields.some(([key]) => resourceValue(resource, key, row, actors).toLowerCase().includes(search.trim().toLowerCase()))
+  })
   return <section className="page-stack">
     <div className="page-heading"><div><h1>{config.title}</h1><p>{config.description}</p></div></div>
     {resource === 'users' && <UserAdministration records={history.records} onSaved={history.refresh} />}
     {resource === 'users' && <section className="panel"><div className="panel__heading"><div><p className="eyebrow">Referencia de acceso</p><h2>Roles institucionales propuestos</h2></div></div><p className="muted-copy">Esta matriz no modifica cuentas. Los permisos técnicos de lectura de equipos y auditoría acompañan los registros que los necesitan.</p><div className="role-catalog">{Object.entries(roleDefinitions).map(([id, role]) => <details key={id}><summary>{role.name} <span>{role.permissions.length} permisos</span></summary><ul>{role.permissions.map((permission) => <li key={permission}><code>{permission}</code><span>{permissionCatalog[permission]}</span></li>)}</ul></details>)}</div></section>}
-    {resource === 'stock' && <aside className="panel" aria-live="polite"><p className="eyebrow">Estado de integración</p>{integration.loading ? <p>Consultando última sincronización…</p> : integration.error ? <p className="form-error" role="alert">{integration.error}</p> : integration.status?.status === 'success' ? <><strong>Última sincronización SAP completada</strong><p className="muted-copy">{dashboardDate(integration.status.completedAt)} · {integration.status.rows ?? 0} registros · {integration.status.warehouses ?? 0} almacén(es)</p></> : <><strong>Aún no hay una sincronización SAP publicada.</strong><p className="muted-copy">Las existencias identificadas como demostración no deben utilizarse para decisiones operativas.</p></>}</aside>}
+    {resource === 'stock' && <aside className={`panel integration-status${integration.status?.status === 'success' ? ' integration-status--success' : ''}`} aria-live="polite"><div><p className="eyebrow">Estado de integración</p>{integration.loading ? <p>Consultando última sincronización…</p> : integration.error ? <p className="form-error" role="alert">{integration.error}</p> : integration.status?.status === 'success' ? <><strong>Inventario SAP actualizado correctamente</strong><p className="muted-copy">Última sincronización: {dashboardDate(integration.status.completedAt)}</p></> : <><strong>Aún no hay una sincronización SAP publicada.</strong><p className="muted-copy">Las existencias identificadas como demostración no deben utilizarse para decisiones operativas.</p></>}</div>{integration.status?.status === 'success' && <dl className="integration-metrics"><div><dt>Registros activos</dt><dd>{Number(integration.status.rows ?? 0).toLocaleString('es-GT')}</dd></div><div><dt>Almacenes</dt><dd>{integration.status.warehouses ?? 0}</dd></div><div><dt>Origen</dt><dd>SQL Server</dd></div></dl>}</aside>}
     {resource === 'stock' && history.records.some((row) => row.source === 'demo-local') && <aside className="panel" role="note"><p className="eyebrow">Datos de demostración</p><strong>Estas cantidades no provienen de SAP.</strong><p className="muted-copy">Sirven únicamente para revisar filtros, permisos y presentación mientras se integra la consulta SQL Server autorizada.</p></aside>}
-    <div className="filter-bar"><label>Buscar en registros cargados<input type="search" value={search} onChange={(e) => setSearch(e.target.value)} /></label></div>
-    <p className="muted-copy">La búsqueda solo revisa lo cargado. Actualizar reinicia el histórico; úsalo si los datos cambiaron durante la consulta.</p>
+    <div className={`filter-bar${resource === 'stock' ? ' filter-bar--stock' : ''}`}><label>Buscar en registros cargados<input type="search" value={search} onChange={(e) => setSearch(e.target.value)} placeholder={resource === 'stock' ? 'Código o descripción' : ''} /></label>{resource === 'stock' && <><label>Fuente<select value={stockSource} onChange={(e) => setStockSource(e.target.value)}><option value="all">Todas las fuentes cargadas</option>{stockSources.map((source) => <option key={source} value={source}>{stockSourceLabel(source)}</option>)}</select></label><label>Almacén<select value={warehouse} onChange={(e) => setWarehouse(e.target.value)}><option value="all">Todos los almacenes cargados</option>{warehouses.map((item) => <option key={item} value={item}>{item}</option>)}</select></label><div className="heading-actions"><button className="button button--secondary" type="button" onClick={() => { setSearch(''); setStockSource('all'); setWarehouse('all') }}>Limpiar filtros</button></div></>}</div>
+    <p className="muted-copy">Los filtros revisan los registros cargados. Usa <strong>Cargar más</strong> para ampliar la consulta o <strong>Actualizar</strong> si SAP fue sincronizado nuevamente.</p>
     {history.error && <p className="form-error" role="alert">{history.error}</p>}
     {resource === 'audit' && actorHistory.error && <p className="muted-copy">No fue posible resolver nombres de usuarios; se conservarán sus UID como referencia.</p>}
-    {history.loading ? <p role="status">Cargando…</p> : !history.error && !filtered.length ? <div className="panel"><h2>Sin coincidencias en lo cargado</h2><p>{resource === 'stock' ? 'La integración real con SAP permanece pendiente; no se presentan existencias ficticias. Si hay más páginas, cárgalas para ampliar la búsqueda.' : 'Carga más registros si están disponibles o ajusta la búsqueda.'}</p></div> : filtered.map((row) => <article key={row.id} className="panel"><dl className="form-grid">{config.fields.map(([key, label]) => <div key={key}><dt>{label}</dt><dd style={{ overflowWrap: 'anywhere', marginLeft: 0 }}>{resourceValue(resource, key, row, actors)}</dd></div>)}</dl>{resource === 'users' && <details><summary>Permisos asignados</summary><ul>{(row.permissions || []).map((p) => <li key={p}>{p}</li>)}</ul></details>}</article>)}
+    {history.loading ? <p role="status">Cargando…</p> : !history.error && !filtered.length ? <div className="panel"><h2>Sin coincidencias en lo cargado</h2><p>{resource === 'stock' ? 'Ajusta los filtros o carga más registros del inventario sincronizado.' : 'Carga más registros si están disponibles o ajusta la búsqueda.'}</p></div> : <div className={resource === 'stock' ? 'stock-grid' : 'contents'}>{filtered.map((row) => <article key={row.id} className={`panel${resource === 'stock' ? ' stock-card' : ''}`}><dl className="form-grid">{config.fields.map(([key, label]) => <div key={key}><dt>{label}</dt><dd style={{ overflowWrap: 'anywhere', marginLeft: 0 }}>{resourceValue(resource, key, row, actors)}</dd></div>)}</dl>{resource === 'users' && <details><summary>Permisos asignados</summary><ul>{(row.permissions || []).map((p) => <li key={p}>{p}</li>)}</ul></details>}</article>)}</div>}
     <HistoryControls history={history} visibleCount={filtered.length} />
   </section>
 }

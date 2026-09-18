@@ -576,6 +576,76 @@ h2 {
   grid-template-columns: 1fr;
 }
 
+.filter-bar--stock {
+  align-items: end;
+}
+
+.integration-status {
+  display: grid;
+  gap: 1rem;
+  border-left: 0.32rem solid var(--color-muted);
+}
+
+.integration-status--success {
+  border-left-color: #16825d;
+  background: linear-gradient(110deg, #f4fcf8, var(--color-surface) 55%);
+}
+
+.integration-metrics {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.65rem;
+  margin: 0;
+}
+
+.integration-metrics div {
+  padding: 0.75rem;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  background: rgb(255 255 255 / 78%);
+}
+
+.integration-metrics dt,
+.stock-card dt {
+  color: var(--color-muted);
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.integration-metrics dd {
+  margin: 0.25rem 0 0;
+  color: var(--color-text);
+  font-size: 1.15rem;
+  font-weight: 850;
+}
+
+.stock-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 25rem), 1fr));
+  gap: 1rem;
+}
+
+.contents {
+  display: contents;
+}
+
+.stock-card {
+  border-top: 0.22rem solid var(--color-brand);
+}
+
+.stock-card dd {
+  margin-top: 0.25rem;
+  font-weight: 700;
+}
+
+@media (max-width: 640px) {
+  .integration-metrics {
+    grid-template-columns: 1fr;
+  }
+}
+
 .filter-bar input,
 .filter-bar select,
 .login-card input,

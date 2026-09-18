@@ -34,6 +34,15 @@ it('mantiene filas de stock visibles tras error en página adicional', () => {
   expect(html).toContain('Error de consulta')
   expect(html).not.toContain('Sin coincidencias en lo cargado')
 })
+it('identifica stock real de SAP y ofrece filtros de consulta', () => {
+  state.records = [{ id: 'sap-part', code: 'SAP-01', description: 'Repuesto sincronizado', quantity: 1250.5, warehouse: '01', source: 'sap-sqlserver' }]
+  const html = render(<ResourceReadPage resource="stock" />)
+  expect(html).toContain('SAP SQL Server')
+  expect(html).toContain('1,250.5')
+  expect(html).toContain('Todos los almacenes cargados')
+  expect(html).toContain('Limpiar filtros')
+  expect(html).not.toContain('La integración real con SAP permanece pendiente')
+})
 it('presenta la matriz de roles como referencia sin controles de edición', () => {
   const html = render(<ResourceReadPage resource="users" />)
   expect(html).toContain('Roles institucionales propuestos')
