@@ -1,7 +1,7 @@
 import { readFile } from 'node:fs/promises'
 import { initializeApp, deleteApp } from 'firebase/app'
 import { getAuth, signInWithEmailAndPassword, signOut } from 'firebase/auth'
-import { collection, getDocs, getFirestore } from 'firebase/firestore'
+import { collection, getDocs, getFirestore, query, where } from 'firebase/firestore'
 
 const expectedProjectId = 'cerofallas-pg2-german-2026'
 const requestedProjectId = process.argv.find((value) => value.startsWith('--project='))?.split('=')[1]
@@ -19,7 +19,7 @@ if (!administrator) throw new Error('El catálogo local no contiene un administr
 
 const expectedCounts = {
   users: 11, equipment: 14, preventivePlans: 18, preventiveExecutions: 37,
-  correctives: 49, incidents: 25, forkliftInspections: 31, stock: 20, audit: 88,
+  correctives: 49, incidents: 25, forkliftInspections: 31, audit: 88,
 }
 const app = initializeApp({
   apiKey: environment.VITE_FIREBASE_API_KEY,
@@ -38,7 +38,9 @@ try {
     const snapshot = await getDocs(collection(database, name))
     if (snapshot.size !== expected) throw new Error(`${name}: existen ${snapshot.size} registros y se esperaban ${expected}.`)
   }
-  console.log(`Firebase Cloud verificado: ${Object.values(expectedCounts).reduce((sum, value) => sum + value, 0)} documentos legibles con reglas activas.`)
+  const demoStock = await getDocs(query(collection(database, 'stock'), where('source', '==', 'demo-local')))
+  if (demoStock.size !== 20) throw new Error(`stock demo: existen ${demoStock.size} registros y se esperaban 20.`)
+  console.log(`Firebase Cloud verificado: ${Object.values(expectedCounts).reduce((sum, value) => sum + value, 20)} documentos demo legibles con reglas activas.`)
   console.log('Inicio de sesión administrativo correcto; no se realizaron escrituras durante esta verificación.')
   await signOut(auth)
 } finally {

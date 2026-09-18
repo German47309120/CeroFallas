@@ -22,6 +22,7 @@
     "sap:stock:check": "node scripts/sap-stock-sync.mjs --check-config",
     "sap:stock:dry-run": "node scripts/sap-stock-sync.mjs --dry-run",
     "sap:stock:publish": "node scripts/sap-stock-sync.mjs --publish",
+    "sap:stock:verify-cloud": "node scripts/verify-sap-stock-cloud.mjs",
     "verify:demo-data": "node scripts/verify-demo-data.mjs",
     "seed:demo-user": "node scripts/create-demo-user.mjs",
     "seed:demo-roles": "node scripts/seed-demo-role-users.mjs",
