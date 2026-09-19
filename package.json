@@ -27,6 +27,7 @@
     "seed:demo-user": "node scripts/create-demo-user.mjs",
     "seed:demo-roles": "node scripts/seed-demo-role-users.mjs",
     "configure:project-users": "node scripts/configure-project-users.mjs",
+    "sync:cloud-role-permissions": "node scripts/sync-role-permissions-cloud.mjs",
     "verify:demo-roles": "node scripts/verify-demo-role-users.mjs",
     "predictive:test": "python -m unittest discover -s predictive/tests -p \"test_*.py\"",
     "predictive:demo": "python predictive/generate_demo_dataset.py --output .local/predictive-demo.csv && python predictive/train_compare.py --input .local/predictive-demo.csv --output .local/predictive-results.json",

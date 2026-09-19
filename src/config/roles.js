@@ -24,7 +24,7 @@ export const roleDefinitions = {
   supervisor: { name: 'Supervisor', permissions: operationalLeadership },
   line_manager: { name: 'Encargado de línea', permissions: operationalLeadership },
   production_manager: { name: 'Jefe de Producción', permissions: operationalLeadership },
-  management: { name: 'Gerencia', permissions: ['dashboard.read', 'corrective.read', 'preventive.read', 'incident.read'] },
+  management: { name: 'Gerencia', permissions: ['dashboard.read', 'corrective.read', 'preventive.read', 'incident.read', 'prediction.read'] },
 }
 
 export function validateRoleDefinitions(definitions = roleDefinitions) {

@@ -39,7 +39,7 @@ describe('control central de acceso por URL', () => {
 
   it('mantiene a gerencia en consultas y bloquea formularios', () => {
     expect(accessibleRoutes('management')).toEqual([
-      '/', '/perfil', '/correctivos', '/preventivos', '/incidentes', '/analitica', '/ayuda',
+      '/', '/perfil', '/correctivos', '/preventivos', '/incidentes', '/riesgo', '/analitica', '/ayuda',
     ])
   })
 

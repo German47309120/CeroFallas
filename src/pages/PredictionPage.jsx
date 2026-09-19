@@ -13,8 +13,8 @@ export default function PredictionPage() {
     <section className="page-stack prediction-page" aria-labelledby="prediction-title">
       <header className="prediction-hero">
         <div>
-          <p className="eyebrow">Analítica · preparación controlada</p>
-          <h1 id="prediction-title">Riesgo predictivo</h1>
+          <p className="eyebrow">Inteligencia artificial · preparación controlada</p>
+          <h1 id="prediction-title">Riesgo predictivo con IA</h1>
           <p>Base técnica para anticipar qué equipos podrían presentar una falla durante los próximos 30 días.</p>
         </div>
         <div className="prediction-status" role="status">
@@ -25,7 +25,7 @@ export default function PredictionPage() {
 
       <aside className="prediction-warning" aria-label="Limitación del laboratorio">
         <strong>No es una predicción de planta.</strong>
-        <span> Los resultados provienen únicamente de datos sintéticos y sirven para demostrar el proceso técnico. No deben usarse para decidir mantenimientos.</span>
+        <span> Los resultados provienen únicamente de datos sintéticos y sirven para demostrar el proceso técnico de aprendizaje automático. No deben usarse para decidir mantenimientos hasta completar la validación con histórico real.</span>
       </aside>
 
       <div className="prediction-kpis" aria-label="Resumen del experimento">

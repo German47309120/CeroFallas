@@ -9,5 +9,5 @@ export const backendRoles = {
   supervisor: { name: 'Supervisor', permissions: ['equipment.read', 'audit.write', 'corrective.read', 'corrective.create', 'preventive.read', 'preventive.execute', 'dashboard.read', 'stock.read'] },
   line_manager: { name: 'Encargado de línea', permissions: ['equipment.read', 'audit.write', 'corrective.read', 'corrective.create', 'preventive.read', 'preventive.execute', 'dashboard.read', 'stock.read'] },
   production_manager: { name: 'Jefe de Producción', permissions: ['equipment.read', 'audit.write', 'corrective.read', 'corrective.create', 'preventive.read', 'preventive.execute', 'dashboard.read', 'stock.read'] },
-  management: { name: 'Gerencia', permissions: ['dashboard.read', 'corrective.read', 'preventive.read', 'incident.read'] },
+  management: { name: 'Gerencia', permissions: ['dashboard.read', 'corrective.read', 'preventive.read', 'incident.read', 'prediction.read'] },
 }
