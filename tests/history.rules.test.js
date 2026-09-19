@@ -18,7 +18,7 @@ beforeEach(async () => {
     const store = ctx.firestore()
     await setDoc(doc(store, 'users', 'reader'), { status: 'active', permissions: ['incident.read', 'audit.read', 'stock.read', 'users.read', 'forklift.read', 'preventive.read', 'equipment.read'] })
     await setDoc(doc(store, 'users', 'blocked'), { status: 'active', permissions: [] })
-    await Promise.all(Object.entries(sources).flatMap(([name, field]) => Array.from({ length: 7 }, (_, n) => setDoc(doc(store, name, `row-${n}`), { [field]: ['displayName', 'code'].includes(field) ? 'Igual' : Timestamp.fromMillis(1000000), ...(name === 'stock' ? { source: 'sap-sqlserver', active: true } : {}), equipmentId: n % 2 ? 'EQ-B' : 'EQ-A', areaId: n % 2 ? 'linea-2' : 'linea-1', status: name === 'equipment' ? (n < 4 ? 'active' : 'inactive') : (n < 4 ? 'reported' : 'resolved') }))))
+    await Promise.all(Object.entries(sources).flatMap(([name, field]) => Array.from({ length: 7 }, (_, n) => setDoc(doc(store, name, `row-${n}`), { [field]: ['displayName', 'code'].includes(field) ? (name === 'stock' ? 'REP-IGUAL' : 'Igual') : Timestamp.fromMillis(1000000), ...(name === 'stock' ? { source: 'sap-sqlserver', active: true } : {}), equipmentId: n % 2 ? 'EQ-B' : 'EQ-A', areaId: n % 2 ? 'linea-2' : 'linea-1', status: name === 'equipment' ? (n < 4 ? 'active' : 'inactive') : (n < 4 ? 'reported' : 'resolved') }))))
   })
   db = env.authenticatedContext('reader').firestore()
 })

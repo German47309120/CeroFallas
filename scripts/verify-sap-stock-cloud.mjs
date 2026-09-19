@@ -30,7 +30,7 @@ try {
   await signInWithEmailAndPassword(auth, reader.email, reader.password)
   const database = getFirestore(app)
   const [stockSnapshot, statusSnapshot, tableSnapshot] = await Promise.all([
-    getDocs(query(collection(database, 'stock'), where('source', '==', 'sap-sqlserver'))),
+    getDocs(query(collection(database, 'stock'), where('source', '==', 'sap-sqlserver'), where('active', '==', true))),
     getDoc(doc(database, 'integrationStatus', 'sap-stock')),
     getDocs(query(collection(database, 'stock'), where('source', '==', 'sap-sqlserver'), where('active', '==', true), orderBy('code', 'asc'), orderBy(documentId(), 'asc'), limit(1))),
   ])

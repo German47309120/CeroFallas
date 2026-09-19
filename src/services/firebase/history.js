@@ -1,11 +1,11 @@
-import { collection, documentId, getDocsFromServer, limit, orderBy, query, startAfter, where } from 'firebase/firestore'
+import { collection, documentId, endAt, getDocsFromServer, limit, orderBy, query, startAfter, startAt, where } from 'firebase/firestore'
 import { getFirebaseFirestore } from './firestore.js'
 import { guatemalaDateRange } from '../../utils/historyFilters.js'
 
 const definitions = {
   incidents: { sort: 'createdAt', states: ['open', 'reported', 'acknowledged', 'in_progress', 'resolved', 'voided'], openStates: ['reported', 'acknowledged', 'in_progress'] },
   audit: { sort: 'occurredAt' },
-  stock: { sort: 'code', direction: 'asc', filters: [['source', '==', 'sap-sqlserver'], ['active', '==', true]] },
+  stock: { sort: 'code', direction: 'asc', prefix: 'REP', filters: [['source', '==', 'sap-sqlserver'], ['active', '==', true]] },
   users: { sort: 'displayName' },
   forkliftInspections: { sort: 'inspectedAt' },
   preventivePlans: { sort: 'nextDueAt', direction: 'asc' },
@@ -34,6 +34,8 @@ export async function readHistory(resource, { status = 'all', areaId = '', equip
   const direction = definition.direction ?? 'desc'
   clauses.push(orderBy(definition.sort, direction), orderBy(documentId(), direction))
   if (cursor) clauses.push(startAfter(cursor))
+  else if (definition.prefix) clauses.push(startAt(definition.prefix))
+  if (definition.prefix) clauses.push(endAt(`${definition.prefix}\uf8ff`))
   clauses.push(limit(pageSize + 1))
   const snapshot = await getDocsFromServer(query(collection(getFirebaseFirestore(), resource), ...clauses))
   const visible = snapshot.docs.slice(0, pageSize)

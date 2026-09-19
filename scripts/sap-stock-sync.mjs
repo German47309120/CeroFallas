@@ -77,9 +77,9 @@ async function publishWithFirebaseCli(stock) {
   await request(':commit', { writes: [{
     update: {
       name: firestoreDocumentName('integrationStatus', 'sap-stock'),
-      fields: firestoreFields({ status: 'success', projectId, runId, rows: stock.length, warehouses, deactivated: obsoleteIds.length }),
+      fields: firestoreFields({ status: 'success', projectId, runId, selection: 'REP%', rows: stock.length, warehouses, deactivated: obsoleteIds.length }),
     },
-    updateMask: { fieldPaths: ['status', 'projectId', 'runId', 'rows', 'warehouses', 'deactivated'] },
+    updateMask: { fieldPaths: ['status', 'projectId', 'runId', 'selection', 'rows', 'warehouses', 'deactivated'] },
     updateTransforms: [{ fieldPath: 'completedAt', setToServerValue: 'REQUEST_TIME' }],
   }] })
   console.log(`Stock publicado: ${stock.length} registros activos y ${obsoleteIds.length} anteriores marcados como inactivos.`)
@@ -172,7 +172,7 @@ try {
   }
   await writer.close()
   await database.collection('integrationStatus').doc('sap-stock').set({
-    status: 'success', projectId, runId, rows: stock.length, warehouses, deactivated,
+    status: 'success', projectId, runId, selection: 'REP%', rows: stock.length, warehouses, deactivated,
     completedAt: FieldValue.serverTimestamp(),
   })
   console.log(`Stock publicado: ${stock.length} registros activos y ${deactivated} anteriores marcados como inactivos.`)
