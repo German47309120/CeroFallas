@@ -115,9 +115,7 @@ export default function AppShell() {
         </header>
 
         <main className="main-content">
-          <div className="demo-banner" role="status">
-            {profileError || `Sesión autenticada como ${user?.email}. ${environment === 'emulator' ? 'Datos aislados en el entorno de pruebas.' : 'Datos sincronizados con el sistema central.'}`}
-          </div>
+          {profileError ? <div className="demo-banner" role="alert">{profileError}</div> : null}
           <RouteAccess><Outlet /></RouteAccess>
         </main>
       </div>

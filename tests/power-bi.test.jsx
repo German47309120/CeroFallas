@@ -22,11 +22,11 @@ describe('integración segura del reporte gerencial', () => {
 
   it('mantiene disponible el reporte interno cuando falta Power BI', () => {
     const html = render('')
-    expect(html).toContain('Resumen interno activo')
     expect(html).toContain('Centro de mantenimiento')
     expect(html).toContain('Imprimir reporte')
     expect(html).toContain('Abrir IA predictiva')
     expect(html).not.toContain('Abrir reporte en una pestaña nueva')
+    expect(html).not.toContain('Power BI opcional pendiente')
   })
 
   it('muestra advertencia explícita para enlaces públicos', () => {

@@ -23,11 +23,6 @@ export default function PredictionPage() {
         </div>
       </header>
 
-      <aside className="prediction-warning" aria-label="Limitación del laboratorio">
-        <strong>No es una predicción de planta.</strong>
-        <span> Los resultados provienen únicamente de datos sintéticos y sirven para demostrar el proceso técnico de aprendizaje automático. No deben usarse para decidir mantenimientos hasta completar la validación con histórico real.</span>
-      </aside>
-
       <div className="prediction-kpis" aria-label="Resumen del experimento">
         <article><span>Registros sintéticos</span><strong>{lab.dataset.rows.toLocaleString('es-GT')}</strong><small>{lab.dataset.trainingRows} entrenamiento · {lab.dataset.testRows} prueba</small></article>
         <article><span>Ventana objetivo</span><strong>30 días</strong><small>Falla siguiente: sí o no</small></article>
@@ -94,7 +89,7 @@ export default function PredictionPage() {
       </section>
 
       <footer className="prediction-trace">
-        Ejecución reproducible del {lab.generatedOn} · Origen: {lab.dataset.origin} · Huella: {lab.dataset.fingerprint}…
+        No es una predicción de planta. No deben usarse para decidir mantenimientos · Ejecución reproducible del {lab.generatedOn} · Origen: {lab.dataset.origin} · Huella: {lab.dataset.fingerprint}…
       </footer>
     </section>
   )

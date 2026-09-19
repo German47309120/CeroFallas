@@ -1,8 +1,12 @@
--- Sustituir dbo.VISTA_STOCK_SAP por la fuente autorizada o adaptar la consulta existente.
--- El resultado debe producir exactamente estos conceptos; se aceptan alias en español o inglés.
+-- Consulta autorizada de inventario para CeroFallas y Power BI.
+-- Mantener las credenciales y la ubicación del servidor fuera del archivo PBIX compartido.
 SELECT
-  Codigo      AS codigo,
-  Descripcion AS descripcion,
-  Cantidad    AS cantidad,
-  Almacen     AS almacen
-FROM dbo.VISTA_STOCK_SAP;
+  W.ItemCode AS codigo,
+  I.ItemName AS descripcion,
+  W.OnHand   AS cantidad,
+  W.WhsCode  AS almacen
+FROM OITW AS W
+INNER JOIN OITM AS I ON I.ItemCode = W.ItemCode
+WHERE W.OnHand <> 0
+  AND W.ItemCode LIKE 'REP%'
+ORDER BY W.ItemCode ASC;
