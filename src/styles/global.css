@@ -708,6 +708,36 @@ h2 {
   font-variant-numeric: tabular-nums;
 }
 
+.management-report-content .dashboard-actions {
+  display: none;
+}
+
+@media print {
+  .sidebar,
+  .topbar,
+  .demo-banner,
+  .print-hidden,
+  .management-report-content .dashboard-actions,
+  .management-report-content a,
+  .management-report-content button {
+    display: none !important;
+  }
+
+  .app-frame,
+  .main-content {
+    width: 100% !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+
+  .panel,
+  .stat-card,
+  .dashboard-hero {
+    break-inside: avoid;
+    box-shadow: none !important;
+  }
+}
+
 @media (max-width: 640px) {
   .integration-metrics {
     grid-template-columns: 1fr;

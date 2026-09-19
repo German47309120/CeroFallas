@@ -1,7 +1,8 @@
 import React from 'react'
 import { renderToStaticMarkup } from 'react-dom/server'
 import { MemoryRouter } from 'react-router-dom'
-import { describe, expect, it } from 'vitest'
+import { describe, expect, it, vi } from 'vitest'
+vi.mock('../src/features/auth/AuthContext.jsx', () => ({ useAuth: () => ({ user: { uid: 'management' }, profile: { displayName: 'Gerencia' }, hasPermission: (permission) => ['dashboard.read', 'corrective.read', 'preventive.read', 'incident.read'].includes(permission) }) }))
 import PowerBiPage from '../src/pages/PowerBiPage.jsx'
 import { powerBiReportConfiguration } from '../src/utils/powerBi.js'
 
@@ -19,9 +20,11 @@ describe('integración segura del reporte gerencial', () => {
     }
   })
 
-  it('no inventa un reporte cuando falta configuración', () => {
+  it('mantiene disponible el reporte interno cuando falta Power BI', () => {
     const html = render('')
-    expect(html).toContain('Aún no se ha configurado el reporte')
+    expect(html).toContain('Resumen interno activo')
+    expect(html).toContain('Centro de mantenimiento')
+    expect(html).toContain('Imprimir reporte')
     expect(html).not.toContain('Abrir reporte en una pestaña nueva')
   })
 
