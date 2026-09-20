@@ -65,7 +65,15 @@ Incidentes se conserva como **módulo adicional transversal**, relacionado con h
 
 Al terminar un avance, actualizar esta tabla y registrar: cambio concreto, pruebas realmente ejecutadas, pendientes, dependencias y siguiente paso. No marcar una fase completa solo por tener pantalla o build exitoso. No atribuir porcentajes globales sin criterios de aceptación medibles. La evidencia de pruebas anterior conserva su fecha: no implica una nueva ejecución hoy.
 
-## Avance vigente — 2026-09-16
+## Avance vigente — 2026-09-19
+
+### Exportación analítica y cronograma publicados
+
+- El reporte gerencial permite a Gerencia, Administrador y Soporte exportar un CSV UTF-8 con correctivos, planes, ejecuciones preventivas e incidentes. La exportación recorre todas las páginas, omite identidades y credenciales y neutraliza fórmulas de hoja de cálculo.
+- El módulo Preventivos presenta un Gantt dinámico de planes activos vencidos y de las próximas ocho semanas. La barra representa la fecha programada; la duración permanece pendiente de incorporarse al plan.
+- El enlace público de Power BI fue retirado. La consulta REP% y la construcción de un reporte privado con SQL Server, gateway y enlace autenticado están documentadas.
+- La corrida seca SAP del 19 de septiembre volvió a finalizar con `ETIMEOUT` antes de autenticarse. SSMS no estaba abierto durante el diagnóstico, por lo que sigue pendiente identificar el puerto TCP que utiliza su conexión funcional; no se leyeron ni publicaron registros.
+- Cierre vigente: 217/217 pruebas web, 3/3 predictivas, lint y build aprobados; once perfiles y 150 verificaciones cloud aprobadas tras sincronizar el permiso de exportación.
 
 ### Verificación autónoma y limpieza de producción
 
