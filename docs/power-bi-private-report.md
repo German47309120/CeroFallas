@@ -17,6 +17,12 @@ Usar la consulta de solo lectura disponible en `integrations/sap-stock-query.exa
 
 La consulta excluye existencias en cero. Las credenciales SQL no se guardan en Git, Firebase ni en el navegador.
 
+## Segunda fuente: mantenimiento CeroFallas
+
+Gerencia, Administrador y Soporte pueden usar **Exportar para Power BI** desde el reporte gerencial. La aplicación recorre todas las páginas autorizadas y genera un CSV UTF-8 con correctivos, planes preventivos, ejecuciones e incidentes. No incluye correos, contraseñas, credenciales, identificadores de sesión ni nombres de proveedores tecnológicos.
+
+El archivo utiliza una tabla unificada de eventos con tipo de registro, equipo, área, estado, fechas, duración, actividad, detalle, cumplimiento y origen. Los valores que podrían interpretarse como fórmulas de hoja de cálculo se neutralizan durante la exportación.
+
 ## Construcción en Power BI Desktop
 
 1. Abrir Power BI Desktop y elegir **Obtener datos > SQL Server**.

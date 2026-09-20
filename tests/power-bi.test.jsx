@@ -2,7 +2,7 @@ import React from 'react'
 import { renderToStaticMarkup } from 'react-dom/server'
 import { MemoryRouter } from 'react-router-dom'
 import { describe, expect, it, vi } from 'vitest'
-vi.mock('../src/features/auth/AuthContext.jsx', () => ({ useAuth: () => ({ user: { uid: 'management' }, profile: { displayName: 'Gerencia' }, hasPermission: (permission) => ['dashboard.read', 'corrective.read', 'preventive.read', 'incident.read', 'prediction.read'].includes(permission) }) }))
+vi.mock('../src/features/auth/AuthContext.jsx', () => ({ useAuth: () => ({ user: { uid: 'management' }, profile: { displayName: 'Gerencia' }, hasPermission: (permission) => ['dashboard.read', 'corrective.read', 'preventive.read', 'incident.read', 'prediction.read', 'analytics.export'].includes(permission) }) }))
 import PowerBiPage from '../src/pages/PowerBiPage.jsx'
 import { powerBiReportConfiguration } from '../src/utils/powerBi.js'
 
@@ -25,6 +25,7 @@ describe('integración segura del reporte gerencial', () => {
     expect(html).toContain('Centro de mantenimiento')
     expect(html).toContain('Imprimir reporte')
     expect(html).toContain('Abrir IA predictiva')
+    expect(html).toContain('Exportar para Power BI')
     expect(html).not.toContain('Abrir reporte en una pestaña nueva')
     expect(html).not.toContain('Power BI opcional pendiente')
   })

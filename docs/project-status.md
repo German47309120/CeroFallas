@@ -1,6 +1,6 @@
 # CEROFALLAS — ESTADO ACTUAL
 
-## Control maestro de fases — actualizado 2026-09-16
+## Control maestro de fases — actualizado 2026-09-19
 
 Este es el único documento de seguimiento de fases. Se conserva la numeración del apartado 33 de `../Prompt_Maestro_CeroFallas_V2.md`. Los registros históricos siguientes son evidencia de avances, no una segunda hoja de ruta. La entrega universitaria editable continúa en su archivo maestro independiente.
 
@@ -19,36 +19,36 @@ Estados: **Base lista** = definición o implementación local con evidencia; no 
 | 7 | Autenticación | Base cloud funcional verificada | Correo/contraseña y once cuentas/perfiles operativos; inicio de sesión cloud comprobado y 242 decisiones de acceso por URL verificadas. Functions administrativas esperan decisión sobre Blaze. |
 | 8 | Catálogo de equipos | Parcial | Alta, consulta, edición y desactivación; faltan códigos/modelos y catálogo de planta. |
 | 9 | Mantenimiento correctivo | Base funcional avanzada | Inicio y finalización separados con tiempo oficial del servidor, duración derivada, consulta y anulación auditada; datos reales pendientes. |
-| 10 | Mantenimiento preventivo | Base funcional local avanzada | Planes y ejecuciones con inicio/finalización oficial, reprogramación atómica y anulación auditada con restauración segura de agenda. Faltan validar frecuencias reales y definir horómetro/condición. |
+| 10 | Mantenimiento preventivo | Base funcional publicada avanzada | Planes y ejecuciones con tiempo oficial, reprogramación y anulación auditadas; Gantt dinámico de vencidos y próximas ocho semanas publicado. Faltan validar frecuencias reales, duración planificada y horómetro/condición. |
 | 11 | Checklist de montacargas | Base funcional local avanzada | 25 puntos, fecha/hora/turno oficiales no editables, resultado operativo y anulación privilegiada con auditoría atómica. Aprobación técnica de plantilla y equipos reales pendientes. |
 | 12 | Históricos y filtros | Base funcional local avanzada | Paginación transversal, filtros estructurados y auditoría con acciones, entidades y actores legibles sin perder UID. Búsqueda textual limitada de forma explícita a páginas cargadas; faltan planta/cloud. |
 | 13 | Dashboard | Base funcional local avanzada | Indicadores navegables hacia su detalle filtrado, agenda, prioridades, períodos, siete áreas, tendencia, promedio de atención, preventivos a tiempo e incidentes por estado; falta aceptación gerencial real. |
 | 14 | Seguridad y roles | Base cloud verificada | Once perfiles institucionales estables, 150 verificaciones publicadas de autenticación/perfil/lectura/Hosting, cuatro escrituras cloud permitidas con auditoría y cuatro prohibidas rechazadas, 132 decisiones locales de escritura y 242 combinaciones de rol/ruta. Faltan firma de aceptación institucional y backend administrativo cloud. |
-| 15 | Power BI y datos SAP | Preparación avanzada | Configuración y consulta local validadas; la app publicada distingue datos demo, muestra el estado protegido de SAP y ofrece una ruta gerencial preparada para enlaces Power BI HTTPS oficiales. Falta ejecutar SAP desde planta/VPN, publicar stock validado y proporcionar el enlace y modalidad de acceso del reporte. |
+| 15 | Power BI y datos SAP | Preparación avanzada | Consulta SAP REP% y diseño del reporte privado documentados; Gerencia puede exportar un dataset analítico sin credenciales con correctivos, planes, ejecuciones e incidentes. Falta ejecutar SAP, construir/publicar el PBIX privado y configurar gateway y actualización. |
 | 16 | Publicación en Internet | Base HTTPS publicada | Hosting Spark disponible en `https://cerofallas-pg2-german-2026.web.app`; 14 rutas directas y cuatro encabezados de seguridad respondieron correctamente. App Check está preparado pero no impuesto; faltan registro/métricas, aceptación móvil/roles, dominio personalizado y Functions si se aprueba Blaze. |
 | 17 | Dataset predictivo | Contrato y demo | Esquema, origen, etiqueta y generador sintético reproducible listos. Histórico real, definición oficial y calidad siguen pendientes. |
 | 18 | Ingeniería de variables | Base demostrativa | Once variables con corte temporal, validación y pruebas; falta confirmar disponibilidad y construirlas con fuentes reales. |
 | 19 | Entrenamiento y comparación | Laboratorio demo | Regresión logística y Random Forest comparados con división temporal y métricas reproducibles; no existen métricas reales ni modelo productivo. |
 | 20 | Integración de predicciones | Interfaz demostrativa segura | Pantalla responsive con comparación, trazabilidad, estado de preparación y advertencia de no uso operativo. Faltan servicio y resultados con histórico real validado. |
 | 21 | Automatización cada 24 horas | Pendiente | Depende de fuentes, modelo, infraestructura y costos autorizados. |
-| 22 | Pruebas generales | En curso avanzado | Suite vigente: 206/206 web y 3/3 predictivas; `npm test` administra Firestore Emulator automáticamente. Once cuentas, 14 rutas y 150 verificaciones publicadas aprobadas. Cuatro escrituras cloud con auditoría fueron aceptadas y cuatro intentos sin permiso rechazados; falta aceptación institucional multidispositivo. |
+| 22 | Pruebas generales | En curso avanzado | Suite vigente: 217 pruebas web y 3 predictivas; `npm test` administra Firestore Emulator automáticamente. Once cuentas, 14 rutas y 150 verificaciones publicadas aprobadas. Falta aceptación institucional multidispositivo. |
 | 23 | Documentación | Base local avanzada | Entrega 2 Word/PDF, documentación técnica y guía de uso integrada y personalizada por permisos. Falta actualizar al cierre definitivo y completar datos académicos. |
 | 24 | Presentación final | Parcial | Guía de defensa incluida en entrega 2; falta ensayo final y evidencia del sistema terminado. |
 
 ### Medición del avance
 
-**Proyecto completo estimado: 79 %. Aplicación web principal: 96 %. Base publicada en Internet: operativa.**
+**Proyecto completo estimado: 82 %. Aplicación web principal: 98 %. Base publicada en Internet: operativa.**
 
 La medición completa incluye aquello que todavía depende de planta, nube y datos predictivos; por eso es menor que el estado de la aplicación local. Se usa una ponderación estable para no aumentar el porcentaje solo por agregar pantallas:
 
 | Bloque | Peso del proyecto | Cumplimiento verificable | Aporte |
 |---|---:|---:|---:|
-| Análisis, diseño y documentación | 15 % | 85 % | 12.75 % |
-| Aplicación web principal | 40 % | 96 % | 38.40 % |
+| Análisis, diseño y documentación | 15 % | 88 % | 13.20 % |
+| Aplicación web principal | 40 % | 98 % | 39.20 % |
 | Seguridad y pruebas | 15 % | 99 % | 14.85 % |
-| Publicación e integraciones SAP/Power BI | 15 % | 55 % | 8.25 % |
-| Predictivo y automatización | 15 % | 30 % | 4.50 % |
-| **Total redondeado** | **100 %** |  | **79 %** |
+| Publicación e integraciones SAP/Power BI | 15 % | 65 % | 9.75 % |
+| Predictivo y automatización | 15 % | 33 % | 4.95 % |
+| **Total redondeado** | **100 %** |  | **82 %** |
 
 Solo se acredita como cumplimiento aquello implementado o documentado con evidencia. Una base local no equivale a despliegue cloud, datos reales o aceptación de planta. Recalcular con estos mismos pesos al cerrar criterios verificables.
 

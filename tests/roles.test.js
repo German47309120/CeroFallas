@@ -31,7 +31,8 @@ describe('Catálogo institucional de roles', () => {
   it('mantiene gerencia en lectura y sin operaciones de registro', () => {
     expect(roleDefinitions.management.permissions).toContain('dashboard.read')
     expect(roleDefinitions.management.permissions).toContain('prediction.read')
-    expect(roleDefinitions.management.permissions.every((permission) => permission.endsWith('.read'))).toBe(true)
+    expect(roleDefinitions.management.permissions).toContain('analytics.export')
+    expect(roleDefinitions.management.permissions.some((permission) => permission.endsWith('.create') || permission.endsWith('.manage'))).toBe(false)
   })
   it('el administrador cubre todo el catálogo conocido', () => {
     expect(new Set(roleDefinitions.administrator.permissions)).toEqual(new Set(Object.keys(permissionCatalog)))

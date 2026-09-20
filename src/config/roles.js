@@ -6,6 +6,7 @@ export const permissionCatalog = {
   'incident.read': 'Consultar incidentes', 'incident.create': 'Reportar incidentes', 'incident.manage': 'Dar seguimiento',
   'dashboard.read': 'Consultar dashboard', 'stock.read': 'Consultar stock', 'users.read': 'Consultar perfiles',
   'audit.read': 'Consultar auditoría', 'audit.write': 'Registrar auditoría', 'prediction.read': 'Consultar riesgo predictivo',
+  'analytics.export': 'Exportar dataset analítico',
 }
 
 const readAndAudit = ['equipment.read', 'audit.write']
@@ -24,7 +25,7 @@ export const roleDefinitions = {
   supervisor: { name: 'Supervisor', permissions: operationalLeadership },
   line_manager: { name: 'Encargado de línea', permissions: operationalLeadership },
   production_manager: { name: 'Jefe de Producción', permissions: operationalLeadership },
-  management: { name: 'Gerencia', permissions: ['dashboard.read', 'corrective.read', 'preventive.read', 'incident.read', 'prediction.read'] },
+  management: { name: 'Gerencia', permissions: ['dashboard.read', 'corrective.read', 'preventive.read', 'incident.read', 'prediction.read', 'analytics.export'] },
 }
 
 export function validateRoleDefinitions(definitions = roleDefinitions) {
