@@ -1,6 +1,6 @@
 # CeroFallas — Registro de riesgos
 
-Fecha de actualización: 2026-09-02
+Fecha de actualización: 2026-09-22
 
 | ID | Riesgo | Probabilidad | Impacto | Mitigación inicial | Estado |
 |---|---|---:|---:|---|---|
@@ -12,5 +12,5 @@ Fecha de actualización: 2026-09-02
 | R-006 | Roles ambiguos o permisos excesivos | Media | Alto | Matriz de permisos y pruebas de autorización | En mitigación |
 | R-007 | Frecuencias preventivas estimadas no coinciden con operación real | Alta | Medio | Hacerlas configurables y marcarlas como provisionales | En mitigación |
 | R-008 | Aumento del alcance por stock, incidentes y predictivo | Alta | Alto | Prioridad por núcleo operativo y criterios de aceptación por módulo | En mitigación |
-| R-009 | Cálculos incorrectos en turnos que atraviesan medianoche | Media | Alto | Guardar timestamps completos y crear pruebas específicas | Abierto |
+| R-009 | Cálculos incorrectos en turnos que atraviesan medianoche | Baja | Alto | Hora oficial del servidor, turno validado por reglas, recálculo al guardar y pruebas de límites/medianoche | Controlado técnicamente; falta aceptación en planta |
 | R-010 | Costos cloud inesperados | Baja inicialmente | Alto | Empezar con cuotas gratuitas, monitorear consumo y pedir autorización antes de facturación | En mitigación |

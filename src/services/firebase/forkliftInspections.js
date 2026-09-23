@@ -1,6 +1,7 @@
 import { collection, doc, getDocs, limit, orderBy, query, serverTimestamp, writeBatch } from 'firebase/firestore'
 import { forkliftChecklistTemplate } from '../../config/forkliftChecklist.js'
 import { validateInspectionVoidReason } from '../../utils/forklift.js'
+import { getOperationalShiftId } from '../../utils/shifts.js'
 import { getFirebaseFirestore } from './firestore.js'
 
 export async function listForkliftInspections() {
@@ -13,6 +14,9 @@ export async function createForkliftInspection(values, equipment, result, userId
   const inspectionRef = doc(collection(database, 'forkliftInspections'))
   const auditRef = doc(collection(database, 'audit'))
   const timestamp = serverTimestamp()
+  // El turno se vuelve a calcular al guardar. No se confía en un valor conservado
+  // por el formulario si permaneció abierto durante un cambio de turno.
+  const shiftId = getOperationalShiftId(new Date())
   const itemLookup = new Map(forkliftChecklistTemplate.sections.flatMap((section) => section.items).map((item) => [item.id, item]))
   const inspection = {
     equipmentId: equipment.id,
@@ -20,7 +24,7 @@ export async function createForkliftInspection(values, equipment, result, userId
     templateId: forkliftChecklistTemplate.id,
     templateVersion: forkliftChecklistTemplate.version,
     inspectedAt: timestamp,
-    shiftId: values.shiftId,
+    shiftId,
     operatorId: userId,
     hourMeter: Number(values.hourMeter),
     answers: values.answers.map((answer) => ({ itemId: answer.itemId, label: itemLookup.get(answer.itemId).label, critical: itemLookup.get(answer.itemId).critical, status: answer.status, observation: answer.observation.trim() || null })),

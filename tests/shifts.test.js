@@ -16,6 +16,12 @@ describe('turnos institucionales en hora de Guatemala', () => {
     expect(getOperationalShiftId(new Date('2026-09-07T12:00:00Z'))).toBe('shift-1')
   })
 
+  it('mantiene el turno nocturno al atravesar la medianoche', () => {
+    expect(getOperationalShiftId(guatemalaTime('2026-09-07', '23:59:00'))).toBe('shift-2')
+    expect(getOperationalShiftId(guatemalaTime('2026-09-08', '00:00:00'))).toBe('shift-2')
+    expect(getOperationalShiftId(guatemalaTime('2026-09-08', '05:59:59'))).toBe('shift-2')
+  })
+
   it('aplica turno mixto a jefaturas de lunes a viernes', () => {
     expect(getCurrentShift(guatemalaTime('2026-09-07', '08:00:00'), 'maintenance_manager')).toMatchObject({ id: 'mixed', active: true })
     expect(getCurrentShift(guatemalaTime('2026-09-07', '18:00:00'), 'maintenance_manager')).toMatchObject({ id: 'mixed', active: false })

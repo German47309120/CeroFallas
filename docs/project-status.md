@@ -1,6 +1,6 @@
 # CEROFALLAS — ESTADO ACTUAL
 
-## Control maestro de fases — actualizado 2026-09-19
+## Control maestro de fases — actualizado 2026-09-22
 
 Este es el único documento de seguimiento de fases. Se conserva la numeración del apartado 33 de `../Prompt_Maestro_CeroFallas_V2.md`. Los registros históricos siguientes son evidencia de avances, no una segunda hoja de ruta. La entrega universitaria editable continúa en su archivo maestro independiente.
 
@@ -20,7 +20,7 @@ Estados: **Base lista** = definición o implementación local con evidencia; no 
 | 8 | Catálogo de equipos | Parcial | Alta, consulta, edición y desactivación; faltan códigos/modelos y catálogo de planta. |
 | 9 | Mantenimiento correctivo | Base funcional avanzada | Inicio y finalización separados con tiempo oficial del servidor, duración derivada, consulta y anulación auditada; datos reales pendientes. |
 | 10 | Mantenimiento preventivo | Base funcional publicada avanzada | Planes y ejecuciones con tiempo oficial, reprogramación y anulación auditadas; Gantt dinámico de vencidos y próximas ocho semanas publicado. Faltan validar frecuencias reales, duración planificada y horómetro/condición. |
-| 11 | Checklist de montacargas | Base funcional local avanzada | 25 puntos, fecha/hora/turno oficiales no editables, resultado operativo y anulación privilegiada con auditoría atómica. Aprobación técnica de plantilla y equipos reales pendientes. |
+| 11 | Checklist de montacargas | Base funcional avanzada | 25 puntos, fecha/hora/turno oficiales no editables, resultado operativo y anulación privilegiada con auditoría atómica. El turno se recalcula al guardar, se actualiza en pantalla y las reglas rechazan valores manipulados. Aprobación técnica de plantilla y equipos reales pendientes. |
 | 12 | Históricos y filtros | Base funcional local avanzada | Paginación transversal, filtros estructurados y auditoría con acciones, entidades y actores legibles sin perder UID. Búsqueda textual limitada de forma explícita a páginas cargadas; faltan planta/cloud. |
 | 13 | Dashboard | Base funcional local avanzada | Indicadores navegables hacia su detalle filtrado, agenda, prioridades, períodos, siete áreas, tendencia, promedio de atención, preventivos a tiempo e incidentes por estado; falta aceptación gerencial real. |
 | 14 | Seguridad y roles | Base cloud verificada | Once perfiles institucionales estables, 150 verificaciones publicadas de autenticación/perfil/lectura/Hosting, cuatro escrituras cloud permitidas con auditoría y cuatro prohibidas rechazadas, 132 decisiones locales de escritura y 242 combinaciones de rol/ruta. Faltan firma de aceptación institucional y backend administrativo cloud. |
@@ -31,8 +31,8 @@ Estados: **Base lista** = definición o implementación local con evidencia; no 
 | 19 | Entrenamiento y comparación | Laboratorio demo | Regresión logística y Random Forest comparados con división temporal y métricas reproducibles; no existen métricas reales ni modelo productivo. |
 | 20 | Integración de predicciones | Interfaz demostrativa segura | Pantalla responsive con comparación, trazabilidad, estado de preparación y advertencia de no uso operativo. Faltan servicio y resultados con histórico real validado. |
 | 21 | Automatización cada 24 horas | Pendiente | Depende de fuentes, modelo, infraestructura y costos autorizados. |
-| 22 | Pruebas generales | En curso avanzado | Suite vigente: 217 pruebas web y 3 predictivas; `npm test` administra Firestore Emulator automáticamente. Once cuentas, 14 rutas y 150 verificaciones publicadas aprobadas. Falta aceptación institucional multidispositivo. |
-| 23 | Documentación | Base local avanzada | Entrega 2 Word/PDF, documentación técnica y guía de uso integrada y personalizada por permisos. Falta actualizar al cierre definitivo y completar datos académicos. |
+| 22 | Pruebas generales | En curso avanzado | Suite vigente: 219 pruebas web y 3 predictivas; `npm test` administra Firestore Emulator automáticamente. Once cuentas, 14 rutas y 150 verificaciones publicadas aprobadas. Falta aceptación institucional multidispositivo. |
+| 23 | Documentación | Base local avanzada | Entrega 2 Word/PDF, documentación técnica, guía integrada por permisos y fuente maestra de estudio cargada en NotebookLM. Falta actualizar al cierre definitivo y completar datos académicos. |
 | 24 | Presentación final | Parcial | Guía de defensa incluida en entrega 2; falta ensayo final y evidencia del sistema terminado. |
 
 ### Medición del avance
@@ -58,6 +58,17 @@ Solo se acredita como cumplimiento aquello implementado o documentado con eviden
 2. Fase 10: validar en planta frecuencias y datos de horómetro/condición. No inventar reprogramaciones automáticas para esos dos métodos.
 3. Fase 16: completar aceptación móvil/roles, App Check y decisión de dominio personalizado; Hosting y Firestore ya están publicados.
 4. Integraciones: repetir la corrida seca desde la red de planta/VPN o con el puerto TCP fijo de la instancia. Solo después de validar filas y almacenes se podrá autorizar la publicación de stock. Nunca almacenar credenciales en frontend o Git.
+
+## Avance vigente — 2026-09-22
+
+### Turno oficial reforzado y diagnóstico SAP actualizado
+
+- El checklist dejó de reutilizar el turno calculado al abrir el formulario: ahora lo recalcula inmediatamente antes de guardar y refresca la indicación visible cada 30 segundos.
+- Firestore ya exigía que el turno coincidiera con la hora oficial de la solicitud; una prueba negativa específica demuestra que un cliente no puede enviar el turno contrario.
+- Se agregó cobertura del turno nocturno al atravesar las 00:00. La verificación completa cerró con 219/219 pruebas web, 3/3 predictivas, lint limpio y build de producción exitoso.
+- La configuración SAP y la consulta de solo lectura siguen válidas. Con WireGuard activo, el nombre del servidor se resuelve, pero el puerto TCP configurado permanece inaccesible y la corrida seca finaliza con `ESOCKET` antes de autenticarse o consultar datos.
+- Próximo dato requerido para SAP: confirmar en la conexión funcional de SQL Server Management Studio el puerto TCP exacto de la instancia. No se publicará inventario hasta que la corrida seca informe filas y almacenes válidos.
+- El porcentaje global permanece en 82 %: este endurecimiento mejora calidad y seguridad, pero no sustituye la integración SAP/Power BI, el histórico predictivo ni la aceptación institucional pendientes.
 
 Incidentes se conserva como **módulo adicional transversal**, relacionado con históricos (12), dashboard (13) y seguridad (14). Los encabezados anteriores «Fase 12: incidentes» fueron una desviación de nomenclatura, no el cierre de la fase original de históricos.
 

@@ -367,6 +367,17 @@ describe('reglas de checklist de montacargas', () => {
     await assertFails(setDoc(doc(database, 'forkliftInspections', 'unsafe-result'), forkliftInspectionData('forklift-operator', { criticalFailures: 1, overallResult: 'fit' })))
   })
 
+  it('rechaza un turno elegido por el cliente que no coincide con la hora oficial', async () => {
+    await createProfile('forklift-operator', ['forklift.inspect'])
+    const database = testEnvironment.authenticatedContext('forklift-operator').firestore()
+    const officialShift = new Date().getUTCHours() >= 12 ? 'shift-1' : 'shift-2'
+    const forgedShift = officialShift === 'shift-1' ? 'shift-2' : 'shift-1'
+    await assertFails(setDoc(
+      doc(database, 'forkliftInspections', 'forged-shift'),
+      forkliftInspectionData('forklift-operator', { shiftId: forgedShift }),
+    ))
+  })
+
   it('impide eliminar físicamente una inspección', async () => {
     await createProfile('forklift-manager', ['forklift.read', 'forklift.manage'], 'active', 'support')
     await testEnvironment.withSecurityRulesDisabled(async (context) => {
