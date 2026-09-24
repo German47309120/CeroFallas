@@ -4,9 +4,23 @@
 
 - `npm test` inicia automáticamente Firestore Emulator, ejecuta las pruebas web y de reglas, y detiene el emulador al finalizar.
 - `npm run test:unit` ejecuta únicamente Vitest y requiere que Firestore Emulator ya esté disponible en `127.0.0.1:8080` para incluir las pruebas de reglas.
-- `npm run verify` reúne lint, las 222 pruebas web y de reglas, las pruebas predictivas y el build de producción.
+- `npm run verify` reúne lint, las 224 pruebas web y de reglas, las pruebas predictivas y el build de producción.
 
 Esta separación evita que una verificación parezca fallar por no haber iniciado manualmente el emulador.
+
+## PRUEBA P-031 — Ficha e historial consolidado por equipo (2026-09-23)
+
+Casos verificados:
+
+1. La ruta dinámica de la ficha requiere `equipment.read` y forma parte de 253 decisiones de acceso entre once roles y veintitrés rutas funcionales.
+2. La línea de tiempo combina eventos de varias fuentes y conserva el orden cronológico descendente.
+3. Cada perfil consulta únicamente los módulos históricos para los que tiene permiso.
+4. La compilación genera la vista independiente `EquipmentDetailPage` y mantiene la navegación desde el catálogo.
+5. Los índices declarados cubren preventivos, checklist y predicciones por equipo; correctivos e incidentes ya contaban con índices equivalentes.
+
+Resultado: **224/224 pruebas web y de reglas**, **3/3 pruebas predictivas**, lint y build aprobados.
+
+Estado: APROBADA LOCALMENTE. Requiere publicación de índices y Hosting para completar la aceptación cloud.
 
 ## PRUEBA P-030 — Revisión integral por usuarios y lenguaje de producción (2026-09-23)
 

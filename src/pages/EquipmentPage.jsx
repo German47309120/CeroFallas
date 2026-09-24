@@ -66,7 +66,7 @@ export default function EquipmentPage() {
         <div className="equipment-grid">
           {filteredEquipment.map((item) => (
             <article className="panel equipment-card" key={item.id}>
-              <div><p className="eyebrow">{item.code}</p><h2>{item.name}</h2><p>{item.type}</p>{canManage ? <Link to={`/equipos/${item.id}/editar`}>Editar equipo</Link> : null}</div>
+              <div><p className="eyebrow">{item.code}</p><h2>{item.name}</h2><p>{item.type}</p><div className="record-actions"><Link to={`/equipos/${item.id}`}>Ver ficha e historial</Link>{canManage ? <Link to={`/equipos/${item.id}/editar`}>Editar equipo</Link> : null}</div></div>
               <dl><div><dt>Área</dt><dd>{getAreaName(item.areaId)}</dd></div><div><dt>Estado</dt><dd><span className={`status-badge status-badge--${item.status}`}>{statusNames[item.status] ?? item.status}</span></dd></div>{item.model ? <div><dt>Modelo</dt><dd>{item.model}</dd></div> : null}</dl>
             </article>
           ))}

@@ -21,17 +21,17 @@ Estados: **Base lista** = definición o implementación local con evidencia; no 
 | 9 | Mantenimiento correctivo | Base funcional avanzada | Inicio y finalización separados con tiempo oficial del servidor, duración derivada, consulta y anulación auditada; datos reales pendientes. |
 | 10 | Mantenimiento preventivo | Base funcional publicada avanzada | Planes y ejecuciones con tiempo oficial, reprogramación y anulación auditadas; Gantt dinámico de vencidos y próximas ocho semanas publicado. Faltan validar frecuencias reales, duración planificada y horómetro/condición. |
 | 11 | Checklist de montacargas | Base funcional avanzada | 25 puntos, fecha/hora/turno oficiales no editables, resultado operativo y anulación privilegiada con auditoría atómica. El turno se recalcula al guardar, se actualiza en pantalla y las reglas rechazan valores manipulados. Aprobación técnica de plantilla y equipos reales pendientes. |
-| 12 | Históricos y filtros | Base funcional local avanzada | Paginación transversal, filtros estructurados y auditoría con acciones, entidades y actores legibles sin perder UID. Búsqueda textual limitada de forma explícita a páginas cargadas; faltan planta/cloud. |
+| 12 | Históricos y filtros | Base funcional publicada avanzada | Paginación transversal, filtros estructurados, auditoría legible y ficha por equipo con historial consolidado según permisos. Búsqueda textual limitada a páginas cargadas; falta aceptación de planta. |
 | 13 | Dashboard | Base funcional local avanzada | Indicadores navegables hacia su detalle filtrado, agenda, prioridades, períodos, siete áreas, tendencia, promedio de atención, preventivos a tiempo e incidentes por estado; falta aceptación gerencial real. |
-| 14 | Seguridad y roles | Base cloud verificada | Once perfiles institucionales estables, 161 verificaciones publicadas de autenticación/perfil/lectura/Hosting, cuatro escrituras cloud permitidas con auditoría y cuatro prohibidas rechazadas, 132 decisiones locales de escritura y 242 combinaciones de rol/ruta. Faltan firma de aceptación institucional y backend administrativo cloud. |
+| 14 | Seguridad y roles | Base cloud verificada | Once perfiles institucionales estables, cuatro escrituras cloud permitidas con auditoría y cuatro prohibidas rechazadas, 132 decisiones locales de escritura y 253 combinaciones de rol/ruta. Faltan firma de aceptación institucional y backend administrativo cloud. |
 | 15 | Power BI y datos SAP | Preparación avanzada | Consulta SAP REP% y diseño del reporte privado documentados; Gerencia puede exportar un dataset analítico sin credenciales con correctivos, planes, ejecuciones e incidentes. Falta ejecutar SAP, construir/publicar el PBIX privado y configurar gateway y actualización. |
-| 16 | Publicación en Internet | Base HTTPS publicada | Hosting Spark disponible en `https://cerofallas-pg2-german-2026.web.app`; 14 rutas directas y cuatro encabezados de seguridad respondieron correctamente. App Check está preparado pero no impuesto; faltan registro/métricas, aceptación móvil/roles, dominio personalizado y Functions si se aprueba Blaze. |
+| 16 | Publicación en Internet | Base HTTPS publicada | Hosting Spark disponible en `https://cerofallas-pg2-german-2026.web.app`; las rutas directas y cuatro encabezados de seguridad responden correctamente. App Check está preparado pero no impuesto; faltan registro/métricas, aceptación móvil/roles, dominio personalizado y Functions si se aprueba Blaze. |
 | 17 | Dataset predictivo | Contrato y demo publicada | Esquema, origen, etiqueta y generador reproducible; 32 resultados sintéticos de ocho equipos y cuatro fechas están publicados con marca demostrativa. Histórico real, definición oficial y calidad siguen pendientes. |
 | 18 | Ingeniería de variables | Base demostrativa | Once variables con corte temporal, validación y pruebas; falta confirmar disponibilidad y construirlas con fuentes reales. |
 | 19 | Entrenamiento y comparación | Laboratorio demo | Regresión logística y Random Forest comparados con división temporal y métricas reproducibles; no existen métricas reales ni modelo productivo. |
 | 20 | Integración de predicciones | Simulación cloud segura | Pantalla responsive consulta resultados fechados desde una colección de solo lectura, filtra por equipo y conserva trazabilidad, versión y advertencia permanente. Faltan servicio automatizado y resultados con histórico real validado. |
 | 21 | Automatización cada 24 horas | Pendiente | Depende de fuentes, modelo, infraestructura y costos autorizados. |
-| 22 | Pruebas generales | En curso avanzado | Suite vigente: 222 pruebas web y 3 predictivas; `npm test` administra Firestore Emulator automáticamente. Once cuentas, 14 rutas y 161 verificaciones publicadas aprobadas. Falta aceptación institucional multidispositivo. |
+| 22 | Pruebas generales | En curso avanzado | Suite vigente: 224 pruebas web y 3 predictivas; `npm test` administra Firestore Emulator automáticamente. Once cuentas y la matriz publicada están verificadas. Falta aceptación institucional multidispositivo. |
 | 23 | Documentación | Base local avanzada | Entrega 2 Word/PDF, documentación técnica, guía integrada por permisos y fuente maestra de estudio cargada en NotebookLM. Falta actualizar al cierre definitivo y completar datos académicos. |
 | 24 | Presentación final | Parcial | Guía de defensa incluida en entrega 2; falta ensayo final y evidencia del sistema terminado. |
 
@@ -69,6 +69,14 @@ Solo se acredita como cumplimiento aquello implementado o documentado con eviden
 - Se retiraron de las pantallas operativas comentarios propios del desarrollo, la defensa académica, fases pendientes e infraestructura. La ayuda quedó enfocada en tareas del usuario y los formularios muestran instrucciones operativas directas.
 - Verificación posterior: **222/222 pruebas web y de reglas**, **3/3 pruebas predictivas**, lint limpio y build de producción exitoso.
 - El porcentaje global permanece en **83 %**: esta revisión mejora calidad y aceptación técnica, pero no sustituye datos reales de planta, integración SAP/Power BI, App Check ni automatización predictiva.
+
+### Trazabilidad de la tercera entrega y ficha consolidada de equipo
+
+- Se contrastaron las 14 entidades, 6 procesos, 26 casos de uso, 10 componentes de arquitectura y 15 mockups del segundo entregable contra la implementación actual.
+- La cobertura documental verificable alcanza **94.4 %** y la cobertura conservadora de casos de uso alcanza **92.3 %**. Estas métricas no sustituyen el avance global del proyecto, que permanece en 83 % por sus dependencias externas.
+- CU-012 quedó completo con una ficha por activo. La línea de tiempo reúne correctivos, preventivos, checklist, incidentes y riesgo predictivo, consultando únicamente las colecciones permitidas para el perfil autenticado.
+- Se añadieron índices compuestos para mantener las consultas por equipo ordenadas en el servidor.
+- Verificación local: **224/224 pruebas web y de reglas**, **3/3 pruebas predictivas**, lint y build aprobados; la matriz cubre **253 decisiones de rol y ruta**.
 
 ## Avance vigente — 2026-09-22
 

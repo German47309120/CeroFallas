@@ -24,6 +24,7 @@ const routeAccessRules = [
   { match: /^\/incidentes$/, permissions: ['incident.read', 'incident.create'] },
   { match: /^\/equipos\/nuevo$/, permissions: ['equipment.manage'] },
   { match: /^\/equipos\/[^/]+\/editar$/, permissions: ['equipment.manage'] },
+  { match: /^\/equipos\/[^/]+$/, permissions: ['equipment.read'] },
   { match: /^\/equipos$/, permissions: ['equipment.read'] },
   { match: /^\/repuestos$/, permissions: ['stock.read'] },
   { match: /^\/riesgo$/, permissions: ['prediction.read'] },

@@ -14,6 +14,15 @@
     { "collectionGroup": "incidents", "queryScope": "COLLECTION", "fields": [
       { "fieldPath": "equipmentId", "order": "ASCENDING" }, { "fieldPath": "createdAt", "order": "DESCENDING" }
     ] },
+    { "collectionGroup": "preventiveExecutions", "queryScope": "COLLECTION", "fields": [
+      { "fieldPath": "equipmentId", "order": "ASCENDING" }, { "fieldPath": "startedAt", "order": "DESCENDING" }
+    ] },
+    { "collectionGroup": "forkliftInspections", "queryScope": "COLLECTION", "fields": [
+      { "fieldPath": "equipmentId", "order": "ASCENDING" }, { "fieldPath": "inspectedAt", "order": "DESCENDING" }
+    ] },
+    { "collectionGroup": "riskPredictions", "queryScope": "COLLECTION", "fields": [
+      { "fieldPath": "equipmentId", "order": "ASCENDING" }, { "fieldPath": "calculatedAt", "order": "DESCENDING" }
+    ] },
     { "collectionGroup": "incidents", "queryScope": "COLLECTION", "fields": [
       { "fieldPath": "status", "order": "ASCENDING" }, { "fieldPath": "equipmentId", "order": "ASCENDING" }, { "fieldPath": "createdAt", "order": "DESCENDING" }
     ] },

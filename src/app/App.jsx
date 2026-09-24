@@ -7,6 +7,7 @@ const LoginPage = lazy(() => import('../pages/LoginPage.jsx'))
 const NotFoundPage = lazy(() => import('../pages/NotFoundPage.jsx'))
 const EquipmentFormPage = lazy(() => import('../pages/EquipmentFormPage.jsx'))
 const EquipmentPage = lazy(() => import('../pages/EquipmentPage.jsx'))
+const EquipmentDetailPage = lazy(() => import('../pages/EquipmentDetailPage.jsx'))
 const CorrectiveFormPage = lazy(() => import('../pages/CorrectiveFormPage.jsx'))
 const CorrectivesPage = lazy(() => import('../pages/CorrectivesPage.jsx'))
 const PreventiveExecutionFormPage = lazy(() => import('../pages/PreventiveExecutionFormPage.jsx'))
@@ -35,6 +36,7 @@ export default function App() {
         <Route path="/equipos" element={<EquipmentPage />} />
         <Route path="/equipos/nuevo" element={<EquipmentFormPage />} />
         <Route path="/equipos/:equipmentId/editar" element={<EquipmentFormPage />} />
+        <Route path="/equipos/:equipmentId" element={<EquipmentDetailPage />} />
         <Route path="/preventivos" element={<PreventivesPage />} />
         <Route path="/preventivos/nuevo" element={<PreventivePlanFormPage />} />
         <Route path="/preventivos/:planId/editar" element={<PreventivePlanFormPage />} />
