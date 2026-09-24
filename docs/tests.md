@@ -8,6 +8,21 @@
 
 Esta separación evita que una verificación parezca fallar por no haber iniciado manualmente el emulador.
 
+## PRUEBA P-030 — Revisión integral por usuarios y lenguaje de producción (2026-09-23)
+
+Casos verificados:
+
+1. Las once cuentas publicadas iniciaron sesión y conservaron rol, estado y permisos esperados.
+2. Las catorce rutas y lecturas protegidas completaron 161 verificaciones cloud.
+3. Las ocho evidencias idempotentes de correctivo, preventivo, incidente y checklist ya existían; no se crearon duplicados.
+4. Cuatro escrituras deliberadamente fuera de rol fueron rechazadas por Firestore.
+5. El lote base de 325 documentos demostrativos permaneció legible con las reglas activas.
+6. Las vistas operativas dejaron de presentar mensajes internos sobre fases, infraestructura, defensa o presentación académica.
+
+Resultado: **222/222 pruebas web y de reglas**, **3/3 pruebas predictivas**, **161 verificaciones cloud**, lint y build aprobados. El verificador de escrituras reportó 0 documentos nuevos, 8 existentes y 4 rechazos correctos.
+
+Estado: APROBADA TÉCNICAMENTE. Falta la aceptación institucional presencial o multidispositivo con los responsables reales.
+
 ## PRUEBA P-029 — Simulación predictiva publicada (2026-09-22)
 
 Casos verificados:

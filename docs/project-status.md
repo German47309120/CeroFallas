@@ -1,6 +1,6 @@
 # CEROFALLAS — ESTADO ACTUAL
 
-## Control maestro de fases — actualizado 2026-09-22
+## Control maestro de fases — actualizado 2026-09-23
 
 Este es el único documento de seguimiento de fases. Se conserva la numeración del apartado 33 de `../Prompt_Maestro_CeroFallas_V2.md`. Los registros históricos siguientes son evidencia de avances, no una segunda hoja de ruta. La entrega universitaria editable continúa en su archivo maestro independiente.
 
@@ -58,6 +58,17 @@ Solo se acredita como cumplimiento aquello implementado o documentado con eviden
 2. Fase 10: validar en planta frecuencias y datos de horómetro/condición. No inventar reprogramaciones automáticas para esos dos métodos.
 3. Fase 16: completar aceptación móvil/roles, App Check y decisión de dominio personalizado; Hosting y Firestore ya están publicados.
 4. Integraciones: repetir la corrida seca desde la red de planta/VPN o con el puerto TCP fijo de la instancia. Solo después de validar filas y almacenes se podrá autorizar la publicación de stock. Nunca almacenar credenciales en frontend o Git.
+
+## Avance vigente — 2026-09-23
+
+### Revisión integral por usuarios y lenguaje de producción
+
+- Se contrastaron los once perfiles publicados con las catorce rutas, sus permisos derivados y las colecciones autorizadas. La aceptación cloud cerró con **161 verificaciones aprobadas** sin modificar datos ni exponer contraseñas.
+- El verificador idempotente de operaciones confirmó que ya existen las ocho evidencias controladas de correctivo, preventivo, incidente y checklist con su auditoría. No creó duplicados y Firebase rechazó los cuatro intentos de escritura fuera de rol.
+- El lote demostrativo base conserva **325 documentos** presentes y legibles bajo las reglas activas.
+- Se retiraron de las pantallas operativas comentarios propios del desarrollo, la defensa académica, fases pendientes e infraestructura. La ayuda quedó enfocada en tareas del usuario y los formularios muestran instrucciones operativas directas.
+- Verificación posterior: **222/222 pruebas web y de reglas**, **3/3 pruebas predictivas**, lint limpio y build de producción exitoso.
+- El porcentaje global permanece en **83 %**: esta revisión mejora calidad y aceptación técnica, pero no sustituye datos reales de planta, integración SAP/Power BI, App Check ni automatización predictiva.
 
 ## Avance vigente — 2026-09-22
 

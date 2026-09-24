@@ -43,7 +43,7 @@ export default function UserAdministration({ records, onSaved }) {
   const [notice, setNotice] = useState('')
   const [error, setError] = useState('')
   if (profile?.roleId !== 'administrator') return <div className="panel"><h2>Administración protegida</h2><p>Tu perfil puede consultar usuarios, pero solamente el Administrador de la aplicación puede crear cuentas o cambiar roles y estados.</p></div>
-  if (!adminFunctionsEnabled) return <><div className="panel"><div className="panel__heading"><div><p className="eyebrow">Administración protegida</p><h2>Usuarios en modo consulta</h2></div><span className="status-badge">Servicio administrativo pendiente</span></div><p>Los once accesos iniciales ya están configurados. Crear cuentas, cambiar roles, desactivar usuarios o restablecer contraseñas permanecerá oculto hasta habilitar y probar la infraestructura administrativa.</p></div><SessionReleaseList records={records} currentUserId={user.uid} /></>
+  if (!adminFunctionsEnabled) return <><div className="panel"><div className="panel__heading"><div><p className="eyebrow">Administración protegida</p><h2>Usuarios configurados</h2></div><span className="status-badge">Consulta y sesiones</span></div><p>Consulta los perfiles registrados y libera una sesión cuando una cuenta necesite ingresar desde otro dispositivo.</p></div><SessionReleaseList records={records} currentUserId={user.uid} /></>
 
   const updateCreate = (event) => setCreateValues((current) => ({ ...current, [event.target.name]: event.target.value }))
   const updateEdit = (event) => setEditing((current) => ({ ...current, [event.target.name]: event.target.value }))

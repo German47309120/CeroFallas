@@ -38,10 +38,12 @@ it('mantiene a gerencia en recorridos de consulta', () => {
   expect(html).not.toContain('href="/correctivos/nuevo"')
 })
 
-it('explica arquitectura, defensa y límites de la demostración', () => {
+it('explica funcionamiento, recorrido y límites de la demostración', () => {
   const html = render()
   expect(html).toContain('Interfaz responsive')
   expect(html).toContain('Base central protegida')
-  expect(html).toContain('Ruta sugerida para la defensa')
-  expect(html).toContain('los registros actuales son demostrativos')
+  expect(html).toContain('Recorrido recomendado')
+  expect(html).toContain('los registros identificados como simulados')
+  expect(html).not.toContain('defensa')
+  expect(html).not.toContain('presentación')
 })
