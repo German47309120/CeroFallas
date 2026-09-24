@@ -16,16 +16,16 @@ Los porcentajes no sustituyen la demostración. Cada elemento debe enseñarse en
 
 ## Resumen de cobertura documental
 
-| Bloque de la segunda entrega | Unidades | Completas | Parciales | Puntaje | Cobertura |
+| Bloque de la segunda entrega | Unidades | Completas | Parciales | Cobertura completa | Cobertura ponderada |
 |---|---:|---:|---:|---:|---:|
-| Modelo lógico y entidades | 14 | 14 | 0 | 14.0 | 100.0 % |
-| Procesos | 6 | 5 | 1 | 5.5 | 91.7 % |
-| Casos de uso | 26 | 22 | 4 | 24.0 | 92.3 % |
-| Componentes de arquitectura | 10 | 7 | 3 | 8.5 | 85.0 % |
-| Mockups representados por vistas reales | 15 | 15 | 0 | 15.0 | 100.0 % |
-| **Total** | **71** | **63** | **8** | **67.0** | **94.4 %** |
+| Modelo lógico y entidades | 14 | 14 | 0 | 100.0 % | 100.0 % |
+| Procesos | 6 | 5 | 1 | 83.3 % | 91.7 % |
+| Casos de uso | 26 | 24 | 2 | 92.3 % | 96.2 % |
+| Componentes de arquitectura | 10 | 7 | 3 | 70.0 % | 85.0 % |
+| Mockups representados por vistas reales | 15 | 15 | 0 | 100.0 % | 100.0 % |
+| **Total** | **71** | **65** | **6** | **91.5 %** | **95.8 %** |
 
-La cobertura documental estimada es **94.4 %**. El indicador más conservador para el funcionamiento de la aplicación es la cobertura de casos de uso: **24 de 26, equivalente a 92.3 %**.
+La medición principal cuenta solamente elementos completos. Con ese criterio conservador, la cobertura documental es **65 de 71, equivalente a 91.5 %**, y el funcionamiento de la aplicación es **24 de 26 casos de uso completos, equivalente a 92.3 %**. La cobertura ponderada de 95.8 % se conserva como dato secundario y no es necesaria para afirmar que se supera el mínimo.
 
 ## Modelo lógico y entidades
 
@@ -84,8 +84,8 @@ La cobertura documental estimada es **94.4 %**. El indicador más conservador pa
 | CU-071 | Consultar dashboard gerencial | Completo | Reporte interno, filtros y exportación |
 | CU-080 | Crear, editar o desactivar perfil | Parcial | Código y emulador listos; Functions administrativas requieren Blaze |
 | CU-081 | Consultar auditoría | Completo | `/admin/auditoria` |
-| CU-090 | Preparar dataset y exportar a Power BI | Parcial | CSV seguro disponible; falta PBIX privado publicado |
-| CU-091 | Entrenar y evaluar modelos | Parcial | Laboratorio reproducible con datos sintéticos; falta histórico real |
+| CU-090 | Preparar dataset y exportar a Power BI | Completo en la aplicación | CSV autorizado y seguro disponible; el PBIX privado continúa como integración externa |
+| CU-091 | Entrenar y evaluar modelos | Completo como laboratorio | Evaluación reproducible de dos modelos con división temporal y simulación identificada, conforme a la alternativa documentada |
 | CU-092 | Consultar riesgo por equipo | Completo como simulación | `/riesgo`, filtros, trazabilidad y advertencia permanente |
 
 ## Arquitectura
