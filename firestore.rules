@@ -104,6 +104,12 @@ service cloud.firestore {
       allow delete: if false;
     }
 
+    match /riskPredictions/{predictionId} {
+      allow read: if hasPermission('prediction.read');
+      // Los resultados solo los publica el proceso técnico autorizado.
+      allow write: if false;
+    }
+
     match /audit/{auditId} {
       allow read: if hasPermission('audit.read');
       allow create: if hasPermission('audit.write')

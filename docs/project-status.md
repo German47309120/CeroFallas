@@ -23,21 +23,21 @@ Estados: **Base lista** = definición o implementación local con evidencia; no 
 | 11 | Checklist de montacargas | Base funcional avanzada | 25 puntos, fecha/hora/turno oficiales no editables, resultado operativo y anulación privilegiada con auditoría atómica. El turno se recalcula al guardar, se actualiza en pantalla y las reglas rechazan valores manipulados. Aprobación técnica de plantilla y equipos reales pendientes. |
 | 12 | Históricos y filtros | Base funcional local avanzada | Paginación transversal, filtros estructurados y auditoría con acciones, entidades y actores legibles sin perder UID. Búsqueda textual limitada de forma explícita a páginas cargadas; faltan planta/cloud. |
 | 13 | Dashboard | Base funcional local avanzada | Indicadores navegables hacia su detalle filtrado, agenda, prioridades, períodos, siete áreas, tendencia, promedio de atención, preventivos a tiempo e incidentes por estado; falta aceptación gerencial real. |
-| 14 | Seguridad y roles | Base cloud verificada | Once perfiles institucionales estables, 150 verificaciones publicadas de autenticación/perfil/lectura/Hosting, cuatro escrituras cloud permitidas con auditoría y cuatro prohibidas rechazadas, 132 decisiones locales de escritura y 242 combinaciones de rol/ruta. Faltan firma de aceptación institucional y backend administrativo cloud. |
+| 14 | Seguridad y roles | Base cloud verificada | Once perfiles institucionales estables, 161 verificaciones publicadas de autenticación/perfil/lectura/Hosting, cuatro escrituras cloud permitidas con auditoría y cuatro prohibidas rechazadas, 132 decisiones locales de escritura y 242 combinaciones de rol/ruta. Faltan firma de aceptación institucional y backend administrativo cloud. |
 | 15 | Power BI y datos SAP | Preparación avanzada | Consulta SAP REP% y diseño del reporte privado documentados; Gerencia puede exportar un dataset analítico sin credenciales con correctivos, planes, ejecuciones e incidentes. Falta ejecutar SAP, construir/publicar el PBIX privado y configurar gateway y actualización. |
 | 16 | Publicación en Internet | Base HTTPS publicada | Hosting Spark disponible en `https://cerofallas-pg2-german-2026.web.app`; 14 rutas directas y cuatro encabezados de seguridad respondieron correctamente. App Check está preparado pero no impuesto; faltan registro/métricas, aceptación móvil/roles, dominio personalizado y Functions si se aprueba Blaze. |
-| 17 | Dataset predictivo | Contrato y demo | Esquema, origen, etiqueta y generador sintético reproducible listos. Histórico real, definición oficial y calidad siguen pendientes. |
+| 17 | Dataset predictivo | Contrato y demo publicada | Esquema, origen, etiqueta y generador reproducible; 32 resultados sintéticos de ocho equipos y cuatro fechas están publicados con marca demostrativa. Histórico real, definición oficial y calidad siguen pendientes. |
 | 18 | Ingeniería de variables | Base demostrativa | Once variables con corte temporal, validación y pruebas; falta confirmar disponibilidad y construirlas con fuentes reales. |
 | 19 | Entrenamiento y comparación | Laboratorio demo | Regresión logística y Random Forest comparados con división temporal y métricas reproducibles; no existen métricas reales ni modelo productivo. |
-| 20 | Integración de predicciones | Interfaz demostrativa segura | Pantalla responsive con comparación, trazabilidad, estado de preparación y advertencia de no uso operativo. Faltan servicio y resultados con histórico real validado. |
+| 20 | Integración de predicciones | Simulación cloud segura | Pantalla responsive consulta resultados fechados desde una colección de solo lectura, filtra por equipo y conserva trazabilidad, versión y advertencia permanente. Faltan servicio automatizado y resultados con histórico real validado. |
 | 21 | Automatización cada 24 horas | Pendiente | Depende de fuentes, modelo, infraestructura y costos autorizados. |
-| 22 | Pruebas generales | En curso avanzado | Suite vigente: 219 pruebas web y 3 predictivas; `npm test` administra Firestore Emulator automáticamente. Once cuentas, 14 rutas y 150 verificaciones publicadas aprobadas. Falta aceptación institucional multidispositivo. |
+| 22 | Pruebas generales | En curso avanzado | Suite vigente: 222 pruebas web y 3 predictivas; `npm test` administra Firestore Emulator automáticamente. Once cuentas, 14 rutas y 161 verificaciones publicadas aprobadas. Falta aceptación institucional multidispositivo. |
 | 23 | Documentación | Base local avanzada | Entrega 2 Word/PDF, documentación técnica, guía integrada por permisos y fuente maestra de estudio cargada en NotebookLM. Falta actualizar al cierre definitivo y completar datos académicos. |
 | 24 | Presentación final | Parcial | Guía de defensa incluida en entrega 2; falta ensayo final y evidencia del sistema terminado. |
 
 ### Medición del avance
 
-**Proyecto completo estimado: 82 %. Aplicación web principal: 98 %. Base publicada en Internet: operativa.**
+**Proyecto completo estimado: 83 %. Aplicación web principal: 98 %. Base publicada en Internet: operativa.**
 
 La medición completa incluye aquello que todavía depende de planta, nube y datos predictivos; por eso es menor que el estado de la aplicación local. Se usa una ponderación estable para no aumentar el porcentaje solo por agregar pantallas:
 
@@ -47,8 +47,8 @@ La medición completa incluye aquello que todavía depende de planta, nube y dat
 | Aplicación web principal | 40 % | 98 % | 39.20 % |
 | Seguridad y pruebas | 15 % | 99 % | 14.85 % |
 | Publicación e integraciones SAP/Power BI | 15 % | 65 % | 9.75 % |
-| Predictivo y automatización | 15 % | 33 % | 4.95 % |
-| **Total redondeado** | **100 %** |  | **82 %** |
+| Predictivo y automatización | 15 % | 40 % | 6.00 % |
+| **Total redondeado** | **100 %** |  | **83 %** |
 
 Solo se acredita como cumplimiento aquello implementado o documentado con evidencia. Una base local no equivale a despliegue cloud, datos reales o aceptación de planta. Recalcular con estos mismos pesos al cerrar criterios verificables.
 
@@ -66,9 +66,17 @@ Solo se acredita como cumplimiento aquello implementado o documentado con eviden
 - El checklist dejó de reutilizar el turno calculado al abrir el formulario: ahora lo recalcula inmediatamente antes de guardar y refresca la indicación visible cada 30 segundos.
 - Firestore ya exigía que el turno coincidiera con la hora oficial de la solicitud; una prueba negativa específica demuestra que un cliente no puede enviar el turno contrario.
 - Se agregó cobertura del turno nocturno al atravesar las 00:00. La verificación completa cerró con 219/219 pruebas web, 3/3 predictivas, lint limpio y build de producción exitoso.
-- La configuración SAP y la consulta de solo lectura siguen válidas. Con WireGuard activo, el nombre del servidor se resuelve, pero el puerto TCP configurado permanece inaccesible y la corrida seca finaliza con `ESOCKET` antes de autenticarse o consultar datos.
-- Próximo dato requerido para SAP: confirmar en la conexión funcional de SQL Server Management Studio el puerto TCP exacto de la instancia. No se publicará inventario hasta que la corrida seca informe filas y almacenes válidos.
-- El porcentaje global permanece en 82 %: este endurecimiento mejora calidad y seguridad, pero no sustituye la integración SAP/Power BI, el histórico predictivo ni la aceptación institucional pendientes.
+- La configuración SAP y la consulta de solo lectura siguen válidas. Con WireGuard activo, el nombre del servidor se resuelve, pero también el puerto TCP 4000 proporcionado permanece inaccesible y la corrida seca finaliza con `ESOCKET` antes de autenticarse o consultar datos.
+- Próximo dato requerido para SAP: verificar si 4000 es realmente el puerto TCP de SQL Server mostrado por `sys.dm_exec_connections` y confirmar que WireGuard permite ese destino. No se publicará inventario hasta que la corrida seca informe filas y almacenes válidos.
+
+### Simulación predictiva fechada publicada
+
+- Se publicó una colección independiente `riskPredictions` con 32 resultados sintéticos: ocho equipos en cuatro fechas de corte entre junio y septiembre de 2026.
+- Cada documento conserva puntuación, nivel, horizonte de 30 días, variables, explicación, modelo y versión. Todos declaran `isDemonstration=true` y `dataOrigin=synthetic_demo`.
+- La pantalla `/riesgo` consulta el histórico, resume el último corte, filtra por equipo y mantiene visible la prohibición de utilizar la simulación para decisiones operativas.
+- Las reglas permiten lectura únicamente a perfiles con `prediction.read` y bloquean todas las escrituras desde el navegador. El publicador técnico exige doble confirmación del proyecto y utiliza identificadores idempotentes.
+- Evidencia: lote cloud base de 325 documentos legible, 11 cuentas, 14 rutas y 161 verificaciones publicadas aprobadas; 222/222 pruebas web, 3/3 predictivas, lint y build aprobados.
+- El avance global sube a 83 % por integrar y publicar resultados trazables. No se acredita como modelo real, histórico real ni automatización de 24 horas.
 
 Incidentes se conserva como **módulo adicional transversal**, relacionado con históricos (12), dashboard (13) y seguridad (14). Los encabezados anteriores «Fase 12: incidentes» fueron una desviación de nomenclatura, no el cierre de la fase original de históricos.
 

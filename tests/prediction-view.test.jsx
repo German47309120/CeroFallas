@@ -10,7 +10,9 @@ describe('pantalla segura del laboratorio predictivo', () => {
   const html = renderToStaticMarkup(<PredictionPage />)
 
   it('declara el origen demostrativo y prohíbe el uso operativo', () => {
-    expect(html).toContain('Laboratorio demostrativo')
+    expect(html).toContain('Simulación publicada')
+    expect(html).toContain('Histórico de riesgos simulados')
+    expect(html).toContain('Demostración identificada')
     expect(html).toContain('No es una predicción de planta')
     expect(html).toContain('No deben usarse para decidir mantenimientos')
     expect(html).toContain('Sintético y reproducible')

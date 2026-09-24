@@ -4,9 +4,24 @@
 
 - `npm test` inicia automáticamente Firestore Emulator, ejecuta las pruebas web y de reglas, y detiene el emulador al finalizar.
 - `npm run test:unit` ejecuta únicamente Vitest y requiere que Firestore Emulator ya esté disponible en `127.0.0.1:8080` para incluir las pruebas de reglas.
-- `npm run verify` reúne lint, las 206 pruebas web y de reglas, las pruebas predictivas y el build de producción.
+- `npm run verify` reúne lint, las 222 pruebas web y de reglas, las pruebas predictivas y el build de producción.
 
 Esta separación evita que una verificación parezca fallar por no haber iniciado manualmente el emulador.
+
+## PRUEBA P-029 — Simulación predictiva publicada (2026-09-22)
+
+Casos verificados:
+
+1. Un perfil con `prediction.read` puede consultar `riskPredictions`; un perfil sin permiso recibe rechazo.
+2. Ninguna sesión del navegador puede crear o alterar resultados predictivos.
+3. Un nivel desconocido se presenta como “No calculable”, nunca como riesgo bajo.
+4. El resumen conserva solo el resultado más reciente de cada equipo sobre un histórico descendente.
+5. La publicación idempotente creó 32 documentos para ocho equipos y cuatro fechas, todos marcados como demostrativos.
+6. Once cuentas conservaron la matriz esperada sobre diez colecciones; Hosting y las catorce rutas siguieron disponibles.
+
+Resultado: **222/222 pruebas web**, **3/3 pruebas predictivas**, **161 verificaciones cloud**, lint y build aprobados.
+
+Estado: APROBADA COMO SIMULACIÓN. No acredita exactitud industrial, histórico real ni autorización para decisiones de mantenimiento.
 
 ## PRUEBA P-027 — Verificación autónoma y limpieza del build (2026-09-16)
 

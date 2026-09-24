@@ -30,6 +30,7 @@
     "sync:cloud-role-permissions": "node scripts/sync-role-permissions-cloud.mjs",
     "verify:demo-roles": "node scripts/verify-demo-role-users.mjs",
     "predictive:test": "python -m unittest discover -s predictive/tests -p \"test_*.py\"",
+    "predictive:publish-demo": "node scripts/publish-predictive-demo-cloud.mjs",
     "predictive:demo": "python predictive/generate_demo_dataset.py --output .local/predictive-demo.csv && python predictive/train_compare.py --input .local/predictive-demo.csv --output .local/predictive-results.json",
     "emulators:start": "firebase emulators:start --only auth,firestore,functions --project demo-cerofallas --import=emulator-data --export-on-exit=emulator-data",
     "emulators:fresh": "firebase emulators:start --only auth,firestore,functions --project demo-cerofallas --export-on-exit=emulator-data",

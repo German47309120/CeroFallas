@@ -167,6 +167,25 @@ describe('reglas de equipos', () => {
   })
 })
 
+describe('reglas de resultados predictivos', () => {
+  it('permite lectura autorizada y bloquea toda escritura desde el navegador', async () => {
+    await createProfile('prediction-viewer', ['prediction.read'])
+    await createProfile('prediction-outsider', [])
+    await testEnvironment.withSecurityRulesDisabled(async (context) => {
+      await setDoc(doc(context.firestore(), 'riskPredictions', 'demo-risk'), {
+        equipmentId: 'TEST-EQ-001', riskScore: 0.72, riskLevel: 'high', isDemonstration: true,
+      })
+    })
+    const viewer = testEnvironment.authenticatedContext('prediction-viewer').firestore()
+    const outsider = testEnvironment.authenticatedContext('prediction-outsider').firestore()
+    await assertSucceeds(getDoc(doc(viewer, 'riskPredictions', 'demo-risk')))
+    await assertFails(getDoc(doc(outsider, 'riskPredictions', 'demo-risk')))
+    await assertFails(setDoc(doc(viewer, 'riskPredictions', 'client-write'), {
+      equipmentId: 'TEST-EQ-001', riskScore: 0.99, isDemonstration: false,
+    }))
+  })
+})
+
 describe('reglas de correctivos', () => {
   it('permite registrar un correctivo y su auditoría al técnico autorizado', async () => {
     await createProfile('technician', ['corrective.read', 'corrective.create', 'audit.write'])

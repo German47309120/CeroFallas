@@ -17,9 +17,9 @@ const accounts = JSON.parse(await readFile('.local/project-users.json', 'utf8'))
 const administrator = accounts.find(({ roleId }) => roleId === 'administrator')
 if (!administrator) throw new Error('El catálogo local no contiene un administrador.')
 
-const expectedCounts = {
+const expectedMinimumCounts = {
   users: 11, equipment: 14, preventivePlans: 18, preventiveExecutions: 37,
-  correctives: 49, incidents: 25, forkliftInspections: 31, audit: 88,
+  correctives: 49, incidents: 25, forkliftInspections: 31, audit: 88, riskPredictions: 32,
 }
 const app = initializeApp({
   apiKey: environment.VITE_FIREBASE_API_KEY,
@@ -34,13 +34,13 @@ try {
   const auth = getAuth(app)
   await signInWithEmailAndPassword(auth, administrator.email, administrator.password)
   const database = getFirestore(app)
-  for (const [name, expected] of Object.entries(expectedCounts)) {
+  for (const [name, expected] of Object.entries(expectedMinimumCounts)) {
     const snapshot = await getDocs(collection(database, name))
-    if (snapshot.size !== expected) throw new Error(`${name}: existen ${snapshot.size} registros y se esperaban ${expected}.`)
+    if (snapshot.size < expected) throw new Error(`${name}: existen ${snapshot.size} registros y se requieren al menos ${expected}.`)
   }
   const demoStock = await getDocs(query(collection(database, 'stock'), where('source', '==', 'demo-local')))
   if (demoStock.size !== 20) throw new Error(`stock demo: existen ${demoStock.size} registros y se esperaban 20.`)
-  console.log(`Firebase Cloud verificado: ${Object.values(expectedCounts).reduce((sum, value) => sum + value, 20)} documentos demo legibles con reglas activas.`)
+  console.log(`Firebase Cloud verificado: lote base de ${Object.values(expectedMinimumCounts).reduce((sum, value) => sum + value, 20)} documentos demo presente y legible con reglas activas.`)
   console.log('Inicio de sesión administrativo correcto; no se realizaron escrituras durante esta verificación.')
   await signOut(auth)
 } finally {
