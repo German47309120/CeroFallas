@@ -112,7 +112,7 @@ Los quince mockups tienen una vista real equivalente: acceso, dashboard, equipos
 - URL publicada: `https://cerofallas-pg2-german-2026.web.app`.
 - 222 de 222 pruebas web y reglas aprobadas.
 - 3 de 3 pruebas predictivas aprobadas.
-- 11 cuentas, 14 rutas y 161 verificaciones cloud aprobadas.
+- 11 cuentas, 15 rutas y 162 verificaciones cloud aprobadas.
 - 4 escrituras operativas y 4 auditorías idempotentes ya existentes.
 - 4 intentos de escritura fuera de rol rechazados.
 - 325 documentos demostrativos presentes y legibles.

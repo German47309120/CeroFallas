@@ -76,7 +76,7 @@ Solo se acredita como cumplimiento aquello implementado o documentado con eviden
 - La cobertura documental verificable alcanza **94.4 %** y la cobertura conservadora de casos de uso alcanza **92.3 %**. Estas métricas no sustituyen el avance global del proyecto, que permanece en 83 % por sus dependencias externas.
 - CU-012 quedó completo con una ficha por activo. La línea de tiempo reúne correctivos, preventivos, checklist, incidentes y riesgo predictivo, consultando únicamente las colecciones permitidas para el perfil autenticado.
 - Se añadieron índices compuestos para mantener las consultas por equipo ordenadas en el servidor.
-- Verificación local: **224/224 pruebas web y de reglas**, **3/3 pruebas predictivas**, lint y build aprobados; la matriz cubre **253 decisiones de rol y ruta**.
+- Verificación: **224/224 pruebas web y de reglas**, **3/3 pruebas predictivas**, lint y build aprobados; la matriz cubre **253 decisiones de rol y ruta**. Hosting e índices están publicados y la aceptación cloud cerró con **11 cuentas, 15 rutas y 162 verificaciones aprobadas**.
 
 ## Avance vigente — 2026-09-22
 

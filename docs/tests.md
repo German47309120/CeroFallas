@@ -20,7 +20,7 @@ Casos verificados:
 
 Resultado: **224/224 pruebas web y de reglas**, **3/3 pruebas predictivas**, lint y build aprobados.
 
-Estado: APROBADA LOCALMENTE. Requiere publicación de índices y Hosting para completar la aceptación cloud.
+Estado: APROBADA Y PUBLICADA. Hosting e índices fueron desplegados; la aceptación posterior confirmó once cuentas, quince rutas y 162 verificaciones cloud.
 
 ## PRUEBA P-030 — Revisión integral por usuarios y lenguaje de producción (2026-09-23)
 
