@@ -542,3 +542,19 @@ Casos verificados:
 Resultado obtenido: 3/3 pruebas focalizadas y suite integral 205/205 aprobadas; lint y build de producción limpios.
 
 Estado: CÓDIGO PREPARADO. Pendiente registrar la app/dominio en App Check, configurar la clave pública, observar métricas y solo entonces decidir enforcement.
+
+## PRUEBA P-027 — Ampliación controlada de datos para exposición
+
+Fecha: 2026-09-29
+
+Casos verificados:
+
+1. El publicador exige dos confirmaciones idénticas del proyecto `cerofallas-pg2-german-2026` y rechaza variables de emulador.
+2. Antes de escribir consulta los conteos reales y calcula únicamente el faltante hasta 60 documentos por módulo.
+3. Los 213 documentos nuevos usan identificadores exclusivos, relaciones válidas y `dataOrigin=presentation_demo`.
+4. Usuarios, credenciales, sesiones, auditorías existentes y 1,967 documentos de stock permanecen sin cambios.
+5. Una segunda ejecución en modo seco informó cero escrituras: equipos, planes, ejecuciones, correctivos, incidentes, checklist y predicciones quedaron en 60 cada uno.
+
+Resultado: publicación y verificación cloud aprobadas; lint limpio, 3/3 pruebas predictivas y build de producción exitoso. La repetición de las pruebas de reglas quedó impedida por un servicio Java externo que ocupa su puerto fijo 8080; se conservará como evidencia vigente el último cierre integral de 224/224.
+
+Estado: APROBADA PARA DEMOSTRACIÓN. Los documentos sintéticos no deben presentarse como información histórica real de planta.

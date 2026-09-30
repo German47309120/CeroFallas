@@ -1,6 +1,6 @@
 # CEROFALLAS — ESTADO ACTUAL
 
-## Control maestro de fases — actualizado 2026-09-23
+## Control maestro de fases — actualizado 2026-09-29
 
 Este es el único documento de seguimiento de fases. Se conserva la numeración del apartado 33 de `../Prompt_Maestro_CeroFallas_V2.md`. Los registros históricos siguientes son evidencia de avances, no una segunda hoja de ruta. La entrega universitaria editable continúa en su archivo maestro independiente.
 
@@ -58,6 +58,19 @@ Solo se acredita como cumplimiento aquello implementado o documentado con eviden
 2. Fase 10: validar en planta frecuencias y datos de horómetro/condición. No inventar reprogramaciones automáticas para esos dos métodos.
 3. Fase 16: completar aceptación móvil/roles, App Check y decisión de dominio personalizado; Hosting y Firestore ya están publicados.
 4. Integraciones: repetir la corrida seca desde la red de planta/VPN o con el puerto TCP fijo de la instancia. Solo después de validar filas y almacenes se podrá autorizar la publicación de stock. Nunca almacenar credenciales en frontend o Git.
+
+## Avance vigente — 2026-09-29
+
+### Datos controlados para la exposición
+
+- Se completaron en Firebase **60 equipos, 60 planes preventivos, 60 ejecuciones preventivas, 60 correctivos, 60 incidentes, 60 checklist de montacargas y 60 resultados predictivos**.
+- Se agregaron 213 documentos con identificadores independientes y la marca `dataOrigin=presentation_demo`; los resultados predictivos mantienen además su carácter demostrativo. No deben presentarse como histórico real de planta.
+- El stock no fue rellenado con datos ficticios: ya contiene **1,967 documentos** provenientes de las cargas existentes y se conservó sin modificaciones.
+- Usuarios, credenciales, sesiones y los 93 eventos de auditoría existentes permanecieron sin cambios.
+- El publicador exige doble confirmación del proyecto, bloquea emuladores, crea únicamente documentos inexistentes y puede ejecutarse con `--dry-run`. Una segunda simulación confirmó cero escrituras pendientes, por lo que el proceso es idempotente.
+- Verificación del avance: conteos cloud confirmados, lint limpio, 3/3 pruebas predictivas y build de producción aprobado. La suite web completa no se repitió porque el puerto fijo 8080 de sus pruebas está ocupado por un servicio Java externo `AuthServiceApplication`; el último resultado integral vigente continúa siendo 224/224.
+
+La ampliación aporta material visual para la defensa, pero no cambia el porcentaje global: no sustituye catálogo real de planta, aceptación institucional, Power BI privado ni automatización predictiva con histórico real.
 
 ## Avance vigente — 2026-09-23
 

@@ -16,6 +16,7 @@
     "seed:emulator": "node scripts/seed-emulator.mjs",
     "seed:demo": "node scripts/seed-demo-data.mjs",
     "publish:demo-cloud": "node scripts/publish-demo-cloud.mjs",
+    "publish:presentation-data": "node scripts/expand-presentation-data-cloud.mjs",
     "verify:demo-cloud": "node scripts/verify-demo-cloud.mjs",
     "verify:published-roles": "node scripts/verify-published-roles.mjs",
     "verify:published-writes": "node scripts/verify-published-writes.mjs",
