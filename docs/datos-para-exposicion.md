@@ -18,7 +18,7 @@ Fecha de preparación: 29 de septiembre de 2026.
 
 ## Cómo reconocer los datos demostrativos
 
-Los documentos agregados para la exposición contienen `dataOrigin = presentation_demo` y `demoVersion = 2`. Los equipos usan códigos `DEMO-EQ-*` y las órdenes correctivas usan `EXPO-*`. Estas marcas permiten separarlos de futuras fuentes reales.
+Los documentos agregados para la exposición contienen internamente `dataOrigin = presentation_demo` y `demoVersion = 2`. Esas marcas no aparecen como parte del nombre operativo: los equipos utilizan códigos por familia como `AIRLAY-*`, `PULS-*` o `MONT-*`, y los correctivos usan órdenes `OT-2026-*`. La metadata interna permite separarlos de futuras fuentes reales sin afectar la presentación de la interfaz.
 
 La explicación correcta durante la defensa es: “CeroFallas posee un conjunto controlado de datos sintéticos para demostrar navegación, filtros, indicadores e IA. No se presentan como datos históricos reales de planta. El stock existente se conservó y no fue rellenado artificialmente”.
 

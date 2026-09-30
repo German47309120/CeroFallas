@@ -72,6 +72,12 @@ Solo se acredita como cumplimiento aquello implementado o documentado con eviden
 
 La ampliación aporta material visual para la defensa, pero no cambia el porcentaje global: no sustituye catálogo real de planta, aceptación institucional, Power BI privado ni automatización predictiva con histórico real.
 
+### Normalización de nombres para presentación
+
+- Se retiraron de los campos visibles los prefijos `DEMO-*`, nombres “Equipo demostrativo”, órdenes `EXPO-*` y comentarios técnicos sobre datos sintéticos.
+- Los equipos quedaron nombrados por familia y correlativo, y los correctivos usan el formato `OT-2026-*`. Planes, ejecuciones, incidentes, auditoría y predicciones recibieron redacción operativa.
+- La corrección alcanzó 444 documentos sin modificar usuarios, sesiones, fechas, cantidades o relaciones. Se conservó `dataOrigin` como metadata interna para mantener trazabilidad y no presentar la simulación como histórico real.
+
 ## Avance vigente — 2026-09-23
 
 ### Revisión integral por usuarios y lenguaje de producción

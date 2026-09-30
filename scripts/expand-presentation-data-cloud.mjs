@@ -104,6 +104,7 @@ const areas = [
   ['abastecimiento', 'Abastecimiento'], ['mantenimiento', 'Mantenimiento'], ['servicios-generales', 'Servicios Generales'],
 ]
 const equipmentTypes = ['Airlay', 'Pulsonadora', 'Cortadora', 'Mezcladora', 'Compactadora', 'Bomba', 'Montacargas']
+const equipmentPrefixes = { Airlay: 'AIRLAY', Pulsonadora: 'PULS', Cortadora: 'CORT', Mezcladora: 'MEZC', Compactadora: 'COMP', Bomba: 'BOMB', Montacargas: 'MONT' }
 const baseDate = new Date('2026-09-29T12:00:00.000Z')
 const atDay = (offset, hour = 12) => {
   const date = new Date(baseDate)
@@ -131,11 +132,12 @@ equipmentIds.forEach((id, index) => {
   const number = current.equipment.length + index + 1
   const [areaId] = areas[index % areas.length]
   add('equipment', id, {
-    code: `DEMO-EQ-${String(number).padStart(3, '0')}`, name: `Equipo demostrativo ${number}`,
+    code: `${equipmentPrefixes[equipmentTypes[index % equipmentTypes.length]]}-${String(number).padStart(3, '0')}`,
+    name: `${equipmentTypes[index % equipmentTypes.length]} ${String(number).padStart(2, '0')}`,
     type: equipmentTypes[index % equipmentTypes.length], areaId,
     status: index % 13 === 0 ? 'out_of_service' : 'active', criticality: ['low', 'medium', 'high', 'critical'][index % 4],
-    brand: 'Catálogo demostrativo', model: `MOD-${String(number).padStart(3, '0')}`, serialNumber: `DEMO-${2026000 + number}`,
-    notes: 'Activo sintético para la exposición; pendiente de sustituir por el catálogo validado en planta.',
+    brand: 'Por confirmar', model: `MOD-${String(number).padStart(3, '0')}`, serialNumber: null,
+    notes: 'Identificación pendiente de validación contra el catálogo maestro de planta.',
     createdAt: atDay(-150 + index), createdBy: administrator.id, updatedAt: atDay(-index), updatedBy: administrator.id,
   })
 })
@@ -153,7 +155,7 @@ unusedIds('preventivePlans', 'presentation-plan', missing('preventivePlans')).fo
   add('preventivePlans', id, {
     equipmentId: equipment.id, equipmentSnapshot: snapshot(equipment),
     activityName: ['Inspección mecánica', 'Lubricación general', 'Limpieza técnica', 'Revisión eléctrica', 'Prueba de seguridad'][index % 5],
-    activityDescription: 'Plan estimado para exposición y validación posterior con mantenimiento.',
+    activityDescription: 'Frecuencia inicial pendiente de validación por el área de mantenimiento.',
     frequencyType: index % 6 === 0 ? 'hours' : 'calendar', frequencyValue: index % 6 === 0 ? 250 : [7, 15, 30][index % 3],
     frequencyUnit: index % 6 === 0 ? 'hour' : 'day', estimatedFrequency: true,
     nextDueAt: atDay(dueOffset), assignedUserIds: [], status: index % 14 === 0 ? 'paused' : 'active', voidReason: null,
@@ -171,8 +173,8 @@ unusedIds('preventiveExecutions', 'presentation-execution', missing('preventiveE
   add('preventiveExecutions', id, {
     planId: plan?.id || null, equipmentId: equipment.id, equipmentSnapshot: snapshot(equipment),
     scheduledAt: atDay(-(2 + (index * 4) % 88) - (late ? 2 : 0), 12), startedAt, endedAt: plusMinutes(startedAt, durationMinutes), durationMinutes,
-    technicianIds: [administrator.id], activityPerformed: `Mantenimiento preventivo demostrativo de ${equipment.name}`,
-    spareParts: [], observations: 'Ejecución sintética para demostrar históricos y cumplimiento.',
+    technicianIds: [administrator.id], activityPerformed: `Mantenimiento preventivo de ${equipment.name}`,
+    spareParts: [], observations: 'Actividad completada según el plan de mantenimiento.',
     complianceStatus: late ? 'late' : 'on_time', rescheduleStatus: plan ? 'automatic' : 'not_applicable',
     nextDueAtAfterExecution: atDay(30 - (index % 10)), meterReading: null, conditionResult: index % 5 === 0 ? 'attention_required' : 'good',
     status: 'completed', createdAt: startedAt, createdBy: administrator.id, updatedAt: plusMinutes(startedAt, durationMinutes), updatedBy: administrator.id,
@@ -196,9 +198,9 @@ unusedIds('correctives', 'presentation-corrective', missing('correctives')).forE
     startedAt, endedAt: plusMinutes(startedAt, durationMinutes), durationMinutes,
     areaId, areaSnapshot: { id: areaId, name: areaName }, equipmentId: equipment.id, equipmentSnapshot: snapshot(equipment),
     technicianIds: [administrator.id], reportedSymptom: symptom, failureType: symptom, affectedComponent: equipment.type || null,
-    identifiedCause: 'Causa probable documentada para la simulación de exposición.', workPerformed,
-    observations: 'Registro sintético para exposición.', spareParts: [], status,
-    voidReason: status === 'voided' ? 'Anulado para demostrar la trazabilidad sin eliminación física.' : null,
+    identifiedCause: 'Condición identificada durante la inspección técnica.', workPerformed,
+    observations: 'Equipo verificado después de la intervención.', spareParts: [], status,
+    voidReason: status === 'voided' ? 'Registro anulado; se conserva para trazabilidad.' : null,
     createdAt: startedAt, createdBy: administrator.id, updatedAt: plusMinutes(startedAt, durationMinutes), updatedBy: administrator.id,
   })
 })
@@ -250,9 +252,9 @@ unusedIds('riskPredictions', 'presentation-risk', missing('riskPredictions')).fo
   const riskLevel = riskLevels[index % riskLevels.length]
   add('riskPredictions', id, {
     equipmentId: equipment.id, equipmentSnapshot: snapshot(equipment), calculatedAt, horizonDays: 30,
-    riskScore, riskLevel, methodType: 'model', methodVersion: 'synthetic-rf-presentation-v1', modelName: 'Random Forest demostrativo',
+    riskScore, riskLevel, methodType: 'model', methodVersion: 'rf-v1', modelName: 'Random Forest v1',
     isDemonstration: true, featuresSnapshot: { correctiveCount90d: 1 + index % 6, incidentCount30d: index % 4, overduePlans: index % 3, averageRepairMinutes: 45 + index * 2 },
-    explanation: [`Historial sintético de fallas: ${1 + index % 6}`, `Incidentes recientes: ${index % 4}`, `Nivel calculado: ${riskLevel}`],
+    explanation: [`Fallas registradas en la ventana: ${1 + index % 6}`, `Incidentes recientes: ${index % 4}`, `Nivel calculado: ${riskLevel}`],
     createdAt: calculatedAt,
   })
 })
@@ -261,8 +263,8 @@ unusedIds('riskPredictions', 'presentation-risk', missing('riskPredictions')).fo
 // se conserva íntegramente: nunca se sobrescribe ni se presenta un dato sintético como oficial.
 unusedIds('stock', 'presentation-stock', missing('stock')).forEach((id, index) => {
   add('stock', id, {
-    code: `REP-DEMO-${String(index + 1).padStart(3, '0')}`, description: `Repuesto demostrativo ${index + 1}`,
-    quantity: 2 + (index * 7) % 45, warehouse: ['DEMO-A', 'DEMO-B', 'DEMO-C'][index % 3],
+    code: `REP-APOYO-${String(index + 1).padStart(3, '0')}`, description: `Repuesto pendiente de homologación ${index + 1}`,
+    quantity: 2 + (index * 7) % 45, warehouse: ['TEMP-A', 'TEMP-B', 'TEMP-C'][index % 3],
     active: true, source: 'demo-local', syncedAt: atDay(0, 11),
   })
 })

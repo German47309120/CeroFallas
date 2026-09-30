@@ -558,3 +558,11 @@ Casos verificados:
 Resultado: publicación y verificación cloud aprobadas; lint limpio, 3/3 pruebas predictivas y build de producción exitoso. La repetición de las pruebas de reglas quedó impedida por un servicio Java externo que ocupa su puerto fijo 8080; se conservará como evidencia vigente el último cierre integral de 224/224.
 
 Estado: APROBADA PARA DEMOSTRACIÓN. Los documentos sintéticos no deben presentarse como información histórica real de planta.
+
+## PRUEBA P-028 — Normalización de etiquetas visibles
+
+Fecha: 2026-09-29
+
+Se revisaron y actualizaron 444 documentos de equipos, planes, ejecuciones, correctivos, incidentes, auditoría y riesgo. Los códigos de equipo ya no utilizan `DEMO-EQ`, las órdenes ya no usan `DEMO` o `EXPO` y los textos visibles adoptan redacción operativa. La verificación posterior confirmó que ningún equipo conserva “demo” o “demostrativo” en código, nombre, marca o notas. `dataOrigin` y `demoVersion` permanecen como metadata interna.
+
+Estado: PUBLICADA Y VERIFICADA. No se modificaron cuentas, sesiones, fechas, cantidades ni relaciones.
