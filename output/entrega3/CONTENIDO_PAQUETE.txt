@@ -1,0 +1,30 @@
+CEROFALLAS - PAQUETE DE CODIGO FUENTE - TERCERA ENTREGA
+=======================================================
+
+Version incluida: commit 342eb19
+
+Contenido principal
+-------------------
+- src/: aplicacion web React.
+- functions/: funciones de Firebase y sus dependencias declaradas.
+- predictive/: laboratorio predictivo y pruebas asociadas.
+- scripts/: semillas, verificaciones y utilidades del proyecto.
+- tests/: pruebas automatizadas.
+- integrations/: archivos de integracion del proyecto.
+- docs/: documentacion tecnica incluida en el repositorio.
+- Archivos de configuracion de Vite, Firebase, ESLint y npm.
+- INSTRUCTIVO_INSTALACION_EJECUCION.md: guia para instalar y ejecutar.
+
+Exclusiones intencionales
+-------------------------
+- node_modules/ y dist/.
+- .env.local y cualquier archivo local con variables reales.
+- .local/ y cuentas de demostracion generadas localmente.
+- Cuentas de servicio, claves privadas y credenciales SAP.
+- Datos exportados de los emuladores, respaldos, temporales y bitacoras.
+- Entregables pesados que no forman parte del codigo fuente.
+
+Nota
+----
+Las dependencias se restauran con npm install. La configuracion local se crea
+copiando .env.example a .env.local, como explica el instructivo.
