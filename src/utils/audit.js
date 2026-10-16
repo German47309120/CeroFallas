@@ -9,6 +9,7 @@ export const auditActionLabels = {
   password_reset: 'Restableció la contraseña',
   password_reset_failed: 'Falló el restablecimiento de contraseña',
   release_session: 'Liberó la sesión de otro dispositivo',
+  permissions_update: 'Actualizó permisos del usuario',
 }
 
 export const auditEntityLabels = {

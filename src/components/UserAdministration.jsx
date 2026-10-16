@@ -4,6 +4,7 @@ import { roleDefinitions } from '../config/roles.js'
 import { createAppUser, resetAppUserPassword, updateAppUser } from '../services/firebase/functions.js'
 import { adminFunctionsEnabled } from '../services/firebase/config.js'
 import { forceReleaseSession } from '../services/firebase/sessions.js'
+import PermissionAdministration from './PermissionAdministration.jsx'
 
 const initialCreate = { displayName: '', email: '', password: '', roleId: 'maintenance_technician' }
 const messageFor = (error) => {
@@ -43,7 +44,7 @@ export default function UserAdministration({ records, onSaved }) {
   const [notice, setNotice] = useState('')
   const [error, setError] = useState('')
   if (profile?.roleId !== 'administrator') return <div className="panel"><h2>Administración protegida</h2><p>Tu perfil puede consultar usuarios, pero solamente el Administrador de la aplicación puede crear cuentas o cambiar roles y estados.</p></div>
-  if (!adminFunctionsEnabled) return <><div className="panel"><div className="panel__heading"><div><p className="eyebrow">Administración protegida</p><h2>Usuarios configurados</h2></div><span className="status-badge">Consulta y sesiones</span></div><p>Consulta los perfiles registrados y libera una sesión cuando una cuenta necesite ingresar desde otro dispositivo.</p></div><SessionReleaseList records={records} currentUserId={user.uid} /></>
+  if (!adminFunctionsEnabled) return <><div className="panel"><div className="panel__heading"><div><p className="eyebrow">Administración protegida</p><h2>Usuarios configurados</h2></div><span className="status-badge">Permisos y sesiones</span></div><p>Gestiona permisos de acceso y libera una sesión cuando una cuenta necesite ingresar desde otro dispositivo. La creación de credenciales permanece separada.</p></div><section className="panel"><PermissionAdministration records={records} currentUserId={user.uid} onSaved={onSaved} /></section><SessionReleaseList records={records} currentUserId={user.uid} /></>
 
   const updateCreate = (event) => setCreateValues((current) => ({ ...current, [event.target.name]: event.target.value }))
   const updateEdit = (event) => setEditing((current) => ({ ...current, [event.target.name]: event.target.value }))
@@ -77,6 +78,7 @@ export default function UserAdministration({ records, onSaved }) {
     <div className="user-admin-list"><h3>Editar perfiles cargados</h3>{records.map((record) => <button type="button" className="user-admin-row" key={record.id} onClick={() => { setEditing({ uid: record.id, displayName: record.displayName || '', roleId: record.roleId || 'maintenance_technician', status: record.status || 'active' }); setResetPassword('') }}><span><strong>{record.displayName || record.email}</strong><small>{record.email}</small></span><span>{record.roleName || record.roleId}</span></button>)}</div>
     {editing && <form className="data-form user-admin-form user-admin-form--edit" onSubmit={submitEdit}><div className="panel__heading"><div><p className="eyebrow">Perfil seleccionado</p><h3>{editing.displayName}</h3></div><button type="button" onClick={() => { setEditing(null); setResetPassword('') }}>Cancelar</button></div><div className="form-grid"><label><span>Nombre completo *</span><input name="displayName" minLength="3" maxLength="120" required value={editing.displayName} onChange={updateEdit} /></label><label><span>Rol *</span><RoleSelect value={editing.roleId} onChange={updateEdit} /></label><label><span>Estado *</span><select name="status" value={editing.status} onChange={updateEdit}><option value="active">Activo</option><option value="disabled">Desactivado</option></select></label></div>{editing.uid === user.uid ? <p className="muted-copy">Tu propia cuenta no puede perder el rol Administrador, desactivarse ni restablecer su contraseña desde este panel.</p> : <div className="password-reset"><label><span>Nueva contraseña temporal</span><input type="password" minLength="10" maxLength="128" autoComplete="new-password" value={resetPassword} onChange={(event) => setResetPassword(event.target.value)} /></label><button className="button button--secondary" type="button" disabled={busy || resetPassword.length < 10} onClick={submitPasswordReset}>Restablecer contraseña</button></div>}<div className="form-actions"><button className="button button--primary" disabled={busy}>{busy ? 'Procesando…' : 'Guardar cambios'}</button></div></form>}
     {error && <p className="form-error" role="alert">{error}</p>}{notice && <p className="form-success" role="status">{notice}</p>}
+    <PermissionAdministration records={records} currentUserId={user.uid} onSaved={onSaved} />
     <SessionReleaseList records={records} currentUserId={user.uid} />
   </section>
 }

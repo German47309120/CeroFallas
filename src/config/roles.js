@@ -14,6 +14,14 @@ const maintenanceEntry = [...readAndAudit, 'corrective.read', 'corrective.create
 const operationalLeadership = [...maintenanceEntry, 'dashboard.read', 'stock.read']
 const all = Object.keys(permissionCatalog)
 
+export const permissionDependencies = {
+  'equipment.manage': ['equipment.read', 'audit.write'], 'corrective.create': ['corrective.read', 'equipment.read', 'audit.write'],
+  'corrective.manage': ['corrective.read', 'audit.write'], 'preventive.plan': ['preventive.read', 'equipment.read', 'audit.write'],
+  'preventive.execute': ['preventive.read', 'equipment.read', 'audit.write'], 'preventive.manage': ['preventive.read', 'audit.write'],
+  'forklift.inspect': ['forklift.read', 'equipment.read', 'audit.write'], 'forklift.manage': ['forklift.read', 'audit.write'],
+  'incident.create': ['equipment.read', 'audit.write'], 'incident.manage': ['incident.read', 'audit.write'],
+}
+
 export const roleDefinitions = {
   administrator: { name: 'Administrador de la aplicación', permissions: all },
   support: { name: 'Técnico de soporte', permissions: all },
@@ -30,20 +38,53 @@ export const roleDefinitions = {
 
 export function validateRoleDefinitions(definitions = roleDefinitions) {
   const issues = []
-  const dependencies = {
-    'equipment.manage': ['equipment.read', 'audit.write'], 'corrective.create': ['corrective.read', 'equipment.read', 'audit.write'],
-    'corrective.manage': ['corrective.read', 'audit.write'], 'preventive.plan': ['preventive.read', 'equipment.read', 'audit.write'],
-    'preventive.execute': ['preventive.read', 'equipment.read', 'audit.write'], 'preventive.manage': ['preventive.read', 'audit.write'],
-    'forklift.inspect': ['forklift.read', 'equipment.read', 'audit.write'], 'forklift.manage': ['forklift.read', 'audit.write'],
-    'incident.create': ['equipment.read', 'audit.write'], 'incident.manage': ['incident.read', 'audit.write'],
-  }
   for (const [roleId, role] of Object.entries(definitions)) {
     if (!role.name?.trim()) issues.push(`${roleId}: nombre vacío`)
     if (new Set(role.permissions).size !== role.permissions.length) issues.push(`${roleId}: permisos duplicados`)
     for (const permission of role.permissions) {
       if (!permissionCatalog[permission]) issues.push(`${roleId}: permiso desconocido ${permission}`)
-      for (const dependency of dependencies[permission] ?? []) if (!role.permissions.includes(dependency)) issues.push(`${roleId}: ${permission} requiere ${dependency}`)
+      for (const dependency of permissionDependencies[permission] ?? []) if (!role.permissions.includes(dependency)) issues.push(`${roleId}: ${permission} requiere ${dependency}`)
     }
   }
   return issues
+}
+
+export const privilegedPermissions = Object.keys(permissionCatalog).filter((permission) => permission.endsWith('.manage'))
+
+export function validatePermissionSelection(permissions, roleId) {
+  if (!Array.isArray(permissions) || permissions.length === 0) return ['Debe conservar al menos un permiso.']
+  const issues = []
+  const selected = new Set(permissions)
+  if (selected.size !== permissions.length) issues.push('Hay permisos duplicados.')
+  for (const permission of selected) {
+    if (!permissionCatalog[permission]) issues.push(`Permiso desconocido: ${permission}.`)
+    for (const dependency of permissionDependencies[permission] ?? []) {
+      if (!selected.has(dependency)) issues.push(`${permission} requiere ${dependency}.`)
+    }
+  }
+  if (!['administrator', 'support'].includes(roleId)) {
+    for (const permission of privilegedPermissions) if (selected.has(permission)) issues.push(`${permission} está reservado para administración y soporte.`)
+  }
+  return issues
+}
+
+export function togglePermissionSelection(permissions, permission, checked) {
+  const selected = new Set(permissions)
+  if (checked) {
+    selected.add(permission)
+    for (const dependency of permissionDependencies[permission] ?? []) selected.add(dependency)
+  } else {
+    selected.delete(permission)
+    let changed = true
+    while (changed) {
+      changed = false
+      for (const candidate of [...selected]) {
+        if ((permissionDependencies[candidate] ?? []).some((dependency) => !selected.has(dependency))) {
+          selected.delete(candidate)
+          changed = true
+        }
+      }
+    }
+  }
+  return Object.keys(permissionCatalog).filter((item) => selected.has(item))
 }

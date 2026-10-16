@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { permissionCatalog, roleDefinitions, validateRoleDefinitions } from '../src/config/roles.js'
+import { permissionCatalog, roleDefinitions, togglePermissionSelection, validatePermissionSelection, validateRoleDefinitions } from '../src/config/roles.js'
 
 describe('Catálogo institucional de roles', () => {
   it('define todos los roles confirmados y el soporte pendiente de asignación', () => {
@@ -36,5 +36,17 @@ describe('Catálogo institucional de roles', () => {
   })
   it('el administrador cubre todo el catálogo conocido', () => {
     expect(new Set(roleDefinitions.administrator.permissions)).toEqual(new Set(Object.keys(permissionCatalog)))
+  })
+
+  it('agrega dependencias al habilitar una operación y retira dependientes al quitar lectura', () => {
+    const enabled = togglePermissionSelection([], 'corrective.create', true)
+    expect(enabled).toEqual(expect.arrayContaining(['corrective.create', 'corrective.read', 'equipment.read', 'audit.write']))
+    const disabled = togglePermissionSelection(enabled, 'equipment.read', false)
+    expect(disabled).not.toContain('equipment.read')
+    expect(disabled).not.toContain('corrective.create')
+  })
+
+  it('rechaza permisos privilegiados en roles operativos', () => {
+    expect(validatePermissionSelection(['equipment.read', 'equipment.manage', 'audit.write'], 'supervisor')).toContain('equipment.manage está reservado para administración y soporte.')
   })
 })

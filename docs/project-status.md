@@ -1,6 +1,6 @@
 # CEROFALLAS — ESTADO ACTUAL
 
-## Control maestro de fases — actualizado 2026-09-29
+## Control maestro de fases — actualizado 2026-10-15
 
 Este es el único documento de seguimiento de fases. Se conserva la numeración del apartado 33 de `../Prompt_Maestro_CeroFallas_V2.md`. Los registros históricos siguientes son evidencia de avances, no una segunda hoja de ruta. La entrega universitaria editable continúa en su archivo maestro independiente.
 
@@ -23,7 +23,7 @@ Estados: **Base lista** = definición o implementación local con evidencia; no 
 | 11 | Checklist de montacargas | Base funcional avanzada | 25 puntos, fecha/hora/turno oficiales no editables, resultado operativo y anulación privilegiada con auditoría atómica. El turno se recalcula al guardar, se actualiza en pantalla y las reglas rechazan valores manipulados. Aprobación técnica de plantilla y equipos reales pendientes. |
 | 12 | Históricos y filtros | Base funcional publicada avanzada | Paginación transversal, filtros estructurados, auditoría legible y ficha por equipo con historial consolidado según permisos. Búsqueda textual limitada a páginas cargadas; falta aceptación de planta. |
 | 13 | Dashboard | Base funcional local avanzada | Indicadores navegables hacia su detalle filtrado, agenda, prioridades, períodos, siete áreas, tendencia, promedio de atención, preventivos a tiempo e incidentes por estado; falta aceptación gerencial real. |
-| 14 | Seguridad y roles | Base cloud verificada | Once perfiles institucionales estables, cuatro escrituras cloud permitidas con auditoría y cuatro prohibidas rechazadas, 132 decisiones locales de escritura y 253 combinaciones de rol/ruta. Faltan firma de aceptación institucional y backend administrativo cloud. |
+| 14 | Seguridad y roles | Base cloud verificada | Once perfiles institucionales y gestión granular de permisos por Administrador con dependencias, restricciones privilegiadas y auditoría atómica. Faltan firma de aceptación institucional y backend cloud para crear identidades. |
 | 15 | Power BI y datos SAP | Preparación avanzada | Consulta SAP REP% y diseño del reporte privado documentados; Gerencia puede exportar un dataset analítico sin credenciales con correctivos, planes, ejecuciones e incidentes. Falta ejecutar SAP, construir/publicar el PBIX privado y configurar gateway y actualización. |
 | 16 | Publicación en Internet | Base HTTPS publicada | Hosting Spark disponible en `https://cerofallas-pg2-german-2026.web.app`; las rutas directas y cuatro encabezados de seguridad responden correctamente. App Check está preparado pero no impuesto; faltan registro/métricas, aceptación móvil/roles, dominio personalizado y Functions si se aprueba Blaze. |
 | 17 | Dataset predictivo | Contrato y demo publicada | Esquema, origen, etiqueta y generador reproducible; 32 resultados sintéticos de ocho equipos y cuatro fechas están publicados con marca demostrativa. Histórico real, definición oficial y calidad siguen pendientes. |
@@ -58,6 +58,19 @@ Solo se acredita como cumplimiento aquello implementado o documentado con eviden
 2. Fase 10: validar en planta frecuencias y datos de horómetro/condición. No inventar reprogramaciones automáticas para esos dos métodos.
 3. Fase 16: completar aceptación móvil/roles, App Check y decisión de dominio personalizado; Hosting y Firestore ya están publicados.
 4. Integraciones: repetir la corrida seca desde la red de planta/VPN o con el puerto TCP fijo de la instancia. Solo después de validar filas y almacenes se podrá autorizar la publicación de stock. Nunca almacenar credenciales en frontend o Git.
+
+## Avance vigente — 2026-10-15
+
+### Gestión granular de permisos y retroalimentación de exposición
+
+- El Administrador puede seleccionar cualquier otra cuenta y habilitar o retirar permisos por equipos, correctivos, preventivos, montacargas, incidentes, dashboard, stock, predicción, exportación, usuarios y auditoría.
+- Al habilitar una operación se agregan automáticamente sus permisos dependientes; al retirar una lectura se eliminan las operaciones que dependían de ella.
+- Los permisos `.manage` continúan reservados para roles Administrador y Soporte. El Administrador no puede modificar sus propios permisos desde el panel, evitando un bloqueo accidental.
+- Cada cambio actualiza únicamente la lista de permisos y genera auditoría atómica. Las reglas rechazan usuarios no administradores, autoedición, permisos desconocidos, dependencias incompletas, escalamiento de roles operativos y cambios sin auditoría.
+- La creación de credenciales y el restablecimiento de contraseñas continúan separados porque requieren el backend privilegiado/Cloud Functions; la gestión de permisos funciona sobre perfiles existentes en Spark.
+- Retroalimentación del docente registrada: reforzar la presentación de Mantenimientos, Incidentes y Repuestos; convertir Analítica predictiva de una vista principalmente tabular a una lectura gráfica; hacer más evidente el Gantt preventivo y consolidar la salida gerencial. El Gantt ya existe en Preventivos, pero debe vincularse y explicarse mejor en Analítica/Reporte consolidado.
+
+Siguiente mejora visual prioritaria: tendencia de riesgo predictivo y distribución por nivel/equipo, seguida de accesos directos entre Analítica, Gantt y Reporte consolidado.
 
 ## Avance vigente — 2026-09-29
 

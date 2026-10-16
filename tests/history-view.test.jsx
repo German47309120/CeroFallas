@@ -43,11 +43,11 @@ it('identifica stock real de SAP y ofrece filtros de consulta', () => {
   expect(html).toContain('Limpiar filtros')
   expect(html).not.toContain('La integración real con SAP permanece pendiente')
 })
-it('presenta la matriz de roles como referencia sin controles de edición', () => {
+it('presenta la matriz de roles y aclara dónde se administran permisos', () => {
   const html = render(<ResourceReadPage resource="users" />)
   expect(html).toContain('Roles institucionales propuestos')
   expect(html).toContain('Técnico de Mantenimiento')
-  expect(html).toContain('Esta matriz no modifica cuentas')
+  expect(html).toContain('El Administrador puede ajustar permisos individuales')
   expect(html).not.toContain('Guardar permisos')
 })
 it('no muestra incidentes guardados en memoria si no hay permiso', () => {

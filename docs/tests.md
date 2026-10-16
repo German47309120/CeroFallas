@@ -566,3 +566,19 @@ Fecha: 2026-09-29
 Se revisaron y actualizaron 444 documentos de equipos, planes, ejecuciones, correctivos, incidentes, auditoría y riesgo. Los códigos de equipo ya no utilizan `DEMO-EQ`, las órdenes ya no usan `DEMO` o `EXPO` y los textos visibles adoptan redacción operativa. La verificación posterior confirmó que ningún equipo conserva “demo” o “demostrativo” en código, nombre, marca o notas. `dataOrigin` y `demoVersion` permanecen como metadata interna.
 
 Estado: PUBLICADA Y VERIFICADA. No se modificaron cuentas, sesiones, fechas, cantidades ni relaciones.
+
+## PRUEBA P-029 — Administración granular de permisos
+
+Fecha: 2026-10-15
+
+Casos verificados:
+
+1. Un Administrador puede modificar permisos de otra cuenta mediante una escritura atómica con auditoría.
+2. Un usuario operativo no puede modificar perfiles y el Administrador no puede retirar sus propios permisos.
+3. Se rechazan permisos desconocidos, dependencias incompletas y permisos `.manage` asignados a roles operativos.
+4. La interfaz agrega dependencias al habilitar operaciones y retira operaciones dependientes cuando se quita su lectura.
+5. La pantalla excluye la propia cuenta del Administrador y permite restablecer el conjunto estándar del rol.
+
+Resultado focalizado: 4/4 pruebas de reglas y 18/18 pruebas de catálogo/interfaz relacionadas aprobadas; lint y build de producción exitosos. Las reglas compilaron y se liberaron junto con Hosting. La verificación posterior confirmó 11 cuentas, 15 rutas y 162 comprobaciones publicadas sin escrituras ni exposición de contraseñas.
+
+Estado: PUBLICADA Y VERIFICADA en `https://cerofallas-pg2-german-2026.web.app`.

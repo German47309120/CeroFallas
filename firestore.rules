@@ -22,6 +22,19 @@ service cloud.firestore {
       return activeUser() && ownProfile().roleId in ['administrator', 'support'];
     }
 
+    function validPermissionDependencies(permissions) {
+      return (!('equipment.manage' in permissions) || ('equipment.read' in permissions && 'audit.write' in permissions))
+        && (!('corrective.create' in permissions) || ('corrective.read' in permissions && 'equipment.read' in permissions && 'audit.write' in permissions))
+        && (!('corrective.manage' in permissions) || ('corrective.read' in permissions && 'audit.write' in permissions))
+        && (!('preventive.plan' in permissions) || ('preventive.read' in permissions && 'equipment.read' in permissions && 'audit.write' in permissions))
+        && (!('preventive.execute' in permissions) || ('preventive.read' in permissions && 'equipment.read' in permissions && 'audit.write' in permissions))
+        && (!('preventive.manage' in permissions) || ('preventive.read' in permissions && 'audit.write' in permissions))
+        && (!('forklift.inspect' in permissions) || ('forklift.read' in permissions && 'equipment.read' in permissions && 'audit.write' in permissions))
+        && (!('forklift.manage' in permissions) || ('forklift.read' in permissions && 'audit.write' in permissions))
+        && (!('incident.create' in permissions) || ('equipment.read' in permissions && 'audit.write' in permissions))
+        && (!('incident.manage' in permissions) || ('incident.read' in permissions && 'audit.write' in permissions));
+    }
+
     function operationalShiftAt(moment) {
       return moment.hours() >= 12 ? 'shift-1' : 'shift-2';
     }
@@ -36,7 +49,31 @@ service cloud.firestore {
 
     match /users/{userId} {
       allow read: if (signedIn() && request.auth.uid == userId) || hasPermission('users.read');
-      allow write: if false;
+      allow create, delete: if false;
+      allow update: if activeUser()
+        && ownProfile().roleId == 'administrator'
+        && request.auth.uid != userId
+        && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['permissions', 'updatedAt', 'updatedBy', 'permissionAuditId'])
+        && request.resource.data.permissions is list
+        && request.resource.data.permissions.size() > 0
+        && request.resource.data.permissions.size() <= 22
+        && request.resource.data.permissions.hasOnly([
+          'equipment.read', 'equipment.manage', 'corrective.read', 'corrective.create', 'corrective.manage',
+          'preventive.read', 'preventive.plan', 'preventive.execute', 'preventive.manage',
+          'forklift.read', 'forklift.inspect', 'forklift.manage', 'incident.read', 'incident.create', 'incident.manage',
+          'dashboard.read', 'stock.read', 'users.read', 'audit.read', 'audit.write', 'prediction.read', 'analytics.export'
+        ])
+        && validPermissionDependencies(request.resource.data.permissions)
+        && (resource.data.roleId in ['administrator', 'support']
+          || !request.resource.data.permissions.hasAny(['equipment.manage', 'corrective.manage', 'preventive.manage', 'forklift.manage', 'incident.manage']))
+        && request.resource.data.updatedBy == request.auth.uid
+        && request.resource.data.updatedAt == request.time
+        && request.resource.data.permissionAuditId is string
+        && getAfter(/databases/$(database)/documents/audit/$(request.resource.data.permissionAuditId)).data.actorId == request.auth.uid
+        && getAfter(/databases/$(database)/documents/audit/$(request.resource.data.permissionAuditId)).data.occurredAt == request.time
+        && getAfter(/databases/$(database)/documents/audit/$(request.resource.data.permissionAuditId)).data.action == 'permissions_update'
+        && getAfter(/databases/$(database)/documents/audit/$(request.resource.data.permissionAuditId)).data.entityType == 'user'
+        && getAfter(/databases/$(database)/documents/audit/$(request.resource.data.permissionAuditId)).data.entityId == userId;
     }
 
     match /activeSessions/{userId} {
