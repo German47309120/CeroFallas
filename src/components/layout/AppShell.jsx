@@ -77,7 +77,7 @@ export default function AppShell() {
 
   async function handleLogout() {
     await logout()
-    navigate('/login', { replace: true })
+    navigate('/login', { replace: true, state: null })
   }
 
   return (

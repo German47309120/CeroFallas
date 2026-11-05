@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
-import { Navigate, useLocation, useNavigate } from 'react-router-dom'
+import { Navigate, useNavigate } from 'react-router-dom'
+import { postLoginDestination } from '../config/access.js'
 import { useAuth } from '../features/auth/AuthContext.jsx'
 import { getAuthErrorMessage, loginWithEmail } from '../services/firebase/auth.js'
 
@@ -9,7 +10,6 @@ export default function LoginPage() {
   const [error, setError] = useState('')
   const [submitting, setSubmitting] = useState(false)
   const { configured, configurationError, environment, loading, sessionError, user } = useAuth()
-  const location = useLocation()
   const navigate = useNavigate()
 
   useEffect(() => {
@@ -17,7 +17,7 @@ export default function LoginPage() {
   }, [email, password])
 
   if (!loading && user) {
-    return <Navigate to={location.state?.from || '/'} replace />
+    return <Navigate to={postLoginDestination()} replace />
   }
 
   async function handleSubmit(event) {
@@ -38,7 +38,7 @@ export default function LoginPage() {
 
     try {
       await loginWithEmail(email, password)
-      navigate(location.state?.from || '/', { replace: true })
+      navigate(postLoginDestination(), { replace: true })
     } catch (authError) {
       setError(getAuthErrorMessage(authError))
     } finally {

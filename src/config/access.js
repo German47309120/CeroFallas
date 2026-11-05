@@ -5,6 +5,12 @@ export const navigationPermissions = {
   '/analitica': 'dashboard.read',
 }
 
+// Cada identidad comienza en una ruta común. No se hereda la pantalla privada
+// que pudo haber dejado abierta otro usuario en el mismo navegador.
+export function postLoginDestination() {
+  return '/'
+}
+
 const routeAccessRules = [
   { match: /^\/$/, permissions: [] },
   { match: /^\/perfil$/, permissions: [] },
