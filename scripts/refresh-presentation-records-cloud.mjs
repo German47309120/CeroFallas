@@ -155,7 +155,12 @@ const summary = Object.fromEntries(collectionNames.map((name) => [name, {
   presentation: records[name].filter(isPresentation).length,
   updates: writes.filter((write) => write.collectionName === name).length,
 }]))
+const legacyDemoIds = collectionNames.flatMap((name) => records[name]
+  .filter((record) => /demo/i.test(record.id))
+  .map((record) => `${name}/${record.id}`))
 console.table(summary)
+console.log(`Identificadores internos heredados que contienen "demo": ${legacyDemoIds.length}.`)
+if (legacyDemoIds.length) console.log(`Ejemplos: ${legacyDemoIds.slice(0, 8).join(', ')}.`)
 console.log(`Ventana utilizada: ${windowStart.toISOString()} a ${cutoff.toISOString()}.`)
 console.log(`${writes.length} documentos de presentación serán normalizados; no se crearán ni eliminarán documentos.`)
 if (!apply) {
