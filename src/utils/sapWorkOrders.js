@@ -32,7 +32,9 @@ export function validateReadOnlyWorkOrderQuery(query) {
   if (forbiddenSql.test(sql)) throw new Error('La consulta contiene una operación que no es de solo lectura.')
   if (!/\bfrom\s+(?:\[[^\]]+\]\.)?\[?MEGA_ENTRY\]?/i.test(sql)) throw new Error('La consulta debe leer MEGA_ENTRY.')
   if (!/\bactive\s*=\s*1\b/i.test(sql)) throw new Error('La consulta debe limitarse a active = 1.')
-  if (!/\bas\s+\[?workOrder\]?\b/i.test(sql)) throw new Error('La consulta debe devolver el alias workOrder.')
+  if (!/\bdocEntryBaseSap\b/i.test(sql)) throw new Error('La consulta debe devolver docEntryBaseSap.')
+  if (!/\bcreated_at\s*>\s*'2026-01-01'/i.test(sql)) throw new Error("La consulta debe filtrar created_at > '2026-01-01'.")
+  if (!/\bdocEntryBaseSap\s+between\s+'11000'\s+and\s+'11900'/i.test(sql)) throw new Error("La consulta debe limitar docEntryBaseSap entre 11000 y 11900.")
   const withoutFinalSemicolon = sql.replace(/;\s*$/, '')
   if (withoutFinalSemicolon.includes(';')) throw new Error('La consulta debe contener una sola sentencia SELECT.')
   return true

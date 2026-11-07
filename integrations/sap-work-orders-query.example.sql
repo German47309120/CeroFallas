@@ -1,6 +1,5 @@
-SELECT DISTINCT
-  UPPER(LTRIM(RTRIM(CONVERT(nvarchar(80), docEntryBaseSap)))) AS workOrder
+SELECT docEntryBaseSap
 FROM MEGA_ENTRY
-WHERE active = 1
-  AND docEntryBaseSap IS NOT NULL
-ORDER BY workOrder ASC;
+WHERE ACTIVE = 1
+  AND created_at > '2026-01-01'
+  AND docEntryBaseSap BETWEEN '11000' AND '11900';

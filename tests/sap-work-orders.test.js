@@ -1,13 +1,15 @@
 import { describe, expect, it } from 'vitest'
 import { normalizeWorkOrderRows, validateReadOnlyWorkOrderQuery, workOrderDocumentId } from '../src/utils/sapWorkOrders.js'
 
-const validQuery = `SELECT DISTINCT UPPER(LTRIM(RTRIM(CONVERT(nvarchar(80), docEntryBaseSap)))) AS workOrder
-FROM MEGA_ENTRY WHERE active = 1 AND docEntryBaseSap IS NOT NULL ORDER BY workOrder ASC;`
+const validQuery = `SELECT docEntryBaseSap FROM MEGA_ENTRY
+WHERE ACTIVE = 1 AND created_at > '2026-01-01' AND docEntryBaseSap BETWEEN '11000' AND '11900';`
 
 describe('integración de órdenes de trabajo SAP', () => {
   it('acepta únicamente la consulta de lectura con OT activas', () => {
     expect(validateReadOnlyWorkOrderQuery(validQuery)).toBe(true)
-    expect(() => validateReadOnlyWorkOrderQuery(validQuery.replace('active = 1', 'active = 0'))).toThrow('active = 1')
+    expect(() => validateReadOnlyWorkOrderQuery(validQuery.replace('ACTIVE = 1', 'ACTIVE = 0'))).toThrow('active = 1')
+    expect(() => validateReadOnlyWorkOrderQuery(validQuery.replaceAll('docEntryBaseSap', 'otroCampo'))).toThrow('docEntryBaseSap')
+    expect(() => validateReadOnlyWorkOrderQuery(validQuery.replace("created_at > '2026-01-01'", "created_at > '2025-01-01'"))).toThrow('created_at')
     expect(() => validateReadOnlyWorkOrderQuery(`${validQuery} DELETE FROM MEGA_ENTRY`)).toThrow('solo lectura')
   })
 

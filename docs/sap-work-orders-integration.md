@@ -4,7 +4,7 @@ Fecha: 2026-11-06
 
 ## Objetivo
 
-El formulario de correctivos no acepta una OT escrita manualmente. El desplegable consulta únicamente órdenes publicadas desde `MEGA_ENTRY` que cumplen `active = 1`, sin imponer un prefijo al identificador.
+El formulario de correctivos no acepta una OT escrita manualmente. El desplegable consulta únicamente órdenes publicadas desde `MEGA_ENTRY` que cumplen `ACTIVE = 1`, fueron creadas después del 1 de enero de 2026 y tienen un `docEntryBaseSap` comprendido entre `11000` y `11900`.
 
 El navegador nunca se conecta directamente a SQL Server. Un sincronizador de solo lectura se ejecuta desde una computadora con acceso por WireGuard, publica el catálogo mínimo en `workOrders` y marca como inactivas las órdenes que ya no aparecen en la siguiente sincronización.
 
@@ -13,12 +13,11 @@ El navegador nunca se conecta directamente a SQL Server. Un sincronizador de sol
 La consulta editable está en `integrations/sap-work-orders-query.example.sql` y devuelve únicamente el alias `workOrder`:
 
 ```sql
-SELECT DISTINCT
-  UPPER(LTRIM(RTRIM(CONVERT(nvarchar(80), docEntryBaseSap)))) AS workOrder
+SELECT docEntryBaseSap
 FROM MEGA_ENTRY
-WHERE active = 1
-  AND docEntryBaseSap IS NOT NULL
-ORDER BY workOrder ASC;
+WHERE ACTIVE = 1
+  AND created_at > '2026-01-01'
+  AND docEntryBaseSap BETWEEN '11000' AND '11900';
 ```
 
 ## Operación segura
