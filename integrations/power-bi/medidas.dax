@@ -1,0 +1,54 @@
+Total Registros = COUNTROWS(Mantenimiento)
+
+Correctivos =
+CALCULATE(
+    [Total Registros],
+    Mantenimiento[tipo_registro] = "correctivo"
+)
+
+Incidentes =
+CALCULATE(
+    [Total Registros],
+    Mantenimiento[tipo_registro] = "incidente"
+)
+
+Preventivos Ejecutados =
+CALCULATE(
+    [Total Registros],
+    Mantenimiento[tipo_registro] = "ejecucion_preventiva"
+)
+
+Duracion Promedio Min =
+AVERAGE(Mantenimiento[duracion_minutos])
+
+Cumplimiento Preventivo % =
+VAR Evaluables =
+    CALCULATE(
+        COUNTROWS(Mantenimiento),
+        Mantenimiento[tipo_registro] = "ejecucion_preventiva",
+        NOT ISBLANK(Mantenimiento[cumplimiento])
+    )
+VAR A Tiempo =
+    CALCULATE(
+        COUNTROWS(Mantenimiento),
+        Mantenimiento[tipo_registro] = "ejecucion_preventiva",
+        Mantenimiento[cumplimiento] IN { "a_tiempo", "on_time", "cumplido" }
+    )
+RETURN
+    DIVIDE(A Tiempo, Evaluables)
+
+Stock Total = SUM(Repuestos[cantidad])
+
+Codigos con Existencia =
+CALCULATE(
+    DISTINCTCOUNT(Repuestos[codigo]),
+    Repuestos[cantidad] > 0
+)
+
+Equipos Alto Riesgo =
+CALCULATE(
+    DISTINCTCOUNT(Riesgo[equipo_id]),
+    Riesgo[nivel_riesgo] IN { "alto", "high", "critico", "critical" }
+)
+
+Riesgo Promedio = AVERAGE(Riesgo[puntuacion_riesgo])

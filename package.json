@@ -28,6 +28,7 @@
     "sap:ot:check": "node scripts/sap-work-orders-sync.mjs --check-config",
     "sap:ot:dry-run": "node scripts/sap-work-orders-sync.mjs --dry-run",
     "sap:ot:publish": "node scripts/sap-work-orders-sync.mjs --publish",
+    "powerbi:export-cloud": "node scripts/export-power-bi-cloud.mjs",
     "verify:demo-data": "node scripts/verify-demo-data.mjs",
     "seed:demo-user": "node scripts/create-demo-user.mjs",
     "seed:demo-roles": "node scripts/seed-demo-role-users.mjs",

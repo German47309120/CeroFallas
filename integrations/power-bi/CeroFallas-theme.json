@@ -1,0 +1,25 @@
+{
+  "name": "CeroFallas",
+  "dataColors": ["#0F676D", "#1B8A8F", "#102A3A", "#E2A83B", "#D95B4B", "#78B9BA", "#657983", "#9CCFD0"],
+  "background": "#F4F7F8",
+  "foreground": "#102A3A",
+  "tableAccent": "#0F676D",
+  "good": "#0F7B6C",
+  "neutral": "#E2A83B",
+  "bad": "#C7463A",
+  "visualStyles": {
+    "*": {
+      "*": {
+        "title": [{ "show": true, "fontFamily": "Segoe UI Semibold", "fontSize": 12, "fontColor": { "solid": { "color": "#102A3A" } }, "alignment": "left" }],
+        "background": [{ "show": true, "color": { "solid": { "color": "#FFFFFF" } }, "transparency": 0 }],
+        "border": [{ "show": true, "color": { "solid": { "color": "#D8E3E6" } }, "radius": 8 }],
+        "visualHeader": [{ "show": true, "foreground": { "solid": { "color": "#5B6870" } } }]
+      }
+    },
+    "page": {
+      "*": {
+        "background": [{ "color": { "solid": { "color": "#F4F7F8" } }, "transparency": 0 }]
+      }
+    }
+  }
+}

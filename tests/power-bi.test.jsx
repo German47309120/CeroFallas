@@ -12,6 +12,7 @@ describe('integración segura del reporte gerencial', () => {
   it('acepta enlaces oficiales autenticados y detecta publicación pública', () => {
     expect(powerBiReportConfiguration('https://app.powerbi.com/reportEmbed?reportId=demo').accessMode).toBe('authenticated')
     expect(powerBiReportConfiguration('https://app.powerbi.com/view?r=demo').accessMode).toBe('public_link')
+    expect(powerBiReportConfiguration('https://app.powerbi.com/groups/me/reports/demo').embedUrl).toBe('https://app.powerbi.com/reportEmbed?reportId=demo&autoAuth=true')
   })
 
   it('rechaza HTTP, dominios ajenos y rutas no autorizadas', () => {
@@ -33,7 +34,8 @@ describe('integración segura del reporte gerencial', () => {
   it('muestra advertencia explícita para enlaces públicos', () => {
     const html = render('https://app.powerbi.com/view?r=demo')
     expect(html).toContain('publicación pública')
-    expect(html).toContain('Abrir reporte en una pestaña nueva')
+    expect(html).toContain('Reporte gerencial CeroFallas en Power BI')
+    expect(html).toContain('Abrir reporte completo')
     expect(html).toContain('noopener noreferrer')
   })
 })
