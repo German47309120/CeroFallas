@@ -43,5 +43,5 @@ it('convierte los indicadores autorizados en accesos al detalle filtrado', () =>
   expect(html).toContain('href="/incidentes?status=open"')
   expect(html).toContain('href="/preventivos?focus=overdue"')
   expect(html).toContain('href="/preventivos?focus=upcoming"')
-  expect(html).toContain('href="/correctivos?status=completed&amp;periodDays=30"')
+  expect(html).toContain('href="/correctivos?status=completed&amp;periodDays=60"')
 })

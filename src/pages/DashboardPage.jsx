@@ -29,7 +29,7 @@ export function ActivityTrend({ loading = false, trend, message, periodDays = 30
 export default function DashboardPage() {
   const { hasPermission, profile, user } = useAuth()
   const [request, setRequest] = useState(() => new Date())
-  const [periodDays, setPeriodDays] = useState(30)
+  const [periodDays, setPeriodDays] = useState(60)
   const [areaId, setAreaId] = useState('')
   const [result, setResult] = useState(null)
   const sources = dashboardSources(hasPermission)
@@ -80,7 +80,7 @@ export default function DashboardPage() {
       <Link to="/perfil">Mi perfil</Link>
     </div></div>
     {canRead && <>
-      <div className="dashboard-cutoff"><div><strong>Corte: {dashboardDate(request)}</strong><span>Hora de Guatemala · alcance: {areaLabel}</span></div><div className="dashboard-filters"><label>Área<select value={areaId} disabled={loading} onChange={(event) => setAreaId(event.target.value)}><option value="">Todas las áreas</option>{areas.map((area) => <option key={area.id} value={area.id}>{area.name}</option>)}</select></label><label>Período de actividad<select value={periodDays} disabled={loading} onChange={(event) => setPeriodDays(Number(event.target.value))}><option value="7">7 días</option><option value="30">30 días</option><option value="90">90 días</option></select></label><button disabled={loading} className="button button--secondary" onClick={() => setRequest(new Date())}>{loading ? 'Actualizando…' : 'Actualizar datos'}</button></div></div>
+      <div className="dashboard-cutoff"><div><strong>Corte: {dashboardDate(request)}</strong><span>Hora de Guatemala · alcance: {areaLabel}</span></div><div className="dashboard-filters"><label>Área<select value={areaId} disabled={loading} onChange={(event) => setAreaId(event.target.value)}><option value="">Todas las áreas</option>{areas.map((area) => <option key={area.id} value={area.id}>{area.name}</option>)}</select></label><label>Período de actividad<select value={periodDays} disabled={loading} onChange={(event) => setPeriodDays(Number(event.target.value))}><option value="7">7 días</option><option value="30">30 días</option><option value="60">60 días</option><option value="90">90 días</option></select></label><button disabled={loading} className="button button--secondary" onClick={() => setRequest(new Date())}>{loading ? 'Actualizando…' : 'Actualizar datos'}</button></div></div>
       <div className="stats-grid" aria-live="polite">{cards.map(([key, field, label, note, tone, target]) => sources.includes(key) ? <Link aria-label={`${label}: ver detalles`} key={field + key} className={`stat-card stat-card--${tone} stat-card--link`} to={target}><p>{label}</p><strong>{loading ? '…' : metric(key, field)}</strong><span>{message(key) || note}</span><small>Ver detalles →</small></Link> : <article key={field + key} className={`stat-card stat-card--${tone}`}><p>{label}</p><strong>—</strong><span>{message(key)}</span></article>)}</div>
       <div className="insight-grid" aria-live="polite">
         <article className="panel insight-card"><p>Promedio de atención correctiva</p><strong>{trendMessage || !sources.includes('correctives') ? '—' : formatAverageMinutes(summary?.averageCorrectiveMinutes)}</strong><span>{trendMessage || (sources.includes('correctives') ? `Promedio de ${data('correctives')?.total ?? 0} correctivos completados del período` : 'Tu perfil no tiene acceso a correctivos.')}</span></article>
