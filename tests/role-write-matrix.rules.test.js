@@ -28,11 +28,15 @@ beforeEach(async () => {
       permissions: role.permissions,
     })))
     await Promise.all([
+      setDoc(doc(database, 'workOrders', 'OT-TEST'), {
+        code: 'OT-TEST', normalizedCode: 'OT-TEST', active: true, source: 'test',
+      }),
       setDoc(doc(database, 'equipment', 'MANAGE-01'), {
         code: 'MANAGE-01', name: 'Equipo administrable', type: 'Máquina', areaId: 'linea-1', status: 'active',
         createdAt: startedAt, createdBy: 'seed', updatedAt: startedAt, updatedBy: 'seed',
       }),
       setDoc(doc(database, 'correctives', 'MANAGE-01'), {
+        workOrder: 'OT-TEST', workOrderKey: 'OT-TEST',
         eventDate: startedAt, startedAt, endedAt, durationMinutes: 30,
         areaId: 'linea-1', areaSnapshot: { id: 'linea-1', name: 'Línea 1' }, equipmentId: 'MANAGE-01',
         equipmentSnapshot: { code: 'MANAGE-01', name: 'Equipo administrable' }, technicianIds: ['seed'],
@@ -100,6 +104,7 @@ const operations = {
   corrective: {
     permission: 'corrective.create',
     write: (database, roleId) => setDoc(doc(database, 'correctives', `corrective-${roleId}`), {
+      workOrder: 'OT-TEST', workOrderKey: 'OT-TEST',
       eventDate: null, startedAt: serverTimestamp(), endedAt: null, durationMinutes: null, timeSource: 'server',
       areaId: 'linea-1', areaSnapshot: { id: 'linea-1', name: 'Línea 1' },
       equipmentId: 'TEST-01', equipmentSnapshot: { code: 'TEST-01', name: 'Equipo de prueba' },

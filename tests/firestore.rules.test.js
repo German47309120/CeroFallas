@@ -38,7 +38,8 @@ const equipmentData = (userId) => ({
 })
 
 const correctiveData = (userId, overrides = {}) => ({
-  workOrder: null,
+  workOrder: 'OT-TEST',
+  workOrderKey: 'OT-TEST',
   eventDate: null, startedAt: serverTimestamp(), endedAt: null, durationMinutes: null, timeSource: 'server',
   areaId: 'linea-1',
   areaSnapshot: { id: 'linea-1', name: 'Línea 1' },
@@ -106,6 +107,11 @@ beforeAll(async () => {
 
 beforeEach(async () => {
   await testEnvironment.clearFirestore()
+  await testEnvironment.withSecurityRulesDisabled(async (context) => {
+    await setDoc(doc(context.firestore(), 'workOrders', 'OT-TEST'), {
+      code: 'OT-TEST', normalizedCode: 'OT-TEST', active: true, source: 'test',
+    })
+  })
 })
 
 afterAll(async () => {
@@ -208,6 +214,22 @@ describe('reglas de correctivos', () => {
     await createProfile('corrective-viewer', ['corrective.read'])
     const database = testEnvironment.authenticatedContext('corrective-viewer').firestore()
     await assertFails(setDoc(doc(database, 'correctives', 'test-corrective'), correctiveData('corrective-viewer')))
+  })
+
+  it('rechaza una OT inexistente o inactiva aunque se manipule el navegador', async () => {
+    await createProfile('technician', ['corrective.read', 'corrective.create', 'audit.write'])
+    const database = testEnvironment.authenticatedContext('technician').firestore()
+    await assertFails(setDoc(doc(database, 'correctives', 'missing-ot'), correctiveData('technician', {
+      workOrder: 'OT-NO-EXISTE', workOrderKey: 'OT-NO-EXISTE',
+    })))
+    await testEnvironment.withSecurityRulesDisabled(async (context) => {
+      await setDoc(doc(context.firestore(), 'workOrders', 'OT-INACTIVA'), {
+        code: 'OT-INACTIVA', normalizedCode: 'OT-INACTIVA', active: false,
+      })
+    })
+    await assertFails(setDoc(doc(database, 'correctives', 'inactive-ot'), correctiveData('technician', {
+      workOrder: 'OT-INACTIVA', workOrderKey: 'OT-INACTIVA',
+    })))
   })
 
   it('rechaza duraciones inválidas', async () => {

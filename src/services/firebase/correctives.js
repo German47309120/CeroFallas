@@ -10,6 +10,7 @@ import {
   writeBatch,
 } from 'firebase/firestore'
 import { getFirebaseFirestore } from './firestore.js'
+import { normalizeWorkOrderCode, workOrderDocumentId } from '../../utils/sapWorkOrders.js'
 
 const correctivesCollection = () => collection(getFirebaseFirestore(), 'correctives')
 
@@ -25,7 +26,7 @@ export async function getCorrective(correctiveId) {
 
 function editableData(values, equipment) {
   return {
-    workOrder: values.workOrder.trim() || null,
+    workOrder: normalizeWorkOrderCode(values.workOrder),
     areaId: values.areaId,
     areaSnapshot: { id: values.areaId, name: values.areaName },
     equipmentId: equipment.id,
@@ -51,6 +52,7 @@ export async function startCorrective(values, equipment, userId) {
   const timestamp = serverTimestamp()
   const corrective = {
     ...editableData({ ...values, workPerformed: '', status: 'in_progress', voidReason: '', spareParts: [], identifiedCause: '', observations: '' }, equipment),
+    workOrderKey: workOrderDocumentId(values.workOrder),
     eventDate: null, startedAt: timestamp, endedAt: null, durationMinutes: null, timeSource: 'server',
     technicianIds: [userId], createdAt: timestamp, createdBy: userId, updatedAt: timestamp, updatedBy: userId,
   }

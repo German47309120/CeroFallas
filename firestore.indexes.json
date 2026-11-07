@@ -1,5 +1,9 @@
 {
   "indexes": [
+    { "collectionGroup": "workOrders", "queryScope": "COLLECTION", "fields": [
+      { "fieldPath": "active", "order": "ASCENDING" },
+      { "fieldPath": "normalizedCode", "order": "ASCENDING" }
+    ] },
     { "collectionGroup": "stock", "queryScope": "COLLECTION", "fields": [
       { "fieldPath": "source", "order": "ASCENDING" },
       { "fieldPath": "active", "order": "ASCENDING" },

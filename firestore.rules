@@ -160,6 +160,11 @@ service cloud.firestore {
       allow create: if hasPermission('corrective.create')
         && request.resource.data.keys().hasAll(['eventDate', 'startedAt', 'endedAt', 'durationMinutes', 'areaId', 'areaSnapshot', 'equipmentId', 'equipmentSnapshot', 'technicianIds', 'reportedSymptom', 'workPerformed', 'status', 'createdAt', 'createdBy', 'updatedAt', 'updatedBy'])
         && request.resource.data.status == 'in_progress'
+        && request.resource.data.workOrder is string
+        && request.resource.data.workOrder.size() > 0
+        && request.resource.data.workOrderKey is string
+        && get(/databases/$(database)/documents/workOrders/$(request.resource.data.workOrderKey)).data.active == true
+        && get(/databases/$(database)/documents/workOrders/$(request.resource.data.workOrderKey)).data.normalizedCode == request.resource.data.workOrder
         && request.resource.data.timeSource == 'server'
         && request.resource.data.eventDate == null
         && request.resource.data.startedAt == request.time
@@ -181,6 +186,8 @@ service cloud.firestore {
         && request.resource.data.areaSnapshot == resource.data.areaSnapshot
         && request.resource.data.equipmentId == resource.data.equipmentId
         && request.resource.data.equipmentSnapshot == resource.data.equipmentSnapshot
+        && request.resource.data.get('workOrder', null) == resource.data.get('workOrder', null)
+        && request.resource.data.get('workOrderKey', null) == resource.data.get('workOrderKey', null)
         && request.resource.data.workPerformed is string
         && request.resource.data.workPerformed.size() > 0
         && request.resource.data.createdAt == resource.data.createdAt
@@ -202,6 +209,8 @@ service cloud.firestore {
           && request.resource.data.createdAt == resource.data.createdAt
           && request.resource.data.createdBy == resource.data.createdBy
           && request.resource.data.technicianIds == resource.data.technicianIds
+          && request.resource.data.get('workOrder', null) == resource.data.get('workOrder', null)
+          && request.resource.data.get('workOrderKey', null) == resource.data.get('workOrderKey', null)
           && request.resource.data.updatedBy == request.auth.uid
           && request.resource.data.updatedAt == request.time
           && (request.resource.data.status != 'voided' || (request.resource.data.voidReason is string && request.resource.data.voidReason.size() > 0)));
@@ -432,8 +441,14 @@ service cloud.firestore {
       allow write: if false;
     }
 
+    match /workOrders/{workOrderId} {
+      allow read: if hasPermission('corrective.create') || hasPermission('corrective.manage');
+      allow write: if false;
+    }
+
     match /integrationStatus/{integrationId} {
-      allow read: if integrationId == 'sap-stock' && hasPermission('stock.read');
+      allow read: if (integrationId == 'sap-stock' && hasPermission('stock.read'))
+        || (integrationId == 'sap-work-orders' && (hasPermission('corrective.create') || hasPermission('corrective.manage')));
       allow write: if false;
     }
 
