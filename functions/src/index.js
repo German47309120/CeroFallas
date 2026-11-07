@@ -3,13 +3,17 @@ import { getAuth } from 'firebase-admin/auth'
 import { FieldValue, getFirestore } from 'firebase-admin/firestore'
 import { HttpsError, onCall } from 'firebase-functions/v2/https'
 import { setGlobalOptions } from 'firebase-functions/v2/options'
+import { defineSecret, defineString } from 'firebase-functions/params'
 import { assertPasswordResetTarget, assertSafeAdministratorUpdate, evaluateAdministratorAccess, normalizeCreateUser, normalizePasswordReset, normalizeUpdateUser, profileForRole } from './user-admin.js'
+import { buildAssistantPrompt, buildMaintenanceSnapshot, normalizeAssistantInput, requestOpenAiAnswer } from './maintenance-assistant.js'
 
 initializeApp()
 setGlobalOptions({ region: 'us-central1', maxInstances: 5 })
 
 const database = getFirestore()
 const auth = getAuth()
+const openAiApiKey = defineSecret('OPENAI_API_KEY')
+const openAiModel = defineString('OPENAI_MODEL', { default: 'gpt-6-luna' })
 
 async function requireAdministrator(request) {
   const uid = request.auth?.uid
@@ -24,6 +28,43 @@ const inputError = (error) => {
   if (error instanceof HttpsError) return error
   return new HttpsError('invalid-argument', error?.message || 'Datos inválidos.')
 }
+
+async function requireAssistantAccess(request) {
+  const uid = request.auth?.uid
+  if (!uid) throw new HttpsError('unauthenticated', 'Debes iniciar sesión.')
+  const snapshot = await database.doc(`users/${uid}`).get()
+  const profile = snapshot.exists ? snapshot.data() : null
+  if (profile?.status !== 'active' || !profile?.permissions?.includes('dashboard.read')) {
+    throw new HttpsError('permission-denied', 'Tu perfil no puede consultar el asistente gerencial.')
+  }
+  return uid
+}
+
+export const askMaintenanceAssistant = onCall({ secrets: [openAiApiKey], timeoutSeconds: 60, memory: '256MiB' }, async (request) => {
+  const actorId = await requireAssistantAccess(request)
+  let input
+  try { input = normalizeAssistantInput(request.data) } catch (error) { throw inputError(error) }
+  try {
+    const snapshot = await buildMaintenanceSnapshot(database)
+    const answer = await requestOpenAiAnswer({
+      apiKey: openAiApiKey.value(),
+      model: openAiModel.value(),
+      prompt: buildAssistantPrompt(snapshot, input.question, input.history),
+    })
+    await database.collection('audit').add({
+      occurredAt: FieldValue.serverTimestamp(),
+      actorId,
+      action: 'assistant_query',
+      entityType: 'maintenanceAssistant',
+      entityId: 'gerencial',
+      outcome: 'completed',
+    })
+    return { answer, snapshot, mode: 'openai', model: openAiModel.value() }
+  } catch (error) {
+    console.error('Maintenance assistant failed', { actorId, message: error?.message })
+    throw new HttpsError('unavailable', 'El análisis con IA no está disponible en este momento.')
+  }
+})
 
 export const createAppUser = onCall(async (request) => {
   const actorId = await requireAdministrator(request)

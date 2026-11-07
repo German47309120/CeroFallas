@@ -10,6 +10,7 @@ const actions = [
   ['incident.create', '/incidentes/nuevo', 'Reportar incidente'],
   ['equipment.manage', '/equipos/nuevo', 'Registrar equipo'],
   ['stock.read', '/repuestos', 'Consultar repuestos'],
+  ['dashboard.read', '/asistente', 'Consultar asistente IA'],
   ['users.read', '/admin/usuarios', 'Consultar usuarios'],
   ['audit.read', '/admin/auditoria', 'Revisar auditoría'],
 ]
@@ -19,6 +20,7 @@ const workflows = [
   { permissions: ['preventive.read', 'preventive.execute', 'preventive.plan'], title: 'Mantenimiento preventivo', steps: ['Seleccionar el plan o equipo.', 'Iniciar y finalizar la actividad.', 'Revisar cumplimiento y próxima programación.'] },
   { permissions: ['forklift.read', 'forklift.inspect'], title: 'Checklist de montacargas', steps: ['Confirmar equipo, turno y horómetro.', 'Responder los 25 puntos y justificar anomalías.', 'No operar si existe una falla crítica.'] },
   { permissions: ['incident.read', 'incident.create'], title: 'Incidentes operativos', steps: ['Indicar área, equipo si se conoce y prioridad.', 'Describir el evento sin sustituir el protocolo de emergencia.', 'Jefaturas autorizadas registran el seguimiento.'] },
+  { permissions: ['dashboard.read'], title: 'Asistente de mantenimiento', steps: ['Revisar el corte de datos mostrado a la derecha.', 'Escribir una pregunta operativa o utilizar una consulta sugerida.', 'Validar cualquier recomendación con el detalle del módulo y el personal técnico.'] },
 ]
 
 export default function HelpPage() {

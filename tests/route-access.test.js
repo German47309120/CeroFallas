@@ -6,7 +6,7 @@ const routes = [
   '/', '/perfil', '/correctivos', '/correctivos/nuevo', '/correctivos/registro-1/editar',
   '/preventivos', '/preventivos/nuevo', '/preventivos/plan-1/editar', '/preventivos/ejecutar',
   '/montacargas', '/montacargas/nuevo', '/incidentes', '/incidentes/nuevo', '/equipos',
-  '/equipos/nuevo', '/equipos/equipo-1/editar', '/equipos/equipo-1', '/repuestos', '/riesgo', '/analitica',
+  '/equipos/nuevo', '/equipos/equipo-1/editar', '/equipos/equipo-1', '/repuestos', '/riesgo', '/asistente', '/analitica',
   '/admin/usuarios', '/admin/auditoria',
   '/ayuda',
 ]
@@ -39,7 +39,7 @@ describe('control central de acceso por URL', () => {
 
   it('mantiene a gerencia en consultas y bloquea formularios', () => {
     expect(accessibleRoutes('management')).toEqual([
-      '/', '/perfil', '/correctivos', '/preventivos', '/incidentes', '/riesgo', '/analitica', '/ayuda',
+      '/', '/perfil', '/correctivos', '/preventivos', '/incidentes', '/riesgo', '/asistente', '/analitica', '/ayuda',
     ])
   })
 
@@ -51,7 +51,7 @@ describe('control central de acceso por URL', () => {
 
   it('evalúa las 253 combinaciones de roles y rutas sin excepciones', () => {
     const decisions = Object.keys(roleDefinitions).flatMap((roleId) => routes.map((path) => [roleId, path, accessibleRoutes(roleId).includes(path)]))
-    expect(decisions).toHaveLength(253)
+    expect(decisions).toHaveLength(264)
     expect(decisions.every(([, , allowed]) => typeof allowed === 'boolean')).toBe(true)
   })
 })

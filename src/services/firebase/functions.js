@@ -4,7 +4,7 @@ import { getFirebaseApp, useFirebaseEmulators } from './config.js'
 let instance
 let emulatorConnected = false
 
-function getFirebaseFunctions() {
+export function getFirebaseFunctions() {
   if (!instance) {
     instance = getFunctions(getFirebaseApp(), 'us-central1')
     if (useFirebaseEmulators && !emulatorConnected) {

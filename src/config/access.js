@@ -3,6 +3,7 @@ export const navigationPermissions = {
   '/incidentes': 'incident.read', '/equipos': 'equipment.read', '/repuestos': 'stock.read',
   '/riesgo': 'prediction.read', '/admin/usuarios': 'users.read', '/admin/auditoria': 'audit.read',
   '/analitica': 'dashboard.read',
+  '/asistente': 'dashboard.read',
 }
 
 // Cada identidad comienza en una ruta común. No se hereda la pantalla privada
@@ -35,6 +36,7 @@ const routeAccessRules = [
   { match: /^\/repuestos$/, permissions: ['stock.read'] },
   { match: /^\/riesgo$/, permissions: ['prediction.read'] },
   { match: /^\/analitica$/, permissions: ['dashboard.read'] },
+  { match: /^\/asistente$/, permissions: ['dashboard.read'] },
   { match: /^\/admin\/usuarios$/, permissions: ['users.read'] },
   { match: /^\/admin\/auditoria$/, permissions: ['audit.read'] },
 ]

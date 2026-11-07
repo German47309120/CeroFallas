@@ -22,6 +22,7 @@ const ProfilePage = lazy(() => import('../pages/ProfilePage.jsx'))
 const PredictionPage = lazy(() => import('../pages/PredictionPage.jsx'))
 const HelpPage = lazy(() => import('../pages/HelpPage.jsx'))
 const PowerBiPage = lazy(() => import('../pages/PowerBiPage.jsx'))
+const MaintenanceAssistantPage = lazy(() => import('../pages/MaintenanceAssistantPage.jsx'))
 
 export default function App() {
   return (
@@ -51,6 +52,7 @@ export default function App() {
         <Route path="/repuestos" element={<ResourceReadPage resource="stock" />} />
         <Route path="/riesgo" element={<PredictionPage />} />
         <Route path="/analitica" element={<PowerBiPage />} />
+        <Route path="/asistente" element={<MaintenanceAssistantPage />} />
         <Route path="/perfil" element={<ProfilePage />} />
         <Route path="/ayuda" element={<HelpPage />} />
       </Route>
