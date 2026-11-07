@@ -14,7 +14,7 @@ export function normalizeWorkOrderRows(rows) {
   const unique = new Map()
   for (const row of rows ?? []) {
     const normalizedCode = normalizeWorkOrderCode(row.workOrder ?? row.workorder ?? row.docEntryBaseSap)
-    if (!normalizedCode || normalizedCode.length > 80 || !normalizedCode.startsWith('OT')) continue
+    if (!normalizedCode || normalizedCode.length > 80) continue
     unique.set(normalizedCode, {
       id: workOrderDocumentId(normalizedCode),
       code: normalizedCode,
@@ -32,7 +32,6 @@ export function validateReadOnlyWorkOrderQuery(query) {
   if (forbiddenSql.test(sql)) throw new Error('La consulta contiene una operación que no es de solo lectura.')
   if (!/\bfrom\s+(?:\[[^\]]+\]\.)?\[?MEGA_ENTRY\]?/i.test(sql)) throw new Error('La consulta debe leer MEGA_ENTRY.')
   if (!/\bactive\s*=\s*1\b/i.test(sql)) throw new Error('La consulta debe limitarse a active = 1.')
-  if (!/\blike\s+['"]OT%['"]/i.test(sql)) throw new Error("La consulta debe filtrar el prefijo con LIKE 'OT%'.")
   if (!/\bas\s+\[?workOrder\]?\b/i.test(sql)) throw new Error('La consulta debe devolver el alias workOrder.')
   const withoutFinalSemicolon = sql.replace(/;\s*$/, '')
   if (withoutFinalSemicolon.includes(';')) throw new Error('La consulta debe contener una sola sentencia SELECT.')

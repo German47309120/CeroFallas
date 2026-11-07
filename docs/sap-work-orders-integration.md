@@ -4,7 +4,7 @@ Fecha: 2026-11-06
 
 ## Objetivo
 
-El formulario de correctivos no acepta una OT escrita manualmente. El desplegable consulta únicamente órdenes publicadas desde `MEGA_ENTRY` que cumplen `active = 1` y cuyo código inicia con `OT`.
+El formulario de correctivos no acepta una OT escrita manualmente. El desplegable consulta únicamente órdenes publicadas desde `MEGA_ENTRY` que cumplen `active = 1`, sin imponer un prefijo al identificador.
 
 El navegador nunca se conecta directamente a SQL Server. Un sincronizador de solo lectura se ejecuta desde una computadora con acceso por WireGuard, publica el catálogo mínimo en `workOrders` y marca como inactivas las órdenes que ya no aparecen en la siguiente sincronización.
 
@@ -18,11 +18,8 @@ SELECT DISTINCT
 FROM MEGA_ENTRY
 WHERE active = 1
   AND docEntryBaseSap IS NOT NULL
-  AND UPPER(LTRIM(RTRIM(CONVERT(nvarchar(80), docEntryBaseSap)))) LIKE 'OT%'
 ORDER BY workOrder ASC;
 ```
-
-`LIKE 'OT'` buscaría solo el valor exacto `OT`. `LIKE 'OT%'` incluye códigos que empiezan con ese prefijo.
 
 ## Operación segura
 

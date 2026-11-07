@@ -85,7 +85,7 @@ async function publishWithFirebaseCli(workOrders) {
   await request(':commit', { writes: [{
     update: {
       name: firestoreDocumentName('integrationStatus', 'sap-work-orders'),
-      fields: firestoreFields({ status: 'success', projectId, runId, selection: 'active=1;OT%', rows: workOrders.length, deactivated: obsoleteIds.length }),
+      fields: firestoreFields({ status: 'success', projectId, runId, selection: 'active=1', rows: workOrders.length, deactivated: obsoleteIds.length }),
     },
     updateMask: { fieldPaths: ['status', 'projectId', 'runId', 'selection', 'rows', 'deactivated'] },
     updateTransforms: [{ fieldPath: 'completedAt', setToServerValue: 'REQUEST_TIME' }],
@@ -122,7 +122,7 @@ const connection = {
 if (networkTarget.instance) connection.options.instanceName = networkTarget.instance
 else connection.port = networkTarget.port
 if (process.argv.includes('--check-config')) {
-  console.log('Configuración SAP OT preparada: consulta de solo lectura, active = 1 y prefijo OT% validados.')
+  console.log('Configuración SAP OT preparada: consulta de solo lectura y active = 1 validados.')
   console.log('No se abrió conexión ni se imprimieron servidor, base, usuario, contraseña o consulta.')
   process.exit(0)
 }
@@ -177,7 +177,7 @@ try {
   }
   await writer.close()
   await database.collection('integrationStatus').doc('sap-work-orders').set({
-    status: 'success', projectId, runId, selection: 'active=1;OT%', rows: workOrders.length, deactivated,
+    status: 'success', projectId, runId, selection: 'active=1', rows: workOrders.length, deactivated,
     completedAt: FieldValue.serverTimestamp(),
   })
   console.log(`Órdenes publicadas: ${workOrders.length} activas y ${deactivated} anteriores desactivadas.`)
